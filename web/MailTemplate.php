@@ -50,11 +50,10 @@ isSessionValid(true);
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
 
-
         <div id="main-wrapper">
-      
 
-        <div class="page-breadcrumb breadcrumb-withbutton">
+
+            <div class="page-breadcrumb breadcrumb-withbutton">
                <div class="row">
                   <div class="col-12 d-flex no-block align-items-center">
                      <h4 class="page-title">Email Templates</h4>
@@ -64,44 +63,48 @@ isSessionValid(true);
                   </div>
                </div>
             </div>
-
-            <div class="card">
-               <div class="card-body">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <button type="button" class="btn btn-info btn-sm" onclick="document.location='MailTemplate?action=add&template=new'"><i class="fas fa-plus"></i> New Email Template</button>
+            
+            <div class="container-fluid" id="section_view_mail_template_list">
+               
+               <div class="card">
+                  <div class="card-body">
+                     <div class="row">
+                        <div class="col-md-12">
+                           <button type="button" class="btn btn-info btn-sm" onclick="document.location='MailTemplate?action=add&template=new'"><i class="fas fa-plus"></i> New Email Template</button>
+                        </div>
                      </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-md-12 m-t-20">
-                        <div class="row">
-                           <div class="table-responsive">
-                              <table id="table_mail_template_list" class="table table-striped table-bordered">
-                                 <thead>
-                                    <tr>
-                                       <th>#</th>
-                                       <th>Mail Template Name</th>
-                                       <th>Email Subject</th>
-                                       <th>Email Body</th>
-                                       <th>Attachment</th>
-                                       <th>Date Created</th>
-                                       <th>Actions</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                 </tbody>
-                              </table>
+                     <div class="row">
+                        <div class="col-md-12 m-t-20">
+                           <div class="row">
+                              <div class="table-responsive">
+                                 <table id="table_mail_template_list" class="table table-striped table-bordered">
+                                    <thead>
+                                       <tr>
+                                          <th>#</th>
+                                          <th>Template Name</th>
+                                          <th>Subject</th>
+                                          <th>Body</th>
+                                          <th>Attachment</th>
+                                          <th>Date Created</th>
+                                          <th>Actions</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                 </table>
+                              </div>
                            </div>
                         </div>
                      </div>
                   </div>
                </div>
+               
             </div>
-
             <div class="container-fluid" id="section_add_mail_template">
+               
                <div class="card">
                   <div class="card-body">
-                     <!--<h5 class="card-title">Tracker Templates</h5>-->
+                     
                      <div class="row">
                         <div class="col-md-9">
                            <div class="form-group row">
@@ -281,18 +284,9 @@ isSessionValid(true);
                      <input type="file" id="tracker-img-uploader" accept="image/*" onchange="getBase64ofFile(uploadTrackerImage,this.files[0],this)" hidden="">
                   </div>
                </div>
-               <!-- ============================================================== -->
-               <!-- End PAge Content -->
-               <!-- ============================================================== -->
-               <!-- ============================================================== -->
-               <!-- Right sidebar -->
-               <!-- ============================================================== -->
-               <!-- .right-sidebar -->
-               <!-- ============================================================== -->
-               <!-- End Right sidebar -->
-               <!-- ============================================================== -->
+               
             </div>
-
+            
             <!-- Modal -->            
             <div class="modal fade" id="modal_email_template_delete" tabindex="-1" role="dialog" aria-hidden="true">
                <div class="modal-dialog" role="document">
@@ -520,16 +514,13 @@ isSessionValid(true);
                   </div>
                </div>
             </div>
-      
+            
          
+         <?php include('../components/foot.php'); ?>
+
       </div>
 
-
-      <?php include('../components/foot.php'); ?>
-
-</div>
-<!--  END CONTENT AREA  -->
-
+        
 </div>
 <!-- END MAIN CONTAINER -->
 
@@ -537,21 +528,21 @@ isSessionValid(true);
 
       <!-- All Jquery -->
       <!-- ============================================================== -->
-      <script src="<?php echo url ?>/customejs/js/libs/js.cookie.min.js"></script>   
+      <script src="<?php echo url ?>/js/libs/js.cookie.min.js"></script>   
       <!-- Bootstrap tether Core JavaScript -->
-      <script src="<?php echo url ?>/customejs/js/libs/popper.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/libs/bootstrap.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/popper.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/bootstrap.min.js"></script>
       <!--Menu sidebar -->
-      <script src="<?php echo url ?>/customejs/js/libs/perfect-scrollbar.jquery.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script>
       <!--Custom JavaScript -->
-      <script src="<?php echo url ?>/customejs/js/libs/custom.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/custom.min.js"></script>
       <!-- this page js -->
-      <script src="<?php echo url ?>/customejs/js/libs/jquery/datatables.js"></script>  
-      <script src="<?php echo url ?>/customejs/js/libs/summernote-bs4.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/libs/codemirror.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/libs/moment.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/common_scripts.js"></script>
-      <script src="<?php echo url ?>/customejs/js/mail_template.js"></script>
+      <script src="<?php echo url ?>/js/libs/jquery/datatables.js"></script>  
+      <script src="<?php echo url ?>/js/libs/summernote-bs4.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/codemirror.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/moment.min.js"></script>
+      <script src="<?php echo url ?>/js/common_scripts.js"></script>
+      <script src="<?php echo url ?>/js/mail_template.js"></script>
       <?php
          echo '<script>';
          
@@ -566,12 +557,13 @@ isSessionValid(true);
                     loadTableMailTemplateList();
                     $("#store-area").hide();';
          }
+
          echo '</script>';
       ?>
-      <script defer src="<?php echo url ?>/customejs/js/libs/sidebarmenu.js"></script>  
-      <script defer src="<?php echo url ?>/customejs/js/libs/select2.min.js"></script>
-      <script defer src="<?php echo url ?>/customejs/js/libs/toastr.min.js"></script> 
-      <script defer src="<?php echo url ?>/customejs/js/libs/codemirror.xml.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>  
+      <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/toastr.min.js"></script> 
+      <script defer src="<?php echo url ?>/js/libs/codemirror.xml.min.js"></script>
 
       
 </body>
