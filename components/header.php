@@ -15,7 +15,7 @@
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
-    <link href="<?php echo url?>/src/plugins/src/apex/apexcharts.css" rel="stylesheet" type="text/css">
+    <!-- <link href="<?php // echo url?>/src/plugins/src/apex/apexcharts.css" rel="stylesheet" type="text/css"> -->
     <link href="<?php echo url?>/src/assets/css/light/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo url?>/src/assets/css/dark/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->

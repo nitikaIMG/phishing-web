@@ -7,6 +7,6 @@
     <!-- END GLOBAL MANDATORY SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="<?php echo url?>/src/plugins/src/apex/apexcharts.min.js"></script>
+    <!-- <script src="<?php echo url?>/src/plugins/src/apex/apexcharts.min.js"></script> -->
     <script src="<?php echo url?>/src/assets/js/dashboard/dash_1.js"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
