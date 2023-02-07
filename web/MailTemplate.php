@@ -81,9 +81,9 @@ isSessionValid(true);
                                     <thead>
                                        <tr>
                                           <th>#</th>
-                                          <th>Mail Template Name</th>
-                                          <th>Email Subject</th>
-                                          <th>Email Body</th>
+                                          <th>Template Name</th>
+                                          <th>Subject</th>
+                                          <th>Body</th>
                                           <th>Attachment</th>
                                           <th>Date Created</th>
                                           <th>Actions</th>
@@ -528,21 +528,21 @@ isSessionValid(true);
 
       <!-- All Jquery -->
       <!-- ============================================================== -->
-      <script src="<?php echo url ?>/customejs/js/libs/js.cookie.min.js"></script>   
+      <script src="<?php echo url ?>/js/libs/js.cookie.min.js"></script>   
       <!-- Bootstrap tether Core JavaScript -->
-      <script src="<?php echo url ?>/customejs/js/libs/popper.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/libs/bootstrap.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/popper.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/bootstrap.min.js"></script>
       <!--Menu sidebar -->
-      <script src="<?php echo url ?>/customejs/js/libs/perfect-scrollbar.jquery.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script>
       <!--Custom JavaScript -->
-      <script src="<?php echo url ?>/customejs/js/libs/custom.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/custom.min.js"></script>
       <!-- this page js -->
-      <script src="<?php echo url ?>/customejs/js/libs/jquery/datatables.js"></script>  
-      <script src="<?php echo url ?>/customejs/js/libs/summernote-bs4.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/libs/codemirror.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/libs/moment.min.js"></script>
-      <script src="<?php echo url ?>/customejs/js/common_scripts.js"></script>
-      <script src="<?php echo url ?>/customejs/js/mail_template.js"></script>
+      <script src="<?php echo url ?>/js/libs/jquery/datatables.js"></script>  
+      <script src="<?php echo url ?>/js/libs/summernote-bs4.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/codemirror.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/moment.min.js"></script>
+      <script src="<?php echo url ?>/js/common_scripts.js"></script>
+      <script src="<?php echo url ?>/js/mail_template.js"></script>
       <?php
          echo '<script>';
          
@@ -557,12 +557,13 @@ isSessionValid(true);
                     loadTableMailTemplateList();
                     $("#store-area").hide();';
          }
+
          echo '</script>';
       ?>
-      <script defer src="<?php echo url ?>/customejs/js/libs/sidebarmenu.js"></script>  
-      <script defer src="<?php echo url ?>/customejs/js/libs/select2.min.js"></script>
-      <script defer src="<?php echo url ?>/customejs/js/libs/toastr.min.js"></script> 
-      <script defer src="<?php echo url ?>/customejs/js/libs/codemirror.xml.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>  
+      <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/toastr.min.js"></script> 
+      <script defer src="<?php echo url ?>/js/libs/codemirror.xml.min.js"></script>
 
       
 </body>

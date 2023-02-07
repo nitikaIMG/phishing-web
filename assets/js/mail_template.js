@@ -227,6 +227,7 @@ function saveMailTemplate(e) {
 }
 
 function getMailTemplateFromTemplateId(id) {
+
     if (id == "new") {
         getRandomId();
         return;
@@ -334,12 +335,14 @@ function loadTableMailTemplateList() {
             action_type: "get_mail_template_list"
          })
     }).done(function (data) {
+        console.log(data);
            if(!data['error']){  // no data
             $.each(data, function(key, value) {
                 var action_items_mail_template_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='MailTemplate?action=edit&template=` + value.mail_template_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailTemplateCopy('` + value.mail_template_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptMailTemplateDeletion('` + value.mail_template_id + `')"><i class="mdi mdi-delete-variant"></i></button></div>`;
 
                 var is_attachment =  Object.keys(value.attachment).length>0? "<i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i><span hidden>Yes</span>" : "<i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i><span hidden>No</span>";
-                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td>" + $('<div>').text(value.mail_template_content).html() + "...</td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + value.date + "</td><td>" + action_items_mail_template_table + "</td></tr>");
+                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td>" + $('<div>').text(value.mail_template_content).html() + "...</td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
+                 + "\">" + value.date + "</td><td>" + action_items_mail_template_table + "</td></tr>");
             });
         }
         
