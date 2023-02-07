@@ -227,7 +227,6 @@ function saveMailTemplate(e) {
 }
 
 function getMailTemplateFromTemplateId(id) {
-    console.log('eeeeeeeeeee');
     if (id == "new") {
         getRandomId();
         return;
@@ -328,7 +327,6 @@ function mailTemplateCopy() {
 }
 
 function loadTableMailTemplateList() {
-    console.log('eee');
     $.post({
         url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
