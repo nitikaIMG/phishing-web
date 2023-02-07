@@ -10,7 +10,11 @@ isSessionValid(true);
    <?php
    echo include('../components/header.php');
    ?>
-
+      <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
+      <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css">
+      <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/style.min.css">
+      <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/dataTables.foundation.min.css">
+      <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/codemirror.min.css">
 </head>
 
 <body class="layout-boxed alt-menu">
@@ -47,7 +51,7 @@ isSessionValid(true);
       <!-- Page wrapper  -->
       <!-- ============================================================== -->
       <div id="content" class="main-content">
-         <div class="layout-px-spacing">
+         <div class="layout-px-spacing" id="section_adduser">
 
             <div class="container-xxl p-0">
 
@@ -122,10 +126,13 @@ isSessionValid(true);
                                                 <button type="button" class="btn btn-success" id="bt_add_email_tracker" onclick="addUserToTable($(this))"><i class="fa fas fa-plus"></i> Add</button>
                                                 <div class="col-sm-2">
                                              <div class="btn-group" id="bt_save_config">
-                                                <button type="button" class="btn btn-success" onclick="addUserFromFile()" title="Import email list" data-toggle="tooltip">Import</button>
+                                                <button type="button" class="btn btn-success dropdown-toggle" onclick="addUserFromFile()" title="Import email list" data-toggle="tooltip">Import</button>
                                                 <input type="file" id="fileinput" accept=".txt, .csv, .lst, .rtf" hidden />
-                                                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                                                <div class="dropdown-menu">
+                                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+
+
+                                              
+                                                <div class="dropdown-menu" aria-labelledby="btndefault">
                                                    <a class="dropdown-item" href="#" onclick="exportUserAction()">Export as CSV</a>
                                                 </div>
                                              </div>
@@ -133,25 +140,26 @@ isSessionValid(true);
                                           </div>
                                        </div>
                                        </div>
-                                       <div class="row">
+                                       <!-- <div class="row">
                                           <div class="col">
                                              <label>Company Name:</label>
                                              <input type="text" class="form-control phone-inputmask" id="tablevalue_notes">
                                           </div>
-                                       </div>
+                                       </div> -->
                                     </div>
                                     <div class="row layout-spacing">
                                        <div class="col-lg-12">
                                           <div class="statbox widget box box-shadow">
                                              <div class="widget-content widget-content-area">
-                                                <table id="table_user_list" class="table style-2 dt-table-hover">
+                                                <table id="table_user_list" class="table table-striped table-bordered">
                                                    <thead>
                                                       <tr>
                                                          <th>#</th>
                                                          <th>First Name</th>
                                                          <th>Last Name</th>
                                                          <th>Email</th>
-                                                         <th>Notes</th>
+                                                         <th>Comapny</th>
+                                                         <th>Job</th>
                                                          <th>Actions</th>
                                                       </tr>
                                                    </thead>
@@ -183,7 +191,7 @@ isSessionValid(true);
                <!-- ============================================================== -->
                <!-- Start Page Content -->
                <!-- ============================================================== -->
-               <!-- <div class="card">
+               <div class="card">
                      <div class="card-body">
                         <div class="row">
                            <div class="col-md-12">
@@ -212,7 +220,7 @@ isSessionValid(true);
                            </div>
                         </div>
                      </div>
-                  </div> -->
+                  </div> 
                <!-- ============================================================== -->
                <!-- End PAge Content -->
                <!-- ============================================================== -->
@@ -229,88 +237,88 @@ isSessionValid(true);
                <!-- Start Page Content -->
                <!-- ============================================================== -->
                <!-- <div class="card">
-                     <div class="card-body">
-                        <div class="row">
-                           <div class="col-md-12">
-                              <div class="row">
-                                 <div class="col-md-6">
-                                    <div class="form-group row">
-                                       <label for="user_group_name" class="col-md-3 text-left control-label col-form-label">User Group Name: </label>
-                                       <div class="col-md-9">
-                                          <input type="text" class="form-control" id="user_group_name">
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div class="col-md-6 text-right">
-                                    <button type="button" class="btn btn-info" onclick="saveUserGroup($(this))"><i class="fa fas fa-save"></i> Save</button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                           <div class="col-md-4">
-                              <div class="form-group">
-                                 <label>First Name:</label>
-                                 <input type="text" class="form-control date-inputmask" id="tablevalue_fname">
-                              </div>
-                              <div class="form-group">
-                                 <label>Email:</label>
-                                 <input type="text" class="form-control phone-inputmask" id="tablevalue_email">
-                              </div>
-                           </div>
-                           <div class="col-md-4">
-                              <div class="form-group">
-                                 <label>Last Name:</label>
-                                 <input type="text" class="form-control date-inputmask" id="tablevalue_lname">
-                              </div>
-                              <div class="form-group">
-                                 <label>Notes:</label>
-                                 <input type="text" class="form-control phone-inputmask" id="tablevalue_notes">
-                              </div>
-                           </div>
-                           <div class="col-md-2">
-                              <div class="form-group m-t-25">
-                                 <button type="button" class="btn btn-success" id="bt_add_email_tracker" onclick="addUserToTable($(this))"><i class="fa fas fa-plus"></i> Add</button>
-                              </div>
-                           </div>
-                           <div class="col-md-2 m-t-25 text-right">
-                              <div class="form-group">
-                                 <div class="btn-group" id="bt_save_config">
-                                    <button type="button" class="btn btn-success" onclick="addUserFromFile()" title="Import email list" data-toggle="tooltip">Import</button>
-                                    <input type="file" id="fileinput" accept=".txt, .csv, .lst, .rtf" hidden />
-                                    <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                                    <div class="dropdown-menu">
-                                       <a class="dropdown-item" href="#" onclick="exportUserAction()">Export as CSV</a>
+                  <div class="card-body">
+                     <div class="row">
+                        <div class="col-md-12">
+                           <div class="row">
+                              <div class="col-md-6">
+                                 <div class="form-group row">
+                                    <label for="user_group_name" class="col-md-3 text-left control-label col-form-label">User Group Name: </label>
+                                    <div class="col-md-9">
+                                       <input type="text" class="form-control" id="user_group_name">
                                     </div>
                                  </div>
                               </div>
+                              <div class="col-md-6 text-right">
+                                 <button type="button" class="btn btn-info" onclick="saveUserGroup($(this))"><i class="fa fas fa-save"></i> Save</button>
+                              </div>
                            </div>
                         </div>
-                        <div class="row layout-spacing">
-                           <div class="col-lg-12">
-                              <div class="statbox widget box box-shadow">
-                                 <div class="widget-content widget-content-area">
-                                    <table id="table_user_list" class="table style-2 dt-table-hover">
-                                       <thead>
-                                          <tr>
-                                             <th>#</th>
-                                             <th>First Name</th>
-                                             <th>Last Name</th>
-                                             <th>Email</th>
-                                             <th>Notes</th>
-                                             <th>Actions</th>
-                                          </tr>
-                                       </thead>
-                                       <tbody>
-                                       </tbody>
-                                    </table>
+                     </div>
+                     <hr />
+                     <div class="row">
+                        <div class="col-md-4">
+                           <div class="form-group">
+                              <label>First Name:</label>
+                              <input type="text" class="form-control date-inputmask" id="tablevalue_fname">
+                           </div>
+                           <div class="form-group">
+                              <label>Email:</label>
+                              <input type="text" class="form-control phone-inputmask" id="tablevalue_email">
+                           </div>
+                        </div>
+                        <div class="col-md-4">
+                           <div class="form-group">
+                              <label>Last Name:</label>
+                              <input type="text" class="form-control date-inputmask" id="tablevalue_lname">
+                           </div>
+                           <div class="form-group">
+                              <label>Notes:</label>
+                              <input type="text" class="form-control phone-inputmask" id="tablevalue_notes">
+                           </div>
+                        </div>
+                        <div class="col-md-2">
+                           <div class="form-group m-t-25">
+                              <button type="button" class="btn btn-success" id="bt_add_email_tracker" onclick="addUserToTable($(this))"><i class="fa fas fa-plus"></i> Add</button>
+                           </div>
+                        </div>
+                        <div class="col-md-2 m-t-25 text-right">
+                           <div class="form-group">
+                              <div class="btn-group" id="bt_save_config">
+                                 <button type="button" class="btn btn-success" onclick="addUserFromFile()" title="Import email list" data-toggle="tooltip">Import</button>
+                                 <input type="file" id="fileinput" accept=".txt, .csv, .lst, .rtf" hidden />
+                                 <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                 <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#" onclick="exportUserAction()">Export as CSV</a>
                                  </div>
                               </div>
                            </div>
                         </div>
                      </div>
-                  </div> -->
+                     <div class="row layout-spacing">
+                        <div class="col-lg-12">
+                           <div class="statbox widget box box-shadow">
+                              <div class="widget-content widget-content-area">
+                                 <table id="table_user_list" class="table style-2 dt-table-hover">
+                                    <thead>
+                                       <tr>
+                                          <th>#</th>
+                                          <th>First Name</th>
+                                          <th>Last Name</th>
+                                          <th>Email</th>
+                                          <th>Notes</th>
+                                          <th>Actions</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>  -->
                <!-- ============================================================== -->
                <!-- End PAge Content -->
                <!-- ============================================================== -->
@@ -356,9 +364,15 @@ isSessionValid(true);
                            </div>
                         </div>
                         <div class="form-group row  m-t-20">
-                           <label for="modal_tablevalue_notes" class="col-sm-2 text-left control-label col-form-label">Notes: </label>
+                           <label for="modal_tablevalue_company" class="col-sm-2 text-left control-label col-form-label">Company: </label>
                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="modal_tablevalue_notes">
+                              <input type="text" class="form-control" id="modal_tablevalue_company">
+                           </div>
+                        </div>
+                        <div class="form-group row  m-t-20">
+                           <label for="modal_tablevalue_job" class="col-sm-2 text-left control-label col-form-label">Job: </label>
+                           <div class="col-sm-8">
+                              <input type="text" class="form-control" id="modal_tablevalue_job">
                            </div>
                         </div>
                      </div>
@@ -459,6 +473,7 @@ isSessionValid(true);
    if (isset($_GET['action'])) {
       if (isset($_GET['action']) && isset($_GET['user'])) {
          if ($_GET['action'] == 'add' || $_GET['action'] == 'edit') {
+            
             echo '$("#section_view_list").hide();
                         getUserGroupFromGroupId("' . doFilter($_GET['user'], 'ALPHA_NUM') . '");';
          }
