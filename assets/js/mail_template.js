@@ -103,7 +103,7 @@ $(function() {
     });  
 
     $.post({
-        url: "sniperhost/../manager/sniperhost_manager",
+        url: "../sniperhost/manager/sniperhost_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_landpage_list",
