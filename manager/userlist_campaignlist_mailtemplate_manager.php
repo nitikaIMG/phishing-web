@@ -361,6 +361,7 @@ function saveMailTemplate($conn,&$POSTJ){
 	else{
 		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_template_list(mail_template_id, mail_template_name, mail_template_subject, mail_template_content, timage_type, mail_content_type, attachment, date) VALUES(?,?,?,?,?,?,?,?)");
 		$stmt->bind_param('ssssssss', $mail_template_id,$mail_template_name,$mail_template_subject,$mail_template_content,$timage_type,$mail_content_type,$attachments,$GLOBALS['entry_time']);
+
 	}
 	
 	if ($stmt->execute() === TRUE){
@@ -378,7 +379,7 @@ function getMailTemplateList($conn){
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["attachment"] = json_decode($row["attachment"]);	//avoid double json encoding
-			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
+			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'M d, Y h:i A');
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);

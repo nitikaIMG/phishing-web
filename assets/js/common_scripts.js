@@ -57,7 +57,7 @@ function getDateTimeFormat(type=''){
         return cookie_c_data.time_format.date + space_format + cookie_c_data.time_format.time;
 }
 
-function getTimestamp(in_val){   //15-11-2021 09:54 PM => 1636993440000
+function getTimestamp(in_val){
     return moment(in_val, 'DD-MM-YYYY hh:mm A').valueOf()
 }
 
@@ -114,7 +114,7 @@ function checkSniperPhishProcess(){
     if(window.location.href.indexOf('?') == -1){    // works only in main pages
         setTimeout(function (){
             $.post({
-                url: window.location.origin + "/spear/manager/home_manager",
+                url: window.location.href + "../manager/home_manager",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                         action_type: "check_process",
@@ -130,7 +130,7 @@ function checkSniperPhishProcess(){
 
 function startSniperPhishService(e){
     $.post({
-            url: window.location.origin + "/spear/manager/home_manager",
+            url: window.location.origin + "../manager/home_manager",
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({ 
                     action_type: "start_process",
@@ -305,7 +305,7 @@ function doReLogin(){
     var pwd = $("input[name=password]").val();
 
     $.post({
-        url: window.location.origin + "/spear/manager/session_manager",
+        url: window.location.origin + "../manager/session_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
                 action_type: "re_login",
