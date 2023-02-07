@@ -171,7 +171,7 @@ require_once '../includes/config.php';
                 })
             }).done(function (data) {
                if(data == "success"){
-                   window.location.href='../views/signin.php';
+                   window.location.href='../web/signin.php';
                }else{
                 alert("Email already exist!");
                }

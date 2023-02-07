@@ -13,7 +13,7 @@ $stmt = $conn->prepare("DELETE FROM tb_log WHERE id NOT IN (SELECT id FROM (SELE
 $stmt->execute();
 
 session_destroy();
-header("Location: ../views/signin.php");
+header("Location: ../web/signin.php");
 
 //---------------------------------------------------------------
 ?>
