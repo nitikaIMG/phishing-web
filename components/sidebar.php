@@ -46,6 +46,37 @@
         </li>
 
         <li class="menu">
+                <a href="#templates" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span>Email Campaign</span>
+                </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
+                </a>
+
+                <ul class="collapse submenu list-unstyled" id="templates" data-bs-parent="#accordionExample">
+                    <li>
+                        <a href="">  Campaign List </a>
+                    </li>
+                    <li>
+                        <a href=""> User Group  </a>
+                    </li>
+                    <li>
+                        <a href="./MailTemplate.php"> Email Template </a>
+                    </li>
+                    <li>
+                        <a href=""> Sender List </a>
+                    </li>        
+                    <li>
+                        <a href=""> Configuration </a>
+                    </li>                        
+                </ul>
+        </li>
+
+
+        <li class="menu">
             <a href="./app-calendar.html" aria-expanded="false" class="dropdown-toggle">
                 <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -554,10 +585,10 @@
             </a>
             <ul class="collapse submenu list-unstyled" id="authentication" data-bs-parent="#accordionExample">
                 <li>
-                    <a href="./auth-boxed-signin.html" target="_blank"> Sign In </a>
+                    <a href="./signin.php" target="_blank"> Sign In </a>
                 </li>
                 <li>
-                    <a href="./auth-boxed-signup.html" target="_blank"> Sign Up </a>
+                    <a href="./signup.php" target="_blank"> Sign Up </a>
                 </li>
                 <li>
                     <a href="./auth-boxed-lockscreen.html" target="_blank"> Unlock </a>
