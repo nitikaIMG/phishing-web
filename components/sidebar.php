@@ -61,10 +61,10 @@
                         <a href="">  Campaign List </a>
                     </li>
                     <li>
-                        <a href=""> User Group  </a>
+                        <a href="../web/employeelist.php"> Employee List </a>
                     </li>
                     <li>
-                        <a href="./MailTemplate.php"> Email Template </a>
+                        <a href="../web/MailTemplate.php"> Email Template </a>
                     </li>
                     <li>
                         <a href=""> Sender List </a>

@@ -167,7 +167,7 @@ function saveMailSenderGroup(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         data: JSON.stringify({ 
             action_type: "save_sender_list",
             sender_list_id: nextRandomId,
@@ -203,7 +203,7 @@ function getSenderFromSenderListId(id) {
         nextRandomId = id;
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_from_sender_list_id",
@@ -246,7 +246,7 @@ function MailSenderCopyAction() {
         $("#mail_sender_name").removeClass("is-invalid");
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "make_copy_sender_list",
@@ -274,7 +274,7 @@ function promptSenderListDeletion(id) {
 
 function senderListDeletionAction() {
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "delete_mail_sender_list_from_list_id",
@@ -318,7 +318,7 @@ function updateTable() {
 //-------------------------------------
 function loadTableSenderList() {
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_list"
@@ -429,7 +429,7 @@ function modalTestDeliveryAction(e){
 
     enableDisableMe(e);
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "send_test_mail_verification",
@@ -500,7 +500,7 @@ function verifyMailBoxAccess(){
     $("#modal_verifier_body .area_loader").html('');
     $("#modal_verifier_body .area_loader").append(displayLoader("Verifying..."));
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "verify_mailbox_access",
@@ -524,7 +524,7 @@ function verifyMailBoxAccess(){
 //------------------Store section---------------
 function getStoreList(){
     $.post({
-        url: "manager/settings_manager",
+        url: "../manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",

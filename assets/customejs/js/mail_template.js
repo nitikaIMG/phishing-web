@@ -73,7 +73,7 @@ $(function() {
     }); 
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_list"
@@ -88,7 +88,7 @@ $(function() {
     });
 
     $.post({
-        url: "manager/web_tracker_generator_list_manager",
+        url: "../manager/web_tracker_generator_list_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_link_to_web_tracker"
@@ -103,7 +103,7 @@ $(function() {
     });  
 
     $.post({
-        url: "sniperhost/manager/sniperhost_manager",
+        url: "sniperhost/../manager/sniperhost_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_landpage_list",
@@ -159,7 +159,7 @@ function uploadTrackerImage(fname,fsize,ftype,fb64){
     }
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "upload_tracker_image",
@@ -199,7 +199,7 @@ function saveMailTemplate(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "save_mail_template",
@@ -234,7 +234,7 @@ function getMailTemplateFromTemplateId(id) {
         nextRandomId = id;
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_mail_template_from_template_id",
@@ -272,7 +272,7 @@ function promptMailTemplateDeletion(id) {
 
 function mailTemplateDeletionAction() {
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "delete_mail_template_from_template_id",
@@ -305,7 +305,7 @@ function mailTemplateCopy() {
         $("#modal_new_mail_template_name").removeClass("is-invalid");
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "make_copy_mail_template",
@@ -328,7 +328,7 @@ function mailTemplateCopy() {
 
 function loadTableMailTemplateList() {
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_mail_template_list"
@@ -385,7 +385,7 @@ function uploadAttachments(fname,fsize,ftype,fb64){
     }
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "upload_attachments",
@@ -458,7 +458,7 @@ function uploadMailBodyFiles(fname,fsize,ftype,fb64,el){
 
     $(el).closest('.modal-content').find('.modal-footer').append(displayLoader("Uploading...","small"))
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "upload_mail_body_files",
@@ -536,7 +536,7 @@ function modalTestDeliveryAction(e){
 
     enableDisableMe(e);
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "send_test_mail_sample",
@@ -655,7 +655,7 @@ function insertMedia(type){
 
 function getStoreList(){
     $.post({
-        url: "manager/settings_manager",
+        url: "../manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",
@@ -678,7 +678,7 @@ $('#selector_sample_mailtemplates').on('change', function() {
 
 function insertMailTemplate(){
     $.post({
-        url: "manager/settings_manager",
+        url: "../manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",

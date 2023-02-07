@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 	//shows if login page is opened before install 
 require_once('../manager/common_functions.php');
-require_once('../includes/db.php');
+require_once('../config/db.php');
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
 error_reporting(E_ERROR | E_PARSE); //Disable warnings

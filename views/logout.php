@@ -1,5 +1,5 @@
 <?php 
-require_once('../includes/db.php');
+require_once('../config/db.php');
 require_once('../manager/session_manager.php');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
 

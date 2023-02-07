@@ -1,6 +1,6 @@
 <?php
 require_once('../manager/common_functions.php');
-require_once('../includes/db.php');
+require_once('../config/db.php');
 //-----------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
