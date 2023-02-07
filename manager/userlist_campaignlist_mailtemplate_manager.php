@@ -451,11 +451,11 @@ function uploadAttachment($conn,&$POSTJ){
 	$binary_data = base64_decode($file_b64);
 	$file_id = $mail_template_id.'_'.time();
 
-	$target_file = dirname(__FILE__,2).'/uploads/attachments/'.$file_id.'.att';
+	$target_file = '../uploads/attachments/'.$file_id.'.att';
 
-	if (!is_dir(dirname(__FILE__,2).'/uploads/attachments/')) 
+	if (!is_dir('../uploads/attachments/')) 
 		die(json_encode(['result' => 'failed', 'error' => 'Directory spear/uploads/attachments/ does not exist']));
-	if (!is_writable(dirname(__FILE__,2).'/uploads/attachments/')) 
+	if (!is_writable('../uploads/attachments/')) 
 		die(json_encode(['result' => 'failed', 'error' => 'Directory spear/uploads/attachments/ has no write permission']));
 
 	try{

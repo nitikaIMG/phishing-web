@@ -9,7 +9,7 @@ getGraphsData();
 
 function getGraphsData() {
     $.post({
-        url: "manager/home_manager",
+        url: "../manager/home_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_home_graphs_data"
