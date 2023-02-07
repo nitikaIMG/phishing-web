@@ -233,7 +233,7 @@ function terminateSession($redirection=true){
 	session_destroy();
 	if($redirection){
 		ob_end_clean();   // clear output buffer
-		header("Location: /spear/");
+		header("Location: /phishing-web/views/signin");
 		die();
 	}
 }
