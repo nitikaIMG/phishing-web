@@ -1,10 +1,10 @@
 <?php
 //-------------------Session check-----------------------
-require_once(dirname(__FILE__,3) . '/config/db.php');
-require_once(dirname(__FILE__,3) . '/manager/session_manager.php');
-require_once(dirname(__FILE__,3) . '/manager/common_functions.php');
-require_once(dirname(__FILE__,2) . '/lib/Base32.php');
-require_once(dirname(__FILE__,2) . '/lib/base85.class.php');
+require_once(dirname(__FILE__,3) . '../config/db.php');
+require_once(dirname(__FILE__,3) . '../manager/session_manager.php');
+require_once(dirname(__FILE__,3) . '../manager/common_functions.php');
+require_once(dirname(__FILE__,3) . '../sniperhost/lib/Base32.php');
+require_once(dirname(__FILE__,3) . '../sniperhost/lib/base85.class.php');
 if(isSessionValid() == false)
 	die("Access denied");
 //-------------------------------------------------------

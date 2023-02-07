@@ -18,6 +18,9 @@ isSessionValid(true);
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/codemirror.min.css">
       <style> 
          .tab-header{ list-style-type: none; }
+         body.dark .table tbody tr td {
+            color: white;
+         }
       </style>
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/toastr.min.css">
 </head>
