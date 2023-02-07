@@ -1,4 +1,5 @@
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="<?php echo url?>/src/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo url?>/src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="<?php echo url?>/src/plugins/src/mousetrap/mousetrap.min.js"></script>

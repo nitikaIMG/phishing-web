@@ -554,10 +554,10 @@
             </a>
             <ul class="collapse submenu list-unstyled" id="authentication" data-bs-parent="#accordionExample">
                 <li>
-                    <a href="./auth-boxed-signin.html" target="_blank"> Sign In </a>
+                    <a href="./signin.php" target="_blank"> Sign In </a>
                 </li>
                 <li>
-                    <a href="./auth-boxed-signup.html" target="_blank"> Sign Up </a>
+                    <a href="./signup.php" target="_blank"> Sign Up </a>
                 </li>
                 <li>
                     <a href="./auth-boxed-lockscreen.html" target="_blank"> Unlock </a>
