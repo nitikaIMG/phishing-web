@@ -90,7 +90,7 @@ function addUserToTable($conn, &$POSTJ){
 		$user_data = json_decode($row["user_data"],true);
 
 	$uid = getRandomStr(10);
-	array_push($user_data,['uid'=>$uid, 'fname'=>$POSTJ['fname'], 'lname'=>$POSTJ['lname'], 'email'=>$POSTJ['email'], 'notes'=>$POSTJ['notes']]);
+	array_push($user_data,['uid'=>$uid, 'fname'=>$POSTJ['fname'], 'lname'=>$POSTJ['lname'], 'email'=>$POSTJ['email'], 'company'=>$POSTJ['company'], 'job' =>$POSTJ['job']]);
 	$user_data = json_encode(array_unique($user_data, SORT_REGULAR));
 
 	if(checkAnIDExist($conn,$user_group_id,'user_group_id','tb_core_mailcamp_user_group')){
@@ -136,7 +136,7 @@ function updateUser($conn, &$POSTJ){
 
 		$index = array_search($uid, array_column($user_data, 'uid'));
 		if($index !== false ){	//returns false if not found
-			$user_data[$index]= ['uid'=>$uid, 'fname'=>$POSTJ['fname'], 'lname'=>$POSTJ['lname'], 'email'=>$POSTJ['email'], 'notes'=>$POSTJ['notes']];
+			$user_data[$index]= ['uid'=>$uid, 'fname'=>$POSTJ['fname'], 'lname'=>$POSTJ['lname'], 'email'=>$POSTJ['email'], 'company'=>$POSTJ['company'], 'job'=>$POSTJ['job']];
 			$user_data = json_encode($user_data);
 			$stmt = $conn->prepare("UPDATE tb_core_mailcamp_user_group SET user_data=? WHERE user_group_id=?");
 			$stmt->bind_param('ss', $user_data,$user_group_id);
@@ -188,7 +188,7 @@ function downloadUser($conn, $user_group_id){
 		$user_data = json_decode($row["user_data"],true);
 
 		$f = fopen('php://memory', 'w'); 
-		fputcsv($f, ['First Name', 'Last Name', 'Email', 'Notes'], ','); 
+		fputcsv($f, ['First Name', 'Last Name', 'Email', 'Company', 'Job'], ','); 
 
 	    foreach ($user_data as $line) {
 	    	unset($line['uid']);	//remove uid field

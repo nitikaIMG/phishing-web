@@ -53,7 +53,8 @@ function addUserToTable(e) {
     var field_fname = $('#tablevalue_fname').val().trim();
     var field_lname = $('#tablevalue_lname').val().trim();
     var field_email = $('#tablevalue_email').val();
-    var field_notes = $('#tablevalue_notes').val().trim()
+    var field_company = $('#tablevalue_companyname').val().trim()
+    var field_job = $('#tablevalue_jobtitle').val().trim()
 
     if (RegTest(user_group_name,'COMMON') == false) {
         $("#user_group_name").addClass("is-invalid");
@@ -84,7 +85,8 @@ function addUserToTable(e) {
             fname: field_fname,
             lname: field_lname,
             email: field_email,
-            notes: field_notes
+            company: field_name,
+            job:field_job
         })
     }).done(function (response) {
         if(response.error)
@@ -392,7 +394,7 @@ function loadTableUserGroupList() {
     }).done(function (data) {
         if(!data.error){  // no data
              $.each(data, function(key, value) {
-                var action_items_user_group_table = `<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='MailUserGroup?action=edit&user=` + value.user_group_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptUserGroupCopy('` + value.user_group_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptUserGroupDeletion('` + value.user_group_id + `')"><i class="mdi mdi-delete-variant"></i></button>`;
+                var action_items_user_group_table = `<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='employeelist?action=edit&user=` + value.user_group_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptUserGroupCopy('` + value.user_group_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptUserGroupDeletion('` + value.user_group_id + `')"><i class="mdi mdi-delete-variant"></i></button>`;
                 $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.user_group_name + "</td><td>" + value.user_count + "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + value.date + "</td><td>" + action_items_user_group_table + "</td></tr>");
             });
         }
