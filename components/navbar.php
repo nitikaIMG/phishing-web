@@ -1,3 +1,12 @@
+<?php
+require_once(dirname(__FILE__,2).'/manager/session_manager.php');
+if(isSessionValid() == true){
+   $email=$_SESSION['contact_mail'];
+   $username=$_SESSION['user'][1];
+}
+
+?>
+
 <div class="header-container container-xxl">
         <header class="header navbar navbar-expand-sm expand-header">
 
@@ -15,6 +24,7 @@
                 </form>
                 <span class="badge badge-secondary">Ctrl + /</span>
             </div>
+
 
             <ul class="navbar-item flex-row ms-lg-auto ms-0">
 
@@ -150,7 +160,6 @@
                             
                         </div>
                     </div>
-                    
                 </li>
 
                 <li class="nav-item dropdown user-profile-dropdown  order-lg-0 order-1">
@@ -169,8 +178,8 @@
                                     &#x1F44B;
                                 </div>
                                 <div class="media-body">
-                                    <h5>Shaun Park</h5>
-                                    <p>Project Leader</p>
+                                    <h5><?=$username?></h5>
+                                    <p><?=$email?></p>
                                 </div>
                             </div>
                         </div>

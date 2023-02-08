@@ -1,4 +1,9 @@
+<?php
 
+require_once('../manager/session_manager.php');
+require_once('../includes/config.php');
+isSessionValid(true);
+?> 
 <?php 
 require_once '../includes/config.php';
 ?> 
