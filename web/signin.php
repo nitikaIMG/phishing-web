@@ -46,12 +46,12 @@ require_once '../includes/config.php';
                         <div class="col-md-12 mb-3">
                             
                             <h2>Sign In</h2>
-                            <p>Enter your contact_mail and password to login</p>
+                            <p>Enter your email and password to login</p>
                             
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label">contact_mail</label>
+                                <label class="form-label">Email</label>
                                 <input type="email" name="contact_mail" class="form-control">
                             </div>
                         </div>
@@ -61,9 +61,9 @@ require_once '../includes/config.php';
                                 <input type="password" name="password"  class="form-control">
                             </div>
                             <?php 
-                      if(isset($_POST['username']) || isset($_POST['password']))
+                      if(isset($_POST['contact_mail']) || isset($_POST['password']))
                          echo '<div class="text-danger">
-                                  Username or password is incorrect.
+                                  Email or Password is incorrect.
                                </div>';
                    ?>
                         </div>

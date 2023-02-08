@@ -227,6 +227,14 @@ function createSession($f_regenerate,$contact_mail){
 		session_regenerate_id(true);
 
 	$_SESSION['contact_mail'] = $contact_mail;
+
+	global $conn;
+	$contact_mail=$_SESSION['contact_mail'];
+	$stmt = $conn->prepare("SELECT * FROM tb_main where contact_mail='$contact_mail'");
+	$stmt->execute();
+	$row = $stmt->get_result()->fetch_row();
+
+	$_SESSION['user'] = $row;
 }
 
 function terminateSession($redirection=true){
@@ -237,4 +245,7 @@ function terminateSession($redirection=true){
 		die();
 	}
 }
+
+
+
 ?>
