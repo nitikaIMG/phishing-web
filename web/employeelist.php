@@ -103,12 +103,12 @@ isSessionValid(true);
                                        <hr />
                                        <div class="row">
                                           <div class="col-12">
-                                             <div class="row d-flex align-items-center">
-                                                <div class="col-2">
-                                                <button type="button" class="btn d-flex align-items-center  justify-content-center btn-success dropdown-toggle" id="addcsvdata" title="Import email list" data-toggle="tooltip"><i class="fas fa-download me-2"></i>bulk Import</button>
+                                             <div class="row d-flex align-items-center g-md-0 g-3">
+                                                <div class="col-md-auto">
+                                                <button type="button" class="btn d-flex align-items-center text-nowrap  justify-content-center btn-success dropdown-toggle" id="addcsvdata" title="Import email list" data-toggle="tooltip"><i class="fas fa-download me-2"></i>bulk Import</button>
                                                 </div>
-                                                <div class="col-8"><input type="file" id="fileinput" class="form-control date-inputmask" accept=".txt, .csv, .lst, .rtf" />       </div>
-                                                <div class="col-2">
+                                                <div class="col"><input type="file" id="fileinput" class="form-control date-inputmask" accept=".txt, .csv, .lst, .rtf" />       </div>
+                                                <div class="col-md-auto col-12">
                                                 <a class="dropdown-item" href="#" onclick="exportUserAction()"><span class=" mdi mdi-file-excel"></span>Download Template</a>
                                                 </div>
                                              </div>
@@ -118,28 +118,28 @@ isSessionValid(true);
                                              </div> 
                                        </div>
                                        <hr />
-                                       <div class="row g-3 align-items-center">
-                                          <div class="col-sm-2">
+                                       <div class="row g-3 align-items-end text-nowrap">
+                                          <div class="col">
                                              <label>First Name:</label>
                                              <input type="text" class="form-control date-inputmask" id="tablevalue_fname">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Last Name:</label>
                                              <input type="text" class="form-control date-inputmask" id="tablevalue_lname">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Email Address:</label>
                                              <input type="text" class="form-control" id="tablevalue_email">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Company Name:</label>
                                              <input type="text" class="form-control" id="tablevalue_companyname">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Job title:</label>
                                              <input type="text" class="form-control" id="tablevalue_jobtitle">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <button type="button" class="btn btn-success" id="bt_add_email_tracker" onclick="addUserToTable($(this))"><i class="fa fas fa-plus"></i> Add</button>
                                              
                                           </div>
@@ -155,7 +155,7 @@ isSessionValid(true);
                                     <div class="row layout-spacing">
                                        <div class="col-12">
                                           <div class="statbox widget box box-shadow">
-                                             <div class="widget-content widget-content-area">
+                                             <div class="widget-content widget-content-area table-responsive">
                                                 <table id="table_user_list" class="table table-bordered w-100 style-3 dt-table-hover dataTable no-footer">
                                                    <thead>
                                                       <tr>
