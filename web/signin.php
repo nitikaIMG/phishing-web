@@ -40,7 +40,7 @@ require_once '../includes/config.php';
             <div class="card mt-3 mb-3">
                 <div class="card-body">
 
-                <form class="form-horizontal m-t-20" id="loginform"  method="post" onsubmit="doLogin()">
+                    <form class="form-horizontal m-t-20" id="loginform"  method="post" onsubmit="doLogin()">
 
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -52,29 +52,29 @@ require_once '../includes/config.php';
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" name="contact_mail" class="form-control">
+                                <input type="email" name="contact_mail" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="mb-4">
                                 <label class="form-label">Password</label>
-                                <input type="password" name="password"  class="form-control">
+                                <input type="password" name="password"  class="form-control" required>
                             </div>
                             <?php 
                       if(isset($_POST['contact_mail']) || isset($_POST['password']))
                          echo '<div class="text-danger">
-                                  Email or Password is incorrect.
+                                  email or password is incorrect.
                                </div>';
                    ?>
                         </div>
                         <div class="col-12">
                             <div class="mb-3">
                                 <div class="form-check form-check-primary form-check-inline">
-                                    <input class="form-check-input me-3" type="checkbox" id="form-check-default">
-                                    <label class="form-check-label" for="form-check-default">
-                                        Remember me
-                                    </label>
-                                    <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> Lost password?</button>
+                                    <!--<input class="form-check-input me-3" type="checkbox" id="form-check-default">-->
+                                    <!--<label class="form-check-label" for="form-check-default">-->
+                                    <!--    Remember me-->
+                                    <!--</label>-->
+                                    <a class="" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> Forget password?</a>
                                     
                                 </div>
                             </div>
@@ -86,41 +86,41 @@ require_once '../includes/config.php';
                             </div>
                         </div>
                         
-                        <div class="col-12 mb-4">
-                            <div class="">
-                                <div class="seperator">
-                                    <hr>
-                                    <div class="seperator-text"> <span>Or continue with</span></div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="col-12 mb-4">-->
+                        <!--    <div class="">-->
+                        <!--        <div class="seperator">-->
+                        <!--            <hr>-->
+                        <!--            <div class="seperator-text"> <span>Or continue with</span></div>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--</div>-->
                         
-                        <div class="col-sm-4 col-12">
-                            <div class="mb-4">
-                                <button class="btn  btn-social-login w-100 ">
-                                    <img src="<?php echo url?>/src/assets/img/google-gmail.svg" alt="" class="img-fluid">
-                                    <span class="btn-text-inner">Google</span>
-                                </button>
-                            </div>
-                        </div>
+                        <!--<div class="col-sm-4 col-12">-->
+                        <!--    <div class="mb-4">-->
+                        <!--        <button class="btn  btn-social-login w-100 ">-->
+                        <!--            <img src="<?php echo url?>/src/assets/img/google-gmail.svg" alt="" class="img-fluid">-->
+                        <!--            <span class="btn-text-inner">Google</span>-->
+                        <!--        </button>-->
+                        <!--    </div>-->
+                        <!--</div>-->
 
-                        <div class="col-sm-4 col-12">
-                            <div class="mb-4">
-                                <button class="btn  btn-social-login w-100">
-                                    <img src="<?php echo url?>/src/assets/img/github-icon.svg" alt="" class="img-fluid">
-                                    <span class="btn-text-inner">Github</span>
-                                </button>
-                            </div>
-                        </div>
+                        <!--<div class="col-sm-4 col-12">-->
+                        <!--    <div class="mb-4">-->
+                        <!--        <button class="btn  btn-social-login w-100">-->
+                        <!--            <img src="<?php echo url?>/src/assets/img/github-icon.svg" alt="" class="img-fluid">-->
+                        <!--            <span class="btn-text-inner">Github</span>-->
+                        <!--        </button>-->
+                        <!--    </div>-->
+                        <!--</div>-->
 
-                        <div class="col-sm-4 col-12">
-                            <div class="mb-4">
-                                <button class="btn  btn-social-login w-100">
-                                    <img src="<?php echo url?>/src/assets/img/twitter.svg" alt="" class="img-fluid">
-                                    <span class="btn-text-inner">Twitter</span>
-                                </button>
-                            </div>
-                        </div>
+                        <!--<div class="col-sm-4 col-12">-->
+                        <!--    <div class="mb-4">-->
+                        <!--        <button class="btn  btn-social-login w-100">-->
+                        <!--            <img src="<?php echo url?>/src/assets/img/twitter.svg" alt="" class="img-fluid">-->
+                        <!--            <span class="btn-text-inner">Twitter</span>-->
+                        <!--        </button>-->
+                        <!--    </div>-->
+                        <!--</div>-->
 
                         <div class="col-12">
                             <div class="text-center">
@@ -131,35 +131,57 @@ require_once '../includes/config.php';
                     </div>
                     
                 </form>
+                <form class="form-horizontal m-t-20" id="recoverform" >
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            
+                            <h2>Forget Password</h2>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control form-control-lg" id="tb_recoverymail" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <div class="form-check form-check-primary form-check-inline">
+                                    <!--<input class="form-check-input me-3" type="checkbox" id="form-check-default">-->
+                                    <!--<label class="form-check-label" for="form-check-default">-->
+                                    <!--    Remember me-->
+                                    <!--</label>-->
+                                    
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="mb-4">
+                                <button name="login" type="submit" class="btn btn-secondary w-100">Send</button>
+                            </div>
+                        </div>
+                        
+                       
+
+                        <div class="col-12">
+                            <div class="text-center">
+                                <p class="mb-0">Dont't have an account ? <a href="#" class="text-warning" id="to-login">Sign in</a></p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </form>
 
                 </div>
             </div>
         </div>
-        <div id="recoverform">
-                  <div class="text-center">
-                     <span class="text-white">Enter your e-mail address below and we will send you instructions how to recover a password.</span>
-                  </div>
-                  <div class="row m-t-20">
-                     <!-- Form -->
-                     <form class="col-12" id="recoveryform" >
-                        <!-- email -->
-                        <div class="input-group mb-3">
-                           <div class="input-group-prepend">
-                              <span class="input-group-text bg-danger text-white" id="basic-addon1"><i class="mdi mdi-email-outline"></i></span>
-                           </div>
-                           <input type="email" class="form-control form-control-lg" id="tb_recoverymail" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1" required>
-                        </div>
-                        <!-- pwd -->
-                        <div class="row m-t-20 p-t-20 border-top border-secondary">
-                           <div class="col-12">
-                              <a class="btn btn-success" href="#" id="to-login">Back To Login</a>
-                              <button class="btn btn-info float-right" type="submit" name="recovery"><i class="fa fas"></i> Recover</button>
-                           </div>
-                        </div>
-                        <div id="lb_msg" class="m-t-10"></div>
-                     </form>
-                  </div>
-               </div>
+       
     </div>
     
 </div>
@@ -167,13 +189,17 @@ require_once '../includes/config.php';
 </div>
 <!-- <script src="js/libs/jquery/jquery-3.6.0.min.js"></script> -->
 <?php include('../components/script.php'); ?>
+
       <script>
+      $(document).ready(function(){
+          $("#recoverform").hide();
+      })
          $(".preloader").fadeOut();
          // ============================================================== 
          // Login and Recover Password 
          // ============================================================== 
          $('#to-recover').on("click", function() {
-             $("#loginform").slideUp();
+             $("#loginform").hide();
              $("#recoverform").fadeIn();
          });
          $('#to-login').click(function(){             

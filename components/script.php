@@ -5,6 +5,8 @@
     <script src="<?php echo url?>/src/plugins/src/mousetrap/mousetrap.min.js"></script>
     <script src="<?php echo url?>/src/plugins/src/waves/waves.min.js"></script>
     <script src="<?php echo url?>/collapsible-menu/app.js"></script>
+       <script src="<?php echo url?>/src/plugins/src/sweetalerts2/sweetalerts2.min.js"></script>
+    <script src="<?php echo url?>/src/plugins/src/sweetalerts2/custom-sweetalert.js"></script>
     <!-- END GLOBAL MANDATORY SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
