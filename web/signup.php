@@ -57,16 +57,16 @@ require_once '../includes/config.php';
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="mb-3">
-                                        <div class="form-check form-check-primary form-check-inline">
-                                            <input class="form-check-input me-3" type="checkbox" id="form-check-default">
-                                            <label class="form-check-label" for="form-check-default">
-                                                I agree the <a href="javascript:void(0);" class="text-primary">Terms and Conditions</a>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!--<div class="col-12">-->
+                                <!--    <div class="mb-3">-->
+                                <!--        <div class="form-check form-check-primary form-check-inline">-->
+                                <!--            <input class="form-check-input me-3" type="checkbox" id="form-check-default">-->
+                                <!--            <label class="form-check-label" for="form-check-default">-->
+                                <!--                I agree the <a href="javascript:void(0);" class="text-primary">Terms and Conditions</a>-->
+                                <!--            </label>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--</div>-->
                                 
                                 <div class="col-12">
                                     <div class="mb-4">
@@ -74,41 +74,41 @@ require_once '../includes/config.php';
                                     </div>
                                 </div>
                                 
-                                <div class="col-12 mb-4">
-                                    <div class="">
-                                        <div class="seperator">
-                                            <hr>
-                                            <div class="seperator-text"> <span>Or continue with</span></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!--<div class="col-12 mb-4">-->
+                                <!--    <div class="">-->
+                                <!--        <div class="seperator">-->
+                                <!--            <hr>-->
+                                <!--            <div class="seperator-text"> <span>Or continue with</span></div>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--</div>-->
                                 
-                                <div class="col-sm-4 col-12">
-                                    <div class="mb-4">
-                                        <button class="btn  btn-social-login w-100 ">
-                                            <img src="<?php echo url?>/src/assets/img/google-gmail.svg" alt="" class="img-fluid">
-                                            <span class="btn-text-inner">Google</span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <!--<div class="col-sm-4 col-12">-->
+                                <!--    <div class="mb-4">-->
+                                <!--        <button class="btn  btn-social-login w-100 ">-->
+                                <!--            <img src="<?php echo url?>/src/assets/img/google-gmail.svg" alt="" class="img-fluid">-->
+                                <!--            <span class="btn-text-inner">Google</span>-->
+                                <!--        </button>-->
+                                <!--    </div>-->
+                                <!--</div>-->
     
-                                <div class="col-sm-4 col-12">
-                                    <div class="mb-4">
-                                        <button class="btn  btn-social-login w-100">
-                                            <img src="<?php echo url?>/src/assets/img/github-icon.svg" alt="" class="img-fluid">
-                                            <span class="btn-text-inner">Github</span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <!--<div class="col-sm-4 col-12">-->
+                                <!--    <div class="mb-4">-->
+                                <!--        <button class="btn  btn-social-login w-100">-->
+                                <!--            <img src="<?php echo url?>/src/assets/img/github-icon.svg" alt="" class="img-fluid">-->
+                                <!--            <span class="btn-text-inner">Github</span>-->
+                                <!--        </button>-->
+                                <!--    </div>-->
+                                <!--</div>-->
     
-                                <div class="col-sm-4 col-12">
-                                    <div class="mb-4">
-                                        <button class="btn  btn-social-login w-100">
-                                            <img src="<?php echo url?>/src/assets/img/twitter.svg" alt="" class="img-fluid">
-                                            <span class="btn-text-inner">Twitter</span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <!--<div class="col-sm-4 col-12">-->
+                                <!--    <div class="mb-4">-->
+                                <!--        <button class="btn  btn-social-login w-100">-->
+                                <!--            <img src="<?php echo url?>/src/assets/img/twitter.svg" alt="" class="img-fluid">-->
+                                <!--            <span class="btn-text-inner">Twitter</span>-->
+                                <!--        </button>-->
+                                <!--    </div>-->
+                                <!--</div>-->
 
                                 <div class="col-12">
                                     <div class="text-center">
@@ -137,7 +137,8 @@ require_once '../includes/config.php';
               var username= $("#username").val();
               var contact_mail= $("#contact_mail").val();
               var password= $("#password").val();
-
+             var re =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+             
               $("#username-error").html("");
               $("#password-error").html("");
               $("#email-error").html("");
@@ -146,8 +147,13 @@ require_once '../includes/config.php';
                  $("#username-error").append("Please Enter User Name!"); 
               }
               if(!contact_mail){
+                  $("#email-error").children().remove();
                  $("#email-error").append("Please Enter Email Address!");
               }
+              if(!contact_mail.match(re)){
+                  $("#email-error").children().remove();
+                 $("#email-error").append("Please Enter valid Email Address!");
+             }
               if(!password){
                  $("#password-error").append("Please Enter Passsword!");
                  exit();
@@ -158,7 +164,7 @@ require_once '../includes/config.php';
             }
            
 
-            if(!username || !password || !contact_mail){
+            if(!username || !password || !contact_mail || !contact_mail.match(re)){
                 exit();
             }
             $.post({
@@ -171,7 +177,16 @@ require_once '../includes/config.php';
                 })
             }).done(function (data) {
                if(data == "success"){
-                   window.location.href='../web/signin.php';
+                            Swal.fire(
+                            'Success!',
+                            'Registered Successfully.',
+                            'success'
+                            )
+                            setTimeout(function () {
+                            window.location.href='../web/signin.php';
+                             }, 2500);
+                      
+                   
                }else{
                 alert("Email already exist!");
                }

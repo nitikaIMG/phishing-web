@@ -163,9 +163,9 @@ isSessionValid(true);
                                                          <th>First Name</th>
                                                          <th>Last Name</th>
                                                          <th>Email</th>
-                                                         <th>Comapny</th>
+                                                         <th>Company</th>
                                                          <th>Job</th>
-                                                         <th>Actions</th>
+                                                         <th>Action</th>
                                                       </tr>
                                                    </thead>
                                                    <tbody>
@@ -214,7 +214,7 @@ isSessionValid(true);
                                              <th>Group Name</th>
                                              <th>Total Users</th>
                                              <th>Date Created</th>
-                                             <th>Actions</th>
+                                             <th>Action</th>
                                           </tr>
                                        </thead>
                                        <tbody>

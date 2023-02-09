@@ -1,5 +1,6 @@
 <?php
 require_once('../manager/common_functions.php');
+
 require_once('../config/db.php');
 //-----------------------------
 date_default_timezone_set('UTC');
