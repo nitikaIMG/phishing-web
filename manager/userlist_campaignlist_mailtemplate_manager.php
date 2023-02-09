@@ -234,9 +234,9 @@ function uploadUserCVS($conn, &$POSTJ){
 		$uid = getRandomStr(10);
 
 		if(isValidEmail($user[1]))
-	    	array_push($arr_users,['uid'=>$uid, 'fname'=>$user[0], 'lname'=>null, 'email'=>$user[1], 'notes'=>$user[2]]);
+	    	array_push($arr_users,['uid'=>$uid, 'fname'=>$user[0], 'lname'=>null, 'email'=>$user[1], 'company'=>$user[2], 'job'=>$user[3]]);
     	elseif(isValidEmail($user[2]))
-	    	array_push($arr_users,['uid'=>$uid, 'fname'=>$user[0], 'lname'=>$user[1], 'email'=>$user[2], 'notes'=>$user[3]]);
+	    	array_push($arr_users,['uid'=>$uid, 'fname'=>$user[0], 'lname'=>$user[1], 'email'=>$user[2], 'company'=>$user[3], 'job'=>$user[4]]);
     	else
     		die(json_encode(['result' => 'failed', 'error' => 'Import failed. Invalid email at '. $user[2]]));
 	}
@@ -287,6 +287,10 @@ function getUserGroupFromGroupIdTable($conn,&$POSTJ){
 	if(!empty($row)){
 		$user_data = json_decode($row["user_data"],true);
 		foreach ($user_data as $item){
+			$item['fname'] = ucfirst($item['fname']);
+			$item['lname'] = ucfirst($item['lname']);
+			$item['company'] = ucfirst($item['company']);
+			$item['job'] = ucfirst($item['job']);
 		    $m_array = preg_grep('/.*'.$search_value.'.*/', $item);
 		    if(!empty($m_array))
 		    	array_push($arr_filtered, $item);

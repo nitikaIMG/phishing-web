@@ -1,6 +1,6 @@
 var row_index;
 var dt_user_group_list;
-var action_items = '<button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" onclick="deleteRow($(this))" data-original-title="Delete"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button> <button class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" onclick="editRow($(this))" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>';
+var action_items = '<a class="" data-toggle="tooltip" data-placement="top" title="" onclick="editRow($(this))" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" data-toggle="tooltip" data-placement="top" title="" onclick="deleteRow($(this))" data-original-title="Delete"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a> ';
 
 dt_user_list = $('#table_user_list').DataTable({
     "preDrawCallback": function(settings) {
@@ -196,7 +196,55 @@ function addUserFromFile() {
     }
 }
 
-$('input[type=file]').change(function() {
+// $('input[type=file]').change(function() {
+//     if (RegTest($('#user_group_name').val(),'COMMON') == false) {
+//         $("#user_group_name").addClass("is-invalid");
+//         toastr.error('', 'Empty/Unsupported character!');
+//         return;
+//     } else
+//         $("#user_group_name").removeClass("is-invalid");
+
+//     var file = $('#fileinput').prop('files')[0];
+
+//     var fileExtension = ['csv', 'txt', 'lst', 'rtf'];
+//     if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+//         toastr.error('', 'Unsupported file type!');
+//         return;
+//     }
+
+//     if (file) {
+//         var reader = new FileReader();
+//         reader.readAsText(file, "UTF-8");
+//         reader.onload = function(evt) {
+//             var user_data = evt.target.result;
+
+//             $.post({
+//                 url: "../manager/userlist_campaignlist_mailtemplate_manager",
+//                 contentType: 'application/json; charset=utf-8',
+//                 data: JSON.stringify({ 
+//                     action_type: "upload_user",
+//                     user_group_id: nextRandomId,
+//                     user_data : user_data,
+//                     user_group_name: $('#user_group_name').val().trim()
+//                 })
+//             }).done(function (response) {
+//                 if(response.result == "success"){
+//                     toastr.success('', 'User list added successfully!');
+//                     getUserGroupFromGroupId(nextRandomId);
+//                 }
+//                 else
+//                     toastr.error('', response.error);
+//             }); 
+//         }
+//         reader.onerror = function(evt) {
+//             toastr.error('', 'Error reading file!');
+//         }
+//     }
+// });
+
+
+$('#addcsvdata').click(function() {
+    
     if (RegTest($('#user_group_name').val(),'COMMON') == false) {
         $("#user_group_name").addClass("is-invalid");
         toastr.error('', 'Empty/Unsupported character!');
@@ -207,7 +255,7 @@ $('input[type=file]').change(function() {
     var file = $('#fileinput').prop('files')[0];
 
     var fileExtension = ['csv', 'txt', 'lst', 'rtf'];
-    if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+    if ($.inArray($('#fileinput').val().split('.').pop().toLowerCase(), fileExtension) == -1) {
         toastr.error('', 'Unsupported file type!');
         return;
     }
@@ -313,7 +361,7 @@ function getUserGroupFromGroupId(id) {
            { data: 'job' },
            { data: 'action' },
         ],
-        'columnDefs': [{'targets':5, 'className':'dt-center'}],
+        'columnDefs': [{ 'className':'dt-center'}],
         'pageLength': 20,
         'lengthMenu': [[20, 50, 100, 500, 1000, -1], [20, 50, 100, 500, 1000, 'All']],
         drawCallback:function(){
@@ -397,8 +445,8 @@ function loadTableUserGroupList() {
          })
     }).done(function (data) {
         if(!data.error){  // no data
-             $.each(data, function(key, value) {
-                var action_items_user_group_table = `<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='employeelist?action=edit&user=` + value.user_group_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptUserGroupCopy('` + value.user_group_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptUserGroupDeletion('` + value.user_group_id + `')"><i class="mdi mdi-delete-variant"></i></button>`;
+             $.each(data, function(key, value) { 
+                var action_items_user_group_table = `<a class="" data-toggle="tooltip" data-placement="top" style="margin: 6px;" onclick="document.location='employeelist?action=edit&user=` + value.user_group_id + `'" title="View/Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" data-toggle="tooltip"  style="margin: 6px;"  data-placement="top" title="Copy" onclick="promptUserGroupCopy('` + value.user_group_id + `')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><a class="" data-toggle="tooltip"   style="margin: 0px;"  data-placement="top" title="Delete" onclick="promptUserGroupDeletion('` + value.user_group_id + `')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>`;
                 $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.user_group_name + "</td><td>" + value.user_count + "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + value.date + "</td><td>" + action_items_user_group_table + "</td></tr>");
             });
         }
@@ -407,7 +455,6 @@ function loadTableUserGroupList() {
             "aaSorting": [3, 'asc'],
             'columnDefs': [{
                 "targets": 4,
-                "className": "dt-center"
             }],
             
             "preDrawCallback": function(settings) {

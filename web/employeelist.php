@@ -101,42 +101,47 @@ isSessionValid(true);
                                           </div>
                                        </div>
                                        <hr />
-                                       <div class="row g-3">
-                                          <div class="col-sm-2">
+                                       <div class="row">
+                                          <div class="col-12">
+                                             <div class="row d-flex align-items-center g-md-0 g-3">
+                                                <div class="col-md-auto">
+                                                <button type="button" class="btn d-flex align-items-center text-nowrap  justify-content-center btn-success dropdown-toggle" id="addcsvdata" title="Import email list" data-toggle="tooltip"><i class="fas fa-download me-2"></i>bulk Import</button>
+                                                </div>
+                                                <div class="col"><input type="file" id="fileinput" class="form-control date-inputmask" accept=".txt, .csv, .lst, .rtf" />       </div>
+                                                <div class="col-md-auto col-12">
+                                                <a class="dropdown-item" href="#" onclick="exportUserAction()"><span class=" mdi mdi-file-excel"></span>Download Template</a>
+                                                </div>
+                                             </div>
+                                               <!--  <div class="btn-group" id="bt_save_config">                                
+                                                     
+                                                </div>-->
+                                             </div> 
+                                       </div>
+                                       <hr />
+                                       <div class="row g-3 align-items-end text-nowrap">
+                                          <div class="col">
                                              <label>First Name:</label>
                                              <input type="text" class="form-control date-inputmask" id="tablevalue_fname">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Last Name:</label>
                                              <input type="text" class="form-control date-inputmask" id="tablevalue_lname">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Email Address:</label>
                                              <input type="text" class="form-control" id="tablevalue_email">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Company Name:</label>
                                              <input type="text" class="form-control" id="tablevalue_companyname">
                                           </div>
-                                          <div class="col-sm-2">
+                                          <div class="col">
                                              <label>Job title:</label>
                                              <input type="text" class="form-control" id="tablevalue_jobtitle">
                                           </div>
-                                          <div class="col-sm-2">
-                                                <button type="button" class="btn btn-success" id="bt_add_email_tracker" onclick="addUserToTable($(this))"><i class="fa fas fa-plus"></i> Add</button>
-                                                <div class="col-sm-2">
-                                             <div class="btn-group" id="bt_save_config">
-                                                <button type="button" class="btn btn-success dropdown-toggle" onclick="addUserFromFile()" title="Import email list" data-toggle="tooltip">Import</button>
-                                                <input type="file" id="fileinput" accept=".txt, .csv, .lst, .rtf" hidden />
-                                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
-
-
-                                              
-                                                <div class="dropdown-menu" aria-labelledby="btndefault">
-                                                   <a class="dropdown-item" href="#" onclick="exportUserAction()">Export as CSV</a>
-                                                </div>
-                                             </div>
-                                          </div>
+                                          <div class="col">
+                                             <button type="button" class="btn btn-success" id="bt_add_email_tracker" onclick="addUserToTable($(this))"><i class="fa fas fa-plus"></i> Add</button>
+                                             
                                           </div>
                                        </div>
                                        </div>
@@ -148,10 +153,10 @@ isSessionValid(true);
                                        </div> -->
                                     </div>
                                     <div class="row layout-spacing">
-                                       <div class="col-lg-12">
+                                       <div class="col-12">
                                           <div class="statbox widget box box-shadow">
-                                             <div class="widget-content widget-content-area">
-                                                <table id="table_user_list" class="table table-striped table-bordered">
+                                             <div class="widget-content widget-content-area table-responsive">
+                                                <table id="table_user_list" class="table table-bordered w-100 style-3 dt-table-hover dataTable no-footer">
                                                    <thead>
                                                       <tr>
                                                          <th>#</th>
@@ -194,15 +199,15 @@ isSessionValid(true);
                <div class="card">
                      <div class="card-body">
                         <div class="row">
-                           <div class="col-md-12">
-                              <button type="button" class="btn btn-info btn-sm" onclick="document.location='employeelist?action=add&user=new'"><i class="fas fa-plus"></i> New User Group</button>
+                           <div class="col-md-12" style="display: flex;justify-content: end;">
+                              <button type="button" class="btn btn-info btn-sm" style="padding-top: 11px; " onclick="document.location='employeelist?action=add&user=new'"><i class="fas fa-plus"></i> New User Group</button>
                            </div>
                         </div>
                         <div class="row">
                            <div class="col-md-12 m-t-20">
                               <div class="row">
                                  <div class="table-responsive">
-                                    <table id="table_user_group_list" class="table table-striped table-bordered">
+                                    <table id="table_user_group_list" class="table  table-bordered">
                                        <thead>
                                           <tr>
                                              <th>#</th>
