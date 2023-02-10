@@ -1,7 +1,7 @@
 <?php
-   require_once(dirname(__FILE__,2) . '/config/db.php');
-   require_once(dirname(__FILE__,2) . '/manager/common_functions.php');
-   require_once '../includes/config.php';
+   require_once(dirname(__FILE__) . '/config/db.php');
+   require_once(dirname(__FILE__) . '/manager/common_functions.php');
+   require_once (dirname(__FILE__).'/includes/config.php');
 
    if(isset($_GET['token'])){  
       if(!isTokenValid($conn,$_GET['token']))
@@ -14,7 +14,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('../components/header.php'); ?>
+    <?php include(dirname(__FILE__).'/components/header.php'); ?>
 </head>
 <style>
     #to-recover:hover {
@@ -78,7 +78,7 @@
 </div>
   
        <!-- <script src="js/libs/jquery/jquery-3.6.0.min.js"></script> -->
-       <?php include('../components/script.php'); ?>
+       <?php include(dirname(__FILE__).'/components/script.php'); ?>
 
 
       <script>
@@ -101,7 +101,7 @@
 
             $("#bt_reset_pwd i").toggleClass('fa-spinner fa-spin');
             $.post({
-                url: "../manager/pwd_manager.php",
+                url: "./manager/pwd_manager.php",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                     action_type: "do_change_pwd",
@@ -112,7 +112,7 @@
                 var url=App;
                 $("#bt_reset_pwd i").toggleClass('fa-spinner fa-spin');
                 if(data.result == "success"){ 
-                    $("#lb_msg").html(`<span class="text-success">Password reset successs. Click <a href="${url}">here</a> to login</span>`);
+                    $("#lb_msg").html('<span class="text-success">Password reset successs. Click <a href="#">here</a> to login</span>');
                 }
                 else
                     $("#lb_msg").html('<span class="text-danger">' + data.error + '</span>');

@@ -1,10 +1,10 @@
 <?php 
-require_once '../includes/config.php';
+require_once (dirname(__FILE__).'/includes/config.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('../components/header.php'); ?>
+    <?php include(dirname(__FILE__).'/components/header.php'); ?>
 </head>
 <body class="form">
 
@@ -129,7 +129,7 @@ require_once '../includes/config.php';
 
     </div>
 
-    <?php include('../components/script.php'); ?>
+    <?php include(dirname(__FILE__).'/components/script.php'); ?>
 
     <script>
               $("#submit").click(function(e){ 
@@ -177,7 +177,7 @@ require_once '../includes/config.php';
             }
 
             $.post({
-                url: "../manager/signup.php",
+                url: "./manager/signup.php",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                     contact_mail: contact_mail,
@@ -192,7 +192,7 @@ require_once '../includes/config.php';
                             'success'
                             )
                             setTimeout(function () {
-                            window.location.href='../web/signin.php';
+                            window.location.href='<?=App?>signin.php';
                              }, 2500);
                }else{
                 alert("Email already exist!");

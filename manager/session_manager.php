@@ -8,6 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 	//shows if login page is opened before install 
 require_once('common_functions.php');
 require_once(dirname(__FILE__,2).'/config/db.php');
+require_once(dirname(__FILE__,2).'/includes/config.php');
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
 error_reporting(E_ERROR | E_PARSE); //Disable warnings
@@ -239,9 +240,11 @@ function createSession($f_regenerate,$contact_mail){
 
 function terminateSession($redirection=true){
 	session_destroy();
+
 	if($redirection){
 		ob_end_clean();   // clear output buffer
-		header("Location: /web/signin.php");
+		$redirecturl = App;
+		header("Location:$redirecturl/signin");
 		die();
 	}
 }

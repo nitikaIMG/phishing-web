@@ -1,6 +1,7 @@
 <?php 
-require_once('../config/db.php');
-require_once('../manager/session_manager.php');
+require_once(dirname(__FILE__).'/config/db.php');
+require_once(dirname(__FILE__).'/includes/config.php');
+require_once(dirname(__FILE__).'/manager/session_manager.php');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
 
 // remove all session variables
@@ -13,7 +14,8 @@ $stmt = $conn->prepare("DELETE FROM tb_log WHERE id NOT IN (SELECT id FROM (SELE
 $stmt->execute();
 
 session_destroy();
-header("Location: ../web/signin.php");
+$redirecturl = App;
+header("Location:$redirecturl/signin");
 
 //---------------------------------------------------------------
 ?>

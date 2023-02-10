@@ -1,7 +1,7 @@
 <?php
 
-require_once('../manager/session_manager.php');
-require_once('../includes/config.php');
+require_once(dirname(__FILE__).'/manager/session_manager.php');
+require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
@@ -9,7 +9,7 @@ isSessionValid(true);
 
 <head>
    <?php
-   echo include('../components/header.php');
+   echo include(dirname(__FILE__).'/components/header.php');
    ?>
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css">
@@ -34,7 +34,7 @@ isSessionValid(true);
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
-    <?php include('../components/navbar.php'); ?>
+    <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
     <!--  END NAVBAR  -->
 
     <!--  BEGIN MAIN CONTAINER  -->
@@ -44,7 +44,7 @@ isSessionValid(true);
         <div class="search-overlay"></div>
 
         <!--  BEGIN SIDEBAR  -->
-        <?php include('../components/sidebar.php'); ?>
+        <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
         <!--  END SIDEBAR  -->
 
         <!--  BEGIN CONTENT AREA  -->
@@ -516,7 +516,7 @@ isSessionValid(true);
             </div>
             
          
-         <?php include('../components/foot.php'); ?>
+         <?php include(dirname(__FILE__).'/components/foot.php'); ?>
 
       </div>
 
@@ -524,7 +524,7 @@ isSessionValid(true);
 </div>
 <!-- END MAIN CONTAINER -->
 
-    <?php include('../components/script.php'); ?>
+    <?php include(dirname(__FILE__).'/components/script.php'); ?>
 
       <!-- All Jquery -->
       <!-- ============================================================== -->

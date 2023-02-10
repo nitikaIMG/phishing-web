@@ -84,7 +84,7 @@ function sendNewReset($conn, $contact_mail){
 
 function initResetMail($conn, $v_hash, $contact_mail){
 
-	$msg = "Hi,<p>It looks you requested for Phishing password reset. Please visit ".App."ChangePwd?token=".$v_hash." for resetting password</p>";
+	$msg = "Hi,<p>It looks you requested for Phishing password reset. Please visit : ".App."ChangePwd?token=".$v_hash." for resetting password</p>";
 	$headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 

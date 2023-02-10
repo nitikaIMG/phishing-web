@@ -1,5 +1,5 @@
 <?php
-   require_once('../manager/session_manager.php');
+   require_once(dirname(__FILE__).'/manager/session_manager.php');
    if(isSessionValid() == true){
       header("Location: index.php");
       die();
@@ -15,12 +15,12 @@
 ?>
 
 <?php 
-require_once '../includes/config.php';
+require_once (dirname(__FILE__).'/includes/config.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('../components/header.php'); ?>
+    <?php include(dirname(__FILE__).'/components/header.php'); ?>
 </head>
 <style>
     #to-recover:hover {
@@ -197,7 +197,7 @@ require_once '../includes/config.php';
 
 </div>
 <!-- <script src="js/libs/jquery/jquery-3.6.0.min.js"></script> -->
-<?php include('../components/script.php'); ?>
+<?php include(dirname(__FILE__).'/components/script.php'); ?>
 
       <script>
       $(document).ready(function(){
@@ -234,7 +234,7 @@ require_once '../includes/config.php';
             $('[name ="recovery"]').children(":first").toggleClass('fa-spinner fa-spin');
               var contact_mail= $("#tb_recoverymail").val();
             $.post({
-                url: "../manager/pwd_manager.php",
+                url: "./manager/pwd_manager.php",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                     action_type: "send_pwd_reset",

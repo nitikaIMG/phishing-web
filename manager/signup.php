@@ -7,9 +7,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 	//shows if login page is opened before install 
-require_once('../manager/common_functions.php');
-require_once('../includes/config.php');
-require_once('../config/db.php');
+require_once(dirname(__FILE__).'/common_functions.php');
+require_once(dirname(__FILE__,2).'/includes/config.php');
+require_once(dirname(__FILE__,2).'/config/db.php');
 
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -27,7 +27,6 @@ if (isset($_POST)) {
     $stmt = $conn->prepare("SELECT COUNT(*) FROM tb_main where contact_mail='$contact_mail'");
 	$stmt->execute();
     $row = $stmt->get_result()->fetch_row();
-
     if($row[0] == 0){
         $name='User';
         $dp_name=1;

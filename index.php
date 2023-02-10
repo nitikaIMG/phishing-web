@@ -1,13 +1,13 @@
 
 <?php 
-require_once('../manager/session_manager.php');
-require_once('../includes/config.php');
+require_once(dirname(__FILE__).'/manager/session_manager.php');
+require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('../components/header.php'); ?>
+    <?php include(dirname(__FILE__).'/components/header.php'); ?>
 </head>
 <body class="layout-boxed alt-menu">
     <!-- BEGIN LOADER -->
@@ -20,7 +20,7 @@ isSessionValid(true);
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
-    <?php include('../components/navbar.php'); ?>
+    <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
     <!--  END NAVBAR  -->
 
     <!--  BEGIN MAIN CONTAINER  -->
@@ -30,7 +30,7 @@ isSessionValid(true);
         <div class="search-overlay"></div>
 
         <!--  BEGIN SIDEBAR  -->
-        <?php include('../components/sidebar.php'); ?>
+        <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
         <!--  END SIDEBAR  -->
 
         <!--  BEGIN CONTENT AREA  -->
@@ -1125,7 +1125,7 @@ isSessionValid(true);
 
             </div>
 
-            <?php include('../components/foot.php'); ?>
+            <?php include(dirname(__FILE__).'/components/foot.php'); ?>
 
         </div>
         <!--  END CONTENT AREA  -->
@@ -1133,7 +1133,7 @@ isSessionValid(true);
     </div>
     <!-- END MAIN CONTAINER -->
 
-    <?php include('../components/script.php'); ?>
+    <?php include(dirname(__FILE__).'/components/script.php'); ?>
 
 </body>
 </html>

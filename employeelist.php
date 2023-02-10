@@ -1,6 +1,6 @@
 <?php
-require_once('../manager/session_manager.php');
-require_once('../includes/config.php');
+require_once(dirname(__FILE__).'/manager/session_manager.php');
+require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
@@ -8,7 +8,7 @@ isSessionValid(true);
 
 <head>
    <?php
-   echo include('../components/header.php');
+   echo include(dirname(__FILE__).'/components/header.php');
    ?>
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css">
@@ -35,14 +35,14 @@ isSessionValid(true);
    <!-- ============================================================== -->
    <div class="main-container" id="container">
       <!-- ============================================================== -->
-      <?php include('../components/navbar.php'); ?>
+      <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
       <!-- Topbar header - style you can find in pages.scss -->
       <!-- ============================================================== -->
       <div class="overlay"></div>
       <div class="search-overlay"></div>
 
       <!--  BEGIN SIDEBAR  -->
-      <?php include('../components/sidebar.php'); ?>
+      <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
       <!--  END SIDEBAR  -->
       <!-- ============================================================== -->
       <!-- End Left Sidebar - style you can find in sidebar.scss  -->
@@ -443,8 +443,8 @@ isSessionValid(true);
                   </div>
                </div>
             </div>
-            <?php include('../components/foot.php'); ?>
-            <?php include "../components/script.php"; ?>
+            <?php include(dirname(__FILE__).'/components/foot.php'); ?>
+            <?php include dirname(__FILE__)."/components/script.php"; ?>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
@@ -461,18 +461,18 @@ isSessionValid(true);
    <!-- All Jquery -->
    <!-- ============================================================== -->
 
-   <script src="../assets/js/libs/jquery/jquery-3.6.0.min.js"></script>
-   <script src="../assets/js/libs/js.cookie.min.js"></script>
+   <script src="<?php echo url ?>/js/libs/jquery/jquery-3.6.0.min.js" ></script>
+   <script src="<?php echo url ?>/js/libs/js.cookie.min.js" ></script>
    <!--Menu sidebar -->
    <!-- <script src="js/libs/sidebarmenu.js"></script> -->
    <!-- <script src="js/libs/perfect-scrollbar.jquery.min.js"></script> -->
    <!--Custom JavaScript -->
    <!-- <script src="js/libs/custom.min.js"></script> -->
    <!-- this page js -->
-   <script src="../assets/js/libs/jquery/datatables.js"></script>
-   <script src="../assets/js/libs/moment.min.js"></script>
-   <script src="../assets/js/common_scripts.js"></script>
-   <script src="../assets/js/mail_user_group.js"></script>
+   <script src="<?php echo url ?>/js/libs/jquery/datatables.js" ></script>
+   <script src="<?php echo url ?>/js/libs/moment.min.js"></script>
+   <script src="<?php echo url ?>/js/common_scripts.js" ></script>
+   <script src="<?php echo url ?>/js/mail_user_group.js" ></script>
    <?php
    echo '<script>';
    if (isset($_GET['action'])) {
@@ -490,8 +490,8 @@ isSessionValid(true);
    ?>
    <!-- <script defer src="js/libs/popper.min.js"></script>
       <script defer src="js/libs/bootstrap.min.js"></script> -->
-   <script defer src="../assets/js/libs/select2.min.js"></script>
-   <script defer src="../assets/js/libs/toastr.min.js"></script>
+   <script defer src="<?php echo url ?>/js/libs/select2.min.js" ></script>
+   <script defer src="<?php echo url ?>/js/libs/toastr.min.js" ></script>
 </body>
 
 </html>

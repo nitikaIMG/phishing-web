@@ -1,18 +1,18 @@
 
 <?php
 
-require_once('../manager/session_manager.php');
-require_once('../includes/config.php');
+require_once(dirname(__FILE__).'/manager/session_manager.php');
+require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 
 <?php 
-require_once '../includes/config.php';
+require_once dirname(__FILE__).'/includes/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('../components/header.php'); ?>
+    <?php include(dirname(__FILE__).'/components/header.php'); ?>
 </head>
 <body class="layout-boxed alt-menu">
     <!-- BEGIN LOADER -->
@@ -22,7 +22,7 @@ require_once '../includes/config.php';
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
-    <?php include('../components/navbar.php'); ?>
+    <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
     <!--  END NAVBAR  -->
 
     <!--  BEGIN MAIN CONTAINER  -->
@@ -32,7 +32,7 @@ require_once '../includes/config.php';
         <div class="search-overlay"></div>
 
         <!--  BEGIN SIDEBAR  -->
-        <?php include('../components/sidebar.php'); ?>
+        <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
         <!--  END SIDEBAR  -->
         
         <!--  BEGIN CONTENT AREA  -->
@@ -740,7 +740,7 @@ require_once '../includes/config.php';
 
             </div>
 
-            <?php include('../components/foot.php'); ?>
+            <?php include(dirname(__FILE__).'/components/foot.php'); ?>
 
         </div>
         <!--  END CONTENT AREA  -->
@@ -748,7 +748,7 @@ require_once '../includes/config.php';
     </div>
     <!-- END MAIN CONTAINER -->
 
-    <?php include('../components/script.php'); ?>
+    <?php include(dirname(__FILE__).'/components/script.php'); ?>
 
 </body>
 </html>
