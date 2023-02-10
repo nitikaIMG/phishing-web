@@ -1,6 +1,8 @@
 <?php
    require_once(dirname(__FILE__,2) . '/config/db.php');
    require_once(dirname(__FILE__,2) . '/manager/common_functions.php');
+   require_once '../includes/config.php';
+
    if(isset($_GET['token'])){  
       if(!isTokenValid($conn,$_GET['token']))
         die("Incorrect request. Token may be invalid");
@@ -8,99 +10,84 @@
    else
       die();
 ?>
+
 <!DOCTYPE html>
-<html dir="ltr">
-   <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <!-- Tell the browser to be responsive to screen width -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <!-- Favicon icon -->
-      <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-      <title>SniperPhish - The Web-Email Spear Phishing Toolkit</title>
-      <!-- Custom CSS -->
-      <link rel="stylesheet" type="text/css" href="css/style.min.css">
-   </head>
-   <body>
-      <div class="main-wrapper">
-         <!-- ============================================================== -->
-         <!-- Preloader - style you can find in spinners.css -->
-         <!-- ============================================================== -->
-         <div class="preloader">
-            <div class="lds-ripple">
-               <div class="lds-pos"></div>
-               <div class="lds-pos"></div>
-            </div>
-         </div>
-         <!-- ============================================================== -->
-         <!-- Preloader - style you can find in spinners.css -->
-         <!-- ============================================================== -->
-         <!-- ============================================================== -->
-         <!-- Login box.scss -->
-         <!-- ============================================================== -->
-         <div class=" d-flex no-block justify-content-center align-items-center bg-dark">
-            <div class="bg-dark border-top border-secondary">
-               <div class="text-center p-t-20 p-b-20">
-                  <span class="db"><img src="images/logo-icon2x.png" alt="logo" /><img src="images/logo.png" alt="logo" /></span>
-               </div>
-            </div>
-         </div>
-         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark req-box">
-            <div class="auth-box bg-dark req-box">
-               <form class="form-horizontal m-t-20" id="doPwdReset">
-                  <div class="row border-top border-secondary">
-                     <div class="col-12">
-                        <div class="form-group p-t-20">
-                           <div id="inst_fields">
-                              <div class="input-group mb-3">
-                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-info text-white" id="basic-addon1"><i class="fa fas fa-key"></i></span>
-                                 </div>
-                                 <input type="password" class="form-control form-control-lg" placeholder="New Password" id="tb_pwd" aria-label="Username" aria-describedby="basic-addon1" required>
-                              </div>
-                              <div class="input-group mb-3">
-                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-info text-white" id="basic-addon2"><i class="fa fas fa-key"></i></span>
-                                 </div>
-                                 <input type="password" class="form-control form-control-lg" placeholder="Confirm Password" id="tb_pwd_confirm" aria-label="Password" aria-describedby="basic-addon1" required>
-                              </div>                              
-                           </div>
+<html lang="en">
+<head>
+    <?php include('../components/header.php'); ?>
+</head>
+<style>
+    #to-recover:hover {
+        color:#805dca;
+    }
+    #to-recover{
+        font-style:italic;
+    }
+</style>
+
+<body class="layout-boxed alt-menu">
+    <!-- BEGIN LOADER -->
+    <div id="load_screen"> <div class="loader"> <div class="loader-content">
+        <div class="spinner-grow align-self-center"></div>
+    </div></div></div>
+    <!--  END LOADER -->
+      
+    <div class="container mx-auto align-self-center">
+
+<div class="row">
+
+    <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center mx-auto">
+        <div class="card mt-5 mb-3">
+            <div class="card-body">
+
+                  <form class="form-horizontal m-t-20" id="doPwdReset">
+
+                  <div class="row">
+                        <div class="col-md-12 mb-3">
+                          <h2>Reset Password</h2>
                         </div>
-                     </div>
-                  </div>
-                  <div class="row border-top border-secondary">
-                     <div class="col-12">
-                        <div class="form-group">
-                           <div class="p-t-20">
-                              <button class="btn btn-info float-right" id="bt_reset_pwd" type="submit"><i class="fa fas"></i> Change</button>
-                           </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">New Password</label>
+                                <input type="password" class="form-control form-control-lg" placeholder="New Password" id="tb_pwd" aria-label="Username" aria-describedby="basic-addon1" required>
+                            </div>
                         </div>
-                     </div>
-                     <div id="lb_msg" class="m-t-10"></div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control form-control-lg" placeholder="Confirm Password" id="tb_pwd_confirm" aria-label="Password" aria-describedby="basic-addon1" required>
+                            </div>
+                            <div id="lb_msg" class="m-t-10"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-4">
+                            <button class="btn btn-secondary w-100 float-right" id="bt_reset_pwd" type="submit"><i class="fa fas"></i> Change</button>
+                            </div>
+                        </div>
                   </div>
-              </form>
+                   
+               </form>
+
             </div>
-         </div>
-      </div>
-       <div class="auth-wrapper  bg-dark">
-            
-       </div>
-      <!-- ============================================================== -->
-      <!-- All Required js -->
-      <!-- ============================================================== -->
-      <script src="js/libs/jquery/jquery-3.6.0.min.js"></script>
-      <!-- Bootstrap tether Core JavaScript -->
-      <!-- ============================================================== -->
-      <!-- This page plugin js -->
-      <!-- ============================================================== -->
+        </div>
+    </div>
+   
+</div>
+
+</div>
+  
+       <!-- <script src="js/libs/jquery/jquery-3.6.0.min.js"></script> -->
+       <?php include('../components/script.php'); ?>
+
+
       <script>
         $(".preloader").fadeOut();
         // ============================================================== 
 
         $("#doPwdReset").submit(function(event) {
             event.preventDefault();
+            $("#lb_msg").html('');
 
             if($("#tb_pwd").val() != $("#tb_pwd_confirm").val()){
               $("#lb_msg").html('<span class="text-danger">Passwords are not matching.</span>');
@@ -122,14 +109,16 @@
                     token: location.search.split("?token=")[1],
                 })
             }).done(function (data) {
+                var url=App;
                 $("#bt_reset_pwd i").toggleClass('fa-spinner fa-spin');
                 if(data.result == "success"){ 
-                    $("#lb_msg").html('<span class="text-success">Password reset successs. Click <a href="/spear">here</a> to login</span>');
+                    $("#lb_msg").html(`<span class="text-success">Password reset successs. Click <a href="${url}">here</a> to login</span>`);
                 }
                 else
                     $("#lb_msg").html('<span class="text-danger">' + data.error + '</span>');
               });
         });
       </script>
+
    </body>
 </html>

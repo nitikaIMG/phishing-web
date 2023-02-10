@@ -1,12 +1,10 @@
 <?php
-require_once(dirname(__FILE__,2).'/manager/session_manager.php');
+require_once('../manager/session_manager.php');
 if(isSessionValid() == true){
    $email=$_SESSION['contact_mail'];
    $username=$_SESSION['user'][1];
 }
-
 ?>
-
 <div class="header-container container-xxl">
         <header class="header navbar navbar-expand-sm expand-header">
 
@@ -24,7 +22,6 @@ if(isSessionValid() == true){
                 </form>
                 <span class="badge badge-secondary">Ctrl + /</span>
             </div>
-
 
             <ul class="navbar-item flex-row ms-lg-auto ms-0">
 
@@ -160,6 +157,7 @@ if(isSessionValid() == true){
                             
                         </div>
                     </div>
+                    
                 </li>
 
                 <li class="nav-item dropdown user-profile-dropdown  order-lg-0 order-1">
@@ -179,12 +177,11 @@ if(isSessionValid() == true){
                                 </div>
                                 <div class="media-body">
                                     <h5><?=$username?></h5>
-                                    <p><?=$email?></p>
+                                  <p><?= $email?></p>
                                 </div>
                             </div>
                         </div>
                         <div class="dropdown-item">
-                        </div>
                         <div class="dropdown-item">
                             <a href="logout.php">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span>Log Out</span>

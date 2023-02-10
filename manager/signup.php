@@ -5,8 +5,10 @@ if (session_status() === PHP_SESSION_NONE) {
    session_start();
    session_write_close();	//prevent access denied lock error
 }
+
 	//shows if login page is opened before install 
 require_once('../manager/common_functions.php');
+require_once('../includes/config.php');
 require_once('../config/db.php');
 
 date_default_timezone_set('UTC');
@@ -15,6 +17,8 @@ error_reporting(E_ERROR | E_PARSE); //Disable warnings
 //-----------------------------
 
 if (isset($_POST)) {
+
+
 	$POSTJ = json_decode(file_get_contents('php://input'),true);
     $username=$POSTJ['username'];
     $contact_mail=$POSTJ['contact_mail'];
@@ -29,6 +33,7 @@ if (isset($_POST)) {
         $dp_name=1;
         $stmt = $conn->prepare("INSERT INTO `tb_main` ( `name`, `username`, `password`, `contact_mail`, `dp_name`, `v_hash`, `v_hash_time`, `date`, `last_login`, `last_logout`) VALUES ( '$name', '$username', '$pass', '$contact_mail', '$dp_name', '', '', '$$entry_time', '$$entry_time', '')");
         $stmt->execute();
+
         echo "success";
 	}
 	else{
@@ -37,3 +42,13 @@ if (isset($_POST)) {
 }
 else
 	die();
+
+
+
+
+
+
+
+
+    
+        
