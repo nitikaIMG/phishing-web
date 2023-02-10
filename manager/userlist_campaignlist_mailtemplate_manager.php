@@ -41,6 +41,8 @@ if (isset($_POST)) {
 
 		if($POSTJ['action_type'] == "save_mail_template")
 			saveMailTemplate($conn,$POSTJ);
+		if($POSTJ['action_type'] == "get_mail_html")
+			getmailhtml($conn,$POSTJ);
 		if($POSTJ['action_type'] == "get_mail_template_list")
 			getMailTemplateList($conn);
 		if($POSTJ['action_type'] == "get_mail_template_from_template_id")
@@ -369,6 +371,26 @@ function saveMailTemplate($conn,&$POSTJ){
 	}
 	else 
 		echo(json_encode(['result' => 'failed', 'error' => $stmt->error]));	
+}
+
+function getmailhtml($conn,$POSTJ){
+print_r("xkjfghfhghfg");die;
+	$resp = [];
+	$DTime_info = getTimeInfo($conn);
+	$id=$POSTJ['id'];
+	$result = mysqli_query($conn, "SELECT mail_template_id, mail_template_name, mail_template_subject, mail_template_content,attachment,date FROM tb_core_mailcamp_template_list  Where mail_template_id='$id' ");
+
+	if(mysqli_num_rows($result) > 0){
+		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
+			$row["attachment"] = json_decode($row["attachment"]);	//avoid double json encoding
+			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'M d, Y h:i A');
+        	array_push($resp,$row);
+		}
+		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+	$result->close();
 }
 
 function getMailTemplateList($conn){

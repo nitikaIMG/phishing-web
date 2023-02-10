@@ -266,6 +266,26 @@ function getMailTemplateFromTemplateId(id) {
     }); 
 }
 
+function getmailhtml(id) {
+    $.post({
+        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_mail_html",
+            mail_template_id: id,
+        })
+    }).done(function (data) {
+        console.log(data);
+        // $('#mail_template_name').val(data.mail_template_name);
+        // $('#mail_template_subject').val(data.mail_template_subject);
+        // $('#summernote').summernote('code', data.mail_template_content);//.replace(/\n/gi, "<br/>"));
+        // $("#mail_content_type_selector").val(data.mail_content_type).trigger("change");
+  
+
+    }); 
+}
+
+
 function promptMailTemplateDeletion(id) {
     globalModalValue = id;
     $('#modal_email_template_delete').modal('toggle');
@@ -341,7 +361,8 @@ function loadTableMailTemplateList() {
                 var action_items_mail_template_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='MailTemplate?action=edit&template=` + value.mail_template_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailTemplateCopy('` + value.mail_template_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptMailTemplateDeletion('` + value.mail_template_id + `')"><i class="mdi mdi-delete-variant"></i></button></div>`;
 
                 var is_attachment =  Object.keys(value.attachment).length>0? "<i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i><span hidden>Yes</span>" : "<i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i><span hidden>No</span>";
-                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td>" + $('<div>').text(value.mail_template_content).html() + "...</td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
+
+                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a href='http://localhost/phishing-web/web/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
                  + "\">" + value.date + "</td><td>" + action_items_mail_template_table + "</td></tr>");
             });
         }
