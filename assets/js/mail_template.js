@@ -73,7 +73,7 @@ $(function() {
     }); 
 
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "/manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_list"
@@ -679,7 +679,7 @@ function insertMedia(type){
 
 function getStoreList(){
     $.post({
-        url: "manager/settings_manager",
+        url: "/../manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",
