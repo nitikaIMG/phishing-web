@@ -2,7 +2,7 @@
    require_once(dirname(__FILE__) . '/config/db.php');
    require_once(dirname(__FILE__) . '/manager/common_functions.php');
    require_once (dirname(__FILE__).'/includes/config.php');
-
+ 
    if(isset($_GET['token'])){  
       if(!isTokenValid($conn,$_GET['token']))
         die("Incorrect request. Token may be invalid");
@@ -112,7 +112,7 @@
                 var url=App;
                 $("#bt_reset_pwd i").toggleClass('fa-spinner fa-spin');
                 if(data.result == "success"){ 
-                    $("#lb_msg").html('<span class="text-success">Password reset successs. Click <a href="#">here</a> to login</span>');
+                    $("#lb_msg").html(`<span class="text-success">Password reset successs. Click <a href="signin">here</a> to login</span>`);
                 }
                 else
                     $("#lb_msg").html('<span class="text-danger">' + data.error + '</span>');

@@ -84,7 +84,88 @@ function sendNewReset($conn, $contact_mail){
 
 function initResetMail($conn, $v_hash, $contact_mail){
 
-	$msg = "Hi,<p>It looks you requested for Phishing password reset. Please visit : ".App."ChangePwd?token=".$v_hash." for resetting password</p>";
+		$msg='
+		<!DOCTYPE html>
+		<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Document</title>
+			</head>
+			<body  marginheight="0" marginwidth="0" rightmargin="0" topmargin="0">
+				<table bgcolor="#f9f9f9"  border="0" cellspacing="0" cellpadding="0" align="center" style="width:100%; margin:0;">
+					<tbody>
+						<tr>
+						<td>
+							<table bgcolor="#fff"   border="0" cellspacing="0" cellpadding="0" align="center" style="max-width:650px; width:100%; margin:0px auto;">
+								<tbody>
+									<tr>
+									<td>
+										<table bgcolor="#fff" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width:650px; width:100%; margin:0px auto;">
+											<tbody>
+											
+												<tr>
+												<td bgcolor="#ffc000" height="10"></td>
+												</tr>
+												<tr>
+												<td>
+													
+													<table  bgcolor="#ffc000"  align="center"  border="0" cellspacing="0" cellpadding="0" style="max-width:650px ; width: 100%;  display: table; text-align: center;"  >
+														<tr>
+															
+															<td bgcolor="#fff" height="50"></td>
+															
+														</tr>
+													</table>
+													<table   align="center"  border="0" cellspacing="0" cellpadding="0" style="max-width:600px;"  >
+														
+														<tr>
+															<td  style="text-align:left;">
+															<p style="font-family:Arial,Helvetica,sans-serif;font-size:15x; ">
+															It looks you requested for Phishing password reset.Click Here
+															</p>
+															<p style="text-align:center;">
+															<b>
+															<form action="'.App.'ChangePwd?token='.$v_hash.'" method="POST">
+															<input type="hidden" name="token" 
+															value="'.$v_hash.'">
+															<button class="btn btn-primary" style="text-align:center;" type="submit"> Change Password</button>  
+															</form>
+															</b>
+															</p>
+
+															</td>
+														</tr>
+													</table>                                       
+
+													<table  align="center"  border="0" cellspacing="0" cellpadding="0" style="max-width:600px; "  >
+														
+														<tr>
+															<td bgcolor="#fff" height="50"></td>
+														</tr>
+													</table>
+
+												</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+									</tr>
+
+									<tr>
+										<td bgcolor="#ffc000" height="10"></td>
+									</tr>
+									
+								</tbody>
+							</table>
+						</td>
+						</tr>
+					</tbody>
+				</table>
+			</body>
+		</html>
+        ';
+
 	$headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 

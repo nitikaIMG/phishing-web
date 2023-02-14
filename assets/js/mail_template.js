@@ -275,13 +275,7 @@ function getmailhtml(id) {
             mail_template_id: id,
         })
     }).done(function (data) {
-        console.log(data);
-        // $('#mail_template_name').val(data.mail_template_name);
-        // $('#mail_template_subject').val(data.mail_template_subject);
-        // $('#summernote').summernote('code', data.mail_template_content);//.replace(/\n/gi, "<br/>"));
-        // $("#mail_content_type_selector").val(data.mail_content_type).trigger("change");
-  
-
+        $('#mail_content').append(data[0].mail_template_content);
     }); 
 }
 
@@ -362,7 +356,7 @@ function loadTableMailTemplateList() {
 
                 var is_attachment =  Object.keys(value.attachment).length>0? "<i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i><span hidden>Yes</span>" : "<i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i><span hidden>No</span>";
 
-                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a href='http://localhost/phishing-web/web/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
+                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a href='http://localhost/phishing-web/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
                  + "\">" + value.date + "</td><td>" + action_items_mail_template_table + "</td></tr>");
             });
         }
@@ -701,6 +695,7 @@ $('#selector_sample_mailtemplates').on('change', function() {
 });
 
 function insertMailTemplate(){
+    console.log("eee");
     $.post({
         url: "manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
@@ -718,13 +713,13 @@ function insertMailTemplate(){
 
             if(data.timage_type == 0)
                 $("#lb_tracker_image").text("None added");
-            else
-            if(data.timage_type == 1)
+            else if(data.timage_type == 1)
                 $("#lb_tracker_image").text("Default tracker added");
             else
                 $("#lb_tracker_image").text("Custom tracker added");
+            
             triggerAttachmentChanges();
-            $('#ModalStore').modal('toggle');
+            // $('#ModalStore').modal('toggle');
         }
     }); 
 }
