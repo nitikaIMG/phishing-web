@@ -519,7 +519,6 @@ isSessionValid(true);
 
       </div>
 
-        
 </div>
 <!-- END MAIN CONTAINER -->
 

@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/session_manager.php');
 require_once(dirname(__FILE__,2) . '/libs/tcpdf_min/tcpdf.php');
+
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -94,8 +95,9 @@ function getCampaignList($conn){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["campaign_data"] = json_decode($row["campaign_data"]);	//avoid double json encoding
 			$row['date'] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
-			$row['scheduled_time'] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'d-m-Y h:i A');
 			$row['stop_time'] = getInClientTime_FD($DTime_info,$row['stop_time'],null,'d-m-Y h:i A');
+			$row["scheduled_date"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'h:i A');
+			$row["scheduled_time"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'M d, Y ');
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);

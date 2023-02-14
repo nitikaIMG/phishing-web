@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/session_manager.php');
+
 if(isSessionValid() == false)
 	die("Access denied");
 //-------------------------------------------------------

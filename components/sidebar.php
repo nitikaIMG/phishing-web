@@ -43,7 +43,7 @@
 
                 <ul class="collapse submenu list-unstyled" id="templates" data-bs-parent="#accordionExample">
                     <li>
-                        <a href="">  Campaign List </a>
+                        <a href="mailcampaignlist">  Campaign List </a>
                     </li>
                     <li>
                         <a href="employeelist"> Employee List </a>
