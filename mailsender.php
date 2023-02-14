@@ -67,13 +67,18 @@ isSessionValid(true);
          <!-- Bread crumb and right sidebar toggle -->
          <!-- ============================================================== -->
          <div class="page-breadcrumb breadcrumb-withbutton">
-            <div class="row">
-               <div class="col-12 d-flex no-block align-items-center">
-                  <h4 class="page-title">Email Sender List</h4>
-                  <div class="ml-auto text-right" id="store-area">
+            <div class="row align-items-center my-3" >
+               <div class="col-sm d-flex no-block align-items-center">
+                  <h4 class="page-title m-0">Email Sender List</h4>
+                  <!-- <div class="ml-auto text-right" id="store-area">
                      <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal_store"><i class="fa fas fa-warehouse"></i> Store</button>
-                  </div>
+                  </div> -->
                </div>
+               <?php if(isset($_GET['action'])){?>
+                  <div class="col-sm-auto text-sm-right mt-3 mt-sm-0">
+                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_sender_list_test_mail"><i class="fa fas fa-paper-plane"></i> Send Test Mail</button>
+                  </div>
+               <?php } ?>
             </div>
          </div>
          <!-- ============================================================== -->
@@ -139,21 +144,21 @@ isSessionValid(true);
                   <div class="row">
                      <div class="col-md-12">
                         <div class="row">
-                           <div class="col-md-6">
+                           <div class="col-md-10">
                               <div class="form-group row">
                                  <label for="mail_sender_name" class="col-md-3 text-left control-label col-form-label">Mail Sender Name: </label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-9">
                                     <input type="text" class="form-control" id="mail_sender_name">
                                  </div>
                               </div>
                            </div>
-                           <div class="col-md-6">
-                              <div class="form-group row">
-                                 <div class="col-sm-5">
+                           <div class="col-md-1">
+                              <div class="form-group row" style="margin: 6px;">
+                                 <!-- <div class="col-sm-5">
                                     <label class="text-left control-label row col-form-label">Sender Template: <span class="text-success ml-1 cursor-pointer" id="lb_sender_template_name" onclick="$('#modal_store').modal('toggle');">Custom</span></label>
-                                 </div>
+                                 </div> -->
                                  <div class="col-sm-7 text-right">
-                                    <button type="button" class="btn btn-info" onclick="saveMailSenderGroup($(this))"><i class="fa fas fa-save"></i> Save</button>
+                                    <button type="button" class="btn btn-info" onclick="saveMailSenderGroup($(this))" style="width: 100px;"><i class="fa fas fa-save"></i> Save</button>
                                  </div>
                               </div>
                            </div>
@@ -163,8 +168,8 @@ isSessionValid(true);
                   <hr />
                   <div class="row">
                      <div class="col-md-12">
-                        <div class="row">
-                           <div class="col-md-6">
+                        <!-- <div class="row">
+                           <div class="col-md-6"> -->
                               <div class="form-group row">
                                  <label for="mail_sender_SMTP_server" class="col-sm-3 text-left control-label col-form-label">SMTP Server:*</label>
                                  <div class="col-sm-7">
@@ -189,7 +194,8 @@ isSessionValid(true);
                                     <input type="text" class="form-control" id="mail_sender_from" placeholder="Name <username@mailserver.com>">
                                  </div>
                               </div>
-                              <div class="form-group row">
+                              
+                              <!-- <div class="form-group row">
                                  <label for="mail_sender_mailbox" class="col-sm-3 text-left control-label col-form-label">Mailbox:</label>
                                  <div class="col-sm-7">
                                     <div class="row">
@@ -208,9 +214,9 @@ isSessionValid(true);
                                        <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" title="Verify mailbox access" onclick="verifyMailBoxAccess()">Verify</button>
                                     </div>
                                  </div>
-                              </div>
-                           </div>
-                           <div class="col-md-6">
+                              </div> -->
+                           <!-- </div> -->
+                           <!-- <div class="col-md-6">
                               <div class="form-group row">
                                  <label class="text-left control-label col-form-label">Custom Email Header:</label>
                               </div>
@@ -241,13 +247,9 @@ isSessionValid(true);
                                  </div>
                               </div>
                               <hr />
-                              <div class="form-group row">
-                                 <div class="col-sm-12 text-right">
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_sender_list_test_mail"><i class="fa fas fa-paper-plane"></i> Send Test Mail</button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
+                              
+                           </div> -->
+                        <!-- </div> -->
                         <hr />
                      </div>
                   </div>
@@ -400,7 +402,7 @@ isSessionValid(true);
                <div class="modal-content">
                   <div class="modal-header">
                      <h5 class="modal-title">Common Senders</h5>
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
                      <div class="form-group row m-t-20">
