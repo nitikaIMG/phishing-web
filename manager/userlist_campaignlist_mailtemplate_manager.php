@@ -380,10 +380,9 @@ function saveMailTemplate($conn,&$POSTJ){
 }
 
 function getmailhtml($conn,$POSTJ){
-print_r("xkjfghfhghfg");die;
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$id=$POSTJ['id'];
+	$id=$POSTJ['mail_template_id'];
 	$result = mysqli_query($conn, "SELECT mail_template_id, mail_template_name, mail_template_subject, mail_template_content,attachment,date FROM tb_core_mailcamp_template_list  Where mail_template_id='$id' ");
 
 	if(mysqli_num_rows($result) > 0){

@@ -1,6 +1,7 @@
 <?php
-require_once('../manager/session_manager.php');
-require_once('../includes/config.php');
+
+require_once(dirname(__FILE__).'/manager/session_manager.php');
+require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
@@ -8,7 +9,7 @@ isSessionValid(true);
 
 <head>
    <?php
-   echo include('../components/header.php');
+   echo include(dirname(__FILE__).'/components/header.php');
         ?>
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css">
@@ -25,9 +26,17 @@ isSessionValid(true);
     <title>Document</title>
 </head>
 <body>
-           
+          
+ <!--  BEGIN CONTENT AREA  -->
+ <div id="content" class="main-content">
+      <div id="main-wrapper">
+            <div class="content" id="mail_content">
+            </div>
+      </div>
+</div>
 
-<?php include('../components/script.php'); ?>
+
+<?php include(dirname(__FILE__).'/components/script.php'); ?>
 
 <!-- All Jquery -->
 <!-- ============================================================== -->
@@ -49,7 +58,8 @@ isSessionValid(true);
    
    <?php
          echo '<script>';
-               echo 'getmailhtml("' .$_GET['id'] . '");';      
+               echo ' var content = getmailhtml("' .$_GET['id'] . '");
+               ';      
          echo '</script>';
       ?>
 <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>  
