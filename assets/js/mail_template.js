@@ -73,7 +73,7 @@ $(function() {
     }); 
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "/manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_list"
@@ -88,7 +88,7 @@ $(function() {
     });
 
     $.post({
-        url: "../manager/web_tracker_generator_list_manager",
+        url: "manager/web_tracker_generator_list_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_link_to_web_tracker"
@@ -103,7 +103,7 @@ $(function() {
     });  
 
     $.post({
-        url: "../sniperhost/manager/sniperhost_manager",
+        url: "sniperhost/manager/sniperhost_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_landpage_list",
@@ -159,7 +159,7 @@ function uploadTrackerImage(fname,fsize,ftype,fb64){
     }
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "upload_tracker_image",
@@ -199,7 +199,7 @@ function saveMailTemplate(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "save_mail_template",
@@ -235,7 +235,7 @@ function getMailTemplateFromTemplateId(id) {
         nextRandomId = id;
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_mail_template_from_template_id",
@@ -266,6 +266,20 @@ function getMailTemplateFromTemplateId(id) {
     }); 
 }
 
+function getmailhtml(id) {
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_mail_html",
+            mail_template_id: id,
+        })
+    }).done(function (data) {
+        $('#mail_content').append(data[0].mail_template_content);
+    }); 
+}
+
+
 function promptMailTemplateDeletion(id) {
     globalModalValue = id;
     $('#modal_email_template_delete').modal('toggle');
@@ -273,7 +287,7 @@ function promptMailTemplateDeletion(id) {
 
 function mailTemplateDeletionAction() {
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "delete_mail_template_from_template_id",
@@ -306,7 +320,7 @@ function mailTemplateCopy() {
         $("#modal_new_mail_template_name").removeClass("is-invalid");
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "make_copy_mail_template",
@@ -329,7 +343,7 @@ function mailTemplateCopy() {
 
 function loadTableMailTemplateList() {
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_mail_template_list"
@@ -341,7 +355,8 @@ function loadTableMailTemplateList() {
                 var action_items_mail_template_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='MailTemplate?action=edit&template=` + value.mail_template_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailTemplateCopy('` + value.mail_template_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptMailTemplateDeletion('` + value.mail_template_id + `')"><i class="mdi mdi-delete-variant"></i></button></div>`;
 
                 var is_attachment =  Object.keys(value.attachment).length>0? "<i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i><span hidden>Yes</span>" : "<i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i><span hidden>No</span>";
-                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td>" + $('<div>').text(value.mail_template_content).html() + "...</td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
+
+                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a href='http://localhost/phishing-web/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
                  + "\">" + value.date + "</td><td>" + action_items_mail_template_table + "</td></tr>");
             });
         }
@@ -388,7 +403,7 @@ function uploadAttachments(fname,fsize,ftype,fb64){
     }
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "upload_attachments",
@@ -461,7 +476,7 @@ function uploadMailBodyFiles(fname,fsize,ftype,fb64,el){
 
     $(el).closest('.modal-content').find('.modal-footer').append(displayLoader("Uploading...","small"))
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "upload_mail_body_files",
@@ -539,7 +554,7 @@ function modalTestDeliveryAction(e){
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "send_test_mail_sample",
@@ -658,7 +673,7 @@ function insertMedia(type){
 
 function getStoreList(){
     $.post({
-        url: "../manager/settings_manager",
+        url: "/../manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",
@@ -680,8 +695,9 @@ $('#selector_sample_mailtemplates').on('change', function() {
 });
 
 function insertMailTemplate(){
+    console.log("eee");
     $.post({
-        url: "../manager/settings_manager",
+        url: "manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",
@@ -697,13 +713,13 @@ function insertMailTemplate(){
 
             if(data.timage_type == 0)
                 $("#lb_tracker_image").text("None added");
-            else
-            if(data.timage_type == 1)
+            else if(data.timage_type == 1)
                 $("#lb_tracker_image").text("Default tracker added");
             else
                 $("#lb_tracker_image").text("Custom tracker added");
+            
             triggerAttachmentChanges();
-            $('#ModalStore').modal('toggle');
+            // $('#ModalStore').modal('toggle');
         }
     }); 
 }

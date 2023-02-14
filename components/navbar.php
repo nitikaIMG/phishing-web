@@ -1,5 +1,5 @@
 <?php
-require_once('../manager/session_manager.php');
+require_once(dirname(__FILE__,2).'/manager/session_manager.php');
 if(isSessionValid() == true){
    $email=$_SESSION['contact_mail'];
    $username=$_SESSION['user'][1];
