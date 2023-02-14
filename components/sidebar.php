@@ -52,7 +52,7 @@
                         <a href="mailtemplate"> Email Template </a>
                     </li>
                     <li>
-                        <a href="#"> Sender List </a>
+                        <a href="mailsender"> Sender List </a>
                     </li>        
                     <li>
                         <a href=""> Configuration </a>

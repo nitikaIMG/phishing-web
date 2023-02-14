@@ -115,7 +115,7 @@ function saveMailSenderGroup(e) {
     var mail_sender_from = $('#mail_sender_from').val().trim();
     var mail_sender_acc_username = $('#mail_sender_acc_username').val().trim();
     var mail_sender_acc_pwd = $('#mail_sender_acc_pwd').val().trim();
-    var mail_sender_mailbox = $('#mail_sender_mailbox').val().trim();
+    // var mail_sender_mailbox = $('#mail_sender_mailbox').val().trim();
 
     if (RegTest(mail_sender_name, "COMMON") == false) {
         $("#mail_sender_name").addClass("is-invalid");
@@ -145,19 +145,19 @@ function saveMailSenderGroup(e) {
     } else
         $("#mail_sender_from").removeClass("is-invalid");
 
-    if ($("#cb_auto_mailbox").is(':checked') && $("#mail_sender_mailbox").val() != null){
-        $("#mail_sender_mailbox").removeClass("is-invalid");
-        var cb_auto_mailbox = 1;
-    }
-    else {        
-        var cb_auto_mailbox = 0;
-        if (mail_sender_mailbox == '') {
-            $("#mail_sender_mailbox").addClass("is-invalid");
-            toastr.error('', 'Empty/unsupported character!');
-            return;
-        } else
-            $("#mail_sender_mailbox").removeClass("is-invalid");
-    }
+    // if ($("#cb_auto_mailbox").is(':checked') && $("#mail_sender_mailbox").val() != null){
+    //     $("#mail_sender_mailbox").removeClass("is-invalid");
+    //     var cb_auto_mailbox = 1;
+    // }
+    // else {        
+    //     var cb_auto_mailbox = 0;
+    //     if (mail_sender_mailbox == '') {
+    //         $("#mail_sender_mailbox").addClass("is-invalid");
+    //         toastr.error('', 'Empty/unsupported character!');
+    //         return;
+    //     } else
+    //         $("#mail_sender_mailbox").removeClass("is-invalid");
+    // }
 
 
     var cust_headers = [];
@@ -176,8 +176,8 @@ function saveMailSenderGroup(e) {
             sender_list_mail_sender_from: mail_sender_from,
             sender_list_mail_sender_acc_username: mail_sender_acc_username,
             sender_list_mail_sender_acc_pwd: mail_sender_acc_pwd,
-            mail_sender_mailbox: mail_sender_mailbox,
-            cb_auto_mailbox: cb_auto_mailbox,
+            // mail_sender_mailbox: mail_sender_mailbox,
+            // cb_auto_mailbox: cb_auto_mailbox,
             sender_list_cust_headers: Object.assign({}, cust_headers),
             dsn_type: g_dsn_type
          }),
