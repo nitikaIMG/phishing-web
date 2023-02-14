@@ -139,7 +139,7 @@ isSessionValid(true);
                                              <label>Job title:</label>
                                              <input type="text" class="form-control" id="tablevalue_jobtitle">
                                           </div>
-                                          <div class="col">
+                                          <div class="col pb-2">
                                              <button type="button" class="btn btn-success" id="bt_add_email_tracker" onclick="addUserToTable($(this))"><i class="fa fas fa-plus"></i> Add</button>
                                              
                                           </div>
@@ -347,7 +347,7 @@ isSessionValid(true);
                   <div class="modal-content" style="width: 610px;">
                      <div class="modal-header">
                         <h5 class="modal-title">Modify user</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                      </div>
                      <div class="modal-body">
                         <div class="form-group row  m-t-20">
@@ -393,7 +393,7 @@ isSessionValid(true);
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title">Are you sure?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                      </div>
                      <div class="modal-body">
                         This will delete user group and the action can't be undone!
@@ -410,7 +410,7 @@ isSessionValid(true);
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title">Are you sure?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                      </div>
                      <div class="modal-body">
                         This will delete user and the action can't be undone!
@@ -427,7 +427,7 @@ isSessionValid(true);
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title">Enter new user group name</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                      </div>
                      <div class="modal-body">
                         <div class="form-group row  m-t-20">

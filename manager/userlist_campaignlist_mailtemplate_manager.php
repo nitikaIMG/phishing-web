@@ -13,7 +13,7 @@ if(isSessionValid() == false)
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
 header('Content-Type: application/json');
-
+$userid = $_SESSION['user'][0];
 if (isset($_POST)) {
 	$POSTJ = json_decode(file_get_contents('php://input'),true);
 
@@ -21,7 +21,7 @@ if (isset($_POST)) {
 		if($POSTJ['action_type'] == "add_user_to_table")
 			addUserToTable($conn, $POSTJ);
 		if($POSTJ['action_type'] == "save_user_group")
-			saveUserGroup($conn, $POSTJ['user_group_id'], $POSTJ['user_group_name']);
+			saveUserGroup($conn, $POSTJ['user_group_id'], $POSTJ['user_group_name'],$userid);
 		if($POSTJ['action_type'] == "update_user")
 			updateUser($conn,$POSTJ);
 		if($POSTJ['action_type'] == "delete_user")
@@ -29,7 +29,7 @@ if (isset($_POST)) {
 		if($POSTJ['action_type'] == "download_user")
 			downloadUser($conn,$POSTJ['user_group_id']);
 		if($POSTJ['action_type'] == "get_user_group_list")
-			getUserGroupList($conn);
+			getUserGroupList($conn,$userid );
 		if($POSTJ['action_type'] == "upload_user")
 			uploadUserCVS($conn,$POSTJ);
 		if($POSTJ['action_type'] == "get_user_group_from_group_Id_table")
@@ -111,14 +111,16 @@ function addUserToTable($conn, &$POSTJ){
 		echo(json_encode(['result' => 'failed', 'error' => 'Error adding user!']));			
 }
 
-function saveUserGroup($conn, $user_group_id, $user_group_name){
+function saveUserGroup($conn, $user_group_id, $user_group_name,$userid ){
+	// print_r($_SESSION['user'][0]);die;
+	
 	if(checkAnIDExist($conn,$user_group_id,'user_group_id','tb_core_mailcamp_user_group')){
 		$stmt = $conn->prepare("UPDATE tb_core_mailcamp_user_group SET user_group_name=? WHERE user_group_id=?");
 		$stmt->bind_param('ss', $user_group_name,$user_group_id);
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_user_group(user_group_id,user_group_name,date) VALUES(?,?,?)");
-		$stmt->bind_param('sss', $user_group_id,$user_group_name,$GLOBALS['entry_time']);
+		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_user_group(user_group_id,user_group_name,date,userid) VALUES(?,?,?,?)");
+		$stmt->bind_param('ssss', $user_group_id,$user_group_name,$GLOBALS['entry_time'],$userid);
 	}
 	
 	if ($stmt->execute() === TRUE)
@@ -206,10 +208,10 @@ function downloadUser($conn, $user_group_id){
 		echo(json_encode(['result' => 'failed', 'error' => 'Error updating row. User group not found!']));	
 }
 
-function getUserGroupList($conn){
+function getUserGroupList($conn,$userid ){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name,JSON_LENGTH(user_data) as user_count,date FROM tb_core_mailcamp_user_group");
+	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name,JSON_LENGTH(user_data) as user_count,date FROM tb_core_mailcamp_user_group WHERE userid=$userid");
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["user_data"] = json_decode($row["user_data"]);	//avoid double json encoding

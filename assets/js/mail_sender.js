@@ -1,5 +1,5 @@
 var dt_mail_sender_list, store_info, g_dsn_type='custom';
-var action_items_header_table = '<button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="editRowHeaderTable($(this))" title="Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" onclick="promptMailHeaderDeletion($(this))" title="Delete"><i class="mdi mdi-delete-variant"></i>';
+var action_items_header_table = '<a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" onclick="editRowHeaderTable($(this))" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" data-toggle="tooltip" data-placement="top" onclick="promptMailHeaderDeletion($(this))" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>';
 
 $(function() {
     $("#selector_common_mail_senders").select2({
@@ -167,7 +167,7 @@ function saveMailSenderGroup(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         data: JSON.stringify({ 
             action_type: "save_sender_list",
             sender_list_id: nextRandomId,
@@ -203,7 +203,7 @@ function getSenderFromSenderListId(id) {
         nextRandomId = id;
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_from_sender_list_id",
@@ -318,7 +318,7 @@ function updateTable() {
 //-------------------------------------
 function loadTableSenderList() {
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_list"
@@ -334,7 +334,7 @@ function loadTableSenderList() {
                 else
                     cust_header = "-";
 
-                var action_items_sender_table = '<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="" onclick="document.location=\'MailSender?action=edit&sender=' + value['sender_list_id'] + '\'" data-original-title="Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailSenderCopy(\'' + value['sender_list_id'] + '\')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" onclick="promptSenderListDeletion(\'' + value['sender_list_id'] + '\')" data-original-title="Delete"><i class="mdi mdi-delete-variant"></i></button></div>';
+                var action_items_sender_table = '<div class="d-flex no-block align-items-center"><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="" onclick="document.location=\'MailSender?action=edit&sender=' + value['sender_list_id'] + '\'" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailSenderCopy(\'' + value['sender_list_id'] + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><a class="" style="margin: 0px;" data-toggle="tooltip" data-placement="top" title="" onclick="promptSenderListDeletion(\'' + value['sender_list_id'] + '\')" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></div>';
 
                 $("#table_mail_sender_list tbody").append("<tr><td></td><td>" + value.sender_name + "</td><td>" + value.sender_SMTP_server + "</td><td>" + value.sender_from + "</td><td>" + value.sender_acc_username + "</td><td>" + cust_header +  "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td>" + action_items_sender_table + "</td></tr>");
             });
@@ -429,7 +429,7 @@ function modalTestDeliveryAction(e){
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "send_test_mail_verification",
@@ -500,7 +500,7 @@ function verifyMailBoxAccess(){
     $("#modal_verifier_body .area_loader").html('');
     $("#modal_verifier_body .area_loader").append(displayLoader("Verifying..."));
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "verify_mailbox_access",
@@ -524,7 +524,7 @@ function verifyMailBoxAccess(){
 //------------------Store section---------------
 function getStoreList(){
     $.post({
-        url: "../manager/settings_manager",
+        url: "manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",

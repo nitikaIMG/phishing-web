@@ -1,5 +1,4 @@
 <?php
-
 require_once(dirname(__FILE__).'/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
