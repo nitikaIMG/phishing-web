@@ -13,3 +13,8 @@
     <!-- <script src="<?php echo url?>/src/plugins/src/apex/apexcharts.min.js"></script> -->
     <script src="<?php echo url?>/src/assets/js/dashboard/dash_1.js"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+
+   <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM Daterangpicker SCRIPTS -->
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+   <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM Daterangpicker SCRIPTS -->

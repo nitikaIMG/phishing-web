@@ -60,20 +60,21 @@ else
 	die();
 
 //----------------------------------------------------------------------
-function saveCampaignList($conn, &$POSTJ){
+function saveCampaignList($conn, & $POSTJ){
 	$campaign_id = $POSTJ['campaign_id'];
 	$campaign_name = $POSTJ['campaign_name'];
 	$campaign_data = json_encode($POSTJ['campaign_data']);
+	$date = $POSTJ['date'];
 	$scheduled_time = $POSTJ['scheduled_time'];
+	$stop_time = $POSTJ['stop_time'];
 	$camp_status = $POSTJ['camp_status'];
-
+	$employees = json_encode($POSTJ['employees']);
+	
 	if(checkCampaignListIdExist($conn,$campaign_id)){
-		$stmt = $conn->prepare("UPDATE tb_core_mailcamp_list SET campaign_name=?, campaign_data=?, scheduled_time=?, stop_time=null, camp_status=?, camp_lock=0 WHERE campaign_id=?");
-		$stmt->bind_param('sssss', $campaign_name,$campaign_data,$scheduled_time,$camp_status,$campaign_id);
+		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_list` SET `campaign_name`='$campaign_name', `campaign_data`='$campaign_data',`date`='$date' ,`scheduled_time`='$scheduled_time', `stop_time`='$stop_time', `camp_status`='$camp_status',`employees`='$employees' ,`camp_lock`=0 WHERE `campaign_id`='$campaign_id'");
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list(campaign_id,campaign_name,campaign_data,date,scheduled_time,camp_status,camp_lock) VALUES(?,?,?,?,?,?,0)");
-		$stmt->bind_param('ssssss', $campaign_id,$campaign_name,$campaign_data,$GLOBALS['entry_time'],$scheduled_time,$camp_status);
+		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_list` (`campaign_id`, `campaign_name`, `campaign_data`, `date`, `scheduled_time`,`stop_time`, `camp_status`, `employees`, `camp_lock`) VALUES ('$campaign_id', '$campaign_name', '$campaign_data', '$date', '$scheduled_time','$stop_time', '$camp_status', '$employees', '0')");
 	}
 	
 
@@ -94,10 +95,12 @@ function getCampaignList($conn){
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["campaign_data"] = json_decode($row["campaign_data"]);	//avoid double json encoding
-			$row['date'] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
-			$row['stop_time'] = getInClientTime_FD($DTime_info,$row['stop_time'],null,'d-m-Y h:i A');
-			$row["scheduled_date"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'h:i A');
-			$row["scheduled_time"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'M d, Y ');
+			$row['date'] = $row['date'];
+			$row['stop_time'] = $row['stop_time'];
+			// $row["scheduled_date"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'h:i A');
+			$row["scheduled_date"] = $row['scheduled_time'];
+			$row["scheduled_time"] = $row['scheduled_time'];
+			// $row["scheduled_time"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'M d, Y ');
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
@@ -135,16 +138,19 @@ function getCampaignFromCampaignListId($conn, $campaign_id){
 	$resp['live_mcamp_data']['timestamp_conv'] = $scatter_data_mail_full['timestamp_conv'];
 
 	//-------------------
-	$stmt = $conn->prepare("SELECT campaign_name,campaign_data,date,scheduled_time,camp_status FROM tb_core_mailcamp_list WHERE campaign_id = ?");
+	$stmt = $conn->prepare("SELECT campaign_name,campaign_data,date,scheduled_time,camp_status,employees FROM tb_core_mailcamp_list WHERE campaign_id = ?");
 	$stmt->bind_param("s", $campaign_id);
 	$stmt->execute();
 	$result = $stmt->get_result();
 	if($row = $result->fetch_assoc()){
 		$resp['campaign_name'] = $row['campaign_name'];
 		$resp['campaign_data'] = json_decode($row["campaign_data"]);//avoid double json encoding
-		$resp['date'] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
-		$resp['scheduled_time'] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'d-m-Y h:i A');
+		// $resp['date'] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
+		$resp['date'] = $row['date'];
+		$resp['scheduled_time'] = $row['scheduled_time'];
+		$resp['stop_time'] = $row['stop_time'];
 		$resp['camp_status'] = $row['camp_status'];
+		$resp['employees'] = json_decode($row['employees']);
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
 	}
 	else
@@ -198,6 +204,7 @@ function pullMailCampaignFieldData($conn){
 	if(mysqli_num_rows($result) > 0){
 		$resp['mail_config'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
+
 
 	echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
 }

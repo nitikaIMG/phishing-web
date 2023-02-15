@@ -15,19 +15,33 @@ $(function() {
         minimumResultsForSearch: -1
     });
 
-    $('#datetimepicker_launch').datetimepicker({
-        format: 'DD-MM-YYYY hh:mm A',
+    // $('#datetimepicker_launch').datetimepicker({
+    //     format: 'DD-MM-YYYY hh:mm A',
+    //     defaultDate: new Date(),
+    //     icons: {
+    //         time: "fa fa-clock",
+    //         date: "fa fa-calendar",
+    //         up: "fa fa-arrow-up",
+    //         down: "fa fa-arrow-down"
+    //     },
+    // });
+
+    $('#datetimepicker_launch').daterangepicker({
         defaultDate: new Date(),
-        icons: {
-            time: "fa fa-clock",
-            date: "fa fa-calendar",
-            up: "fa fa-arrow-up",
-            down: "fa fa-arrow-down"
+        startDate: moment().add(1, 'day'),
+        endDate: moment().add(1, 'day'),
+        dateLimit: {
+            days: 30
         },
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
     });
+
 });
 
 function pullMailCampaignFieldData() {
+    console.log('pullMailCampaignFieldData');
     $.post({
         url: "manager/mail_campaign_manager",
         contentType: 'application/json; charset=utf-8',
@@ -38,6 +52,7 @@ function pullMailCampaignFieldData() {
         if(!data['error']){  // no data error
             $.each(data.user_group, function() {
                 $('#userGroupSelector').append('<option value="' + this.user_group_id + '">' + this.user_group_name + '</option>');
+                $('#employees').append('<option value="' + this.user_group_id + '">' + this.user_group_name + '</option>');
             });
 
             $.each(data.mail_template, function() {
@@ -51,7 +66,15 @@ function pullMailCampaignFieldData() {
             $.each(data.mail_config, function() {
                 $('#mailConfigSelector').append('<option value="' + this.mconfig_id + '">' + this.mconfig_name + '</option>');
             });
+
             $('#mailConfigSelector').val("default").trigger('change'); 
+            $('select[name="employees[]"]').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available',
+                selectedListLabel: 'Selected',
+                preserveSelectionOnMove: 'moved',
+                moveAllLabel: 'Move all',
+                removeAllLabel: 'Remove all'
+             });
         }
     }); 
 }
@@ -79,7 +102,7 @@ function getMailCampaignFromCampaignListId(id) {
                     $("#userGroupSelector").val(data.campaign_data.user_group.id);
                     $("#userGroupSelector").trigger('change');
                 } catch (err) {}
-
+                
                 try {
                     $("#mailTemplateSelector").val(data.campaign_data.mail_template.id);
                     $("#mailTemplateSelector").trigger('change');
@@ -95,8 +118,9 @@ function getMailCampaignFromCampaignListId(id) {
                     $('#mailConfigSelector').trigger('change');
                 } catch (err) {}
 
-                $("#datetimepicker_launch").val(data.scheduled_time).trigger('change');
-
+                $("#datetimepicker_launch").val(data.date).trigger('change');
+                $("#stop_time").val(data.stop_time);
+                $("#scheduled_time").val(data.scheduled_time);
                 $('#range_campaign_time_min').val(data.campaign_data.msg_interval.split('-')[0]);
                 $('#range_campaign_time_max').val(data.campaign_data.msg_interval.split('-')[1]);
                 $('#tb_campaign_time_val').val(data.campaign_data.msg_interval);
@@ -110,7 +134,13 @@ function getMailCampaignFromCampaignListId(id) {
 }
 
 function promptSaveMailCampaign() {
-    if ($("#cb_act_deact_campaign").is(':checked') && ($("#datetimepicker_launch").data("DateTimePicker").date()) <= (new Date($.now()))) {
+    var date = $("#datetimepicker_launch").val();
+    var start_date=date.split("-")[0];
+    var nowDate = new Date($.now());
+    var date1 = nowDate.getDate()+'/'+(nowDate.getMonth()+1)+'/'+nowDate.getFullYear();
+
+
+    if ($("#cb_act_deact_campaign").is(':checked') && (start_date <= date1)== true) {
         $('#modal_prompts').modal('toggle');
         $("#modal_prompts_body").text("");
         $("#modal_prompts_body").append("The scheduled time is in past. This will start the campaign immediately. Do you want to save and start campaign \"" + $('#mail_campaign_name').val() + "\"?<br/><br/><i>Note: This will delete previous results of this campaign</i>");
@@ -123,7 +153,7 @@ function saveMailCampaignAction() {
     var campaignData = {};
 
     var campaign_name = $('#mail_campaign_name').val();
-    var scheduled_time = moment.utc($("#datetimepicker_launch").data("DateTimePicker").date()).format('DD-MM-YYYY hh:mm A');
+    // var scheduled_time = moment.utc($("#datetimepicker_launch").data("DateTimePicker").date()).format('DD-MM-YYYY hh:mm A');
     campaignData.user_group = {id:$('#userGroupSelector').val(), name:$('#userGroupSelector :selected').text()};
     campaignData.mail_template = {id:$('#mailTemplateSelector').val(), name:$('#mailTemplateSelector :selected').text()};
     campaignData.mail_sender = {id:$('#mailSenderSelector').val(), name:$('#mailSenderSelector :selected').text()};
@@ -131,10 +161,22 @@ function saveMailCampaignAction() {
     campaignData.msg_interval = $('#tb_campaign_time_val').val();
     campaignData.msg_fail_retry = $('#range_campaign_msg_retry').val();
 
+    var date = $("#datetimepicker_launch").val();
+    var scheduled_time = $("#scheduled_time").val();
+    var stop_time = $("#stop_time").val();
+
     if ($("#cb_act_deact_campaign").is(':checked'))
         var cb_act_deact_campaign = 1;
     else
         var cb_act_deact_campaign = 0;
+
+        var employees={id:$('#employees').val()};
+
+        if(employees.length === 0){
+            $("#employees").parent().css("border", "1px solid red");
+            toastr.error('', 'None selected!');
+            return;
+        }
 
     if (RegTest(campaign_name, 'COMMON') == false) {
         $("#mail_campaign_name").addClass("is-invalid");
@@ -173,8 +215,11 @@ function saveMailCampaignAction() {
             campaign_id: nextRandomId,
             campaign_name: campaign_name,
             scheduled_time: scheduled_time,
+            stop_time:stop_time,
+            date:date,
             campaign_data: campaignData,
-            camp_status: cb_act_deact_campaign
+            camp_status: cb_act_deact_campaign,
+            employees:employees
          }),
     }).done(function (response) {
         if(response.result == "success"){ 
@@ -329,7 +374,7 @@ function loadTableCampaignList() {
                     if(value.camp_status == 0 || value.camp_status == 3)
                         var option_edit = `<a class="dropdown-item" href="#" onClick="document.location='mailcampaignlist?action=edit&campaign=` + value.campaign_id + `','` + value.campaign_name + `'">Edit</a>`;
                     else
-                        var option_edit = `<a class="dropdown-item" href="#" disabled>Edit</a>`;
+                        var option_edit = `<a class="dropdown-item disabled" href="#" disabled>Edit</a>`;
     
                     action_items_campaign_table += `<div class="btn-group ml-sm-1 btn-group-table">
                             <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>
@@ -356,10 +401,10 @@ function loadTableCampaignList() {
                             var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
                             break;
                     }                
-                    
-                    // $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.user_group.name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td>" + value.campaign_data.mail_sender.name + "</td><td>" + value.campaign_data.mail_config.name+ "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td data-order=\"" + getTimestamp(value.scheduled_time) + "\">" + (value.scheduled_time==null?'-':value.scheduled_time) + "</td><td data-order=\"" + getTimestamp(value.stop_time) + "\">" + (value.stop_time==null?'-':value.stop_time) + "</td><td>"+ camp_status + "</td><td>" + action_items_campaign_table + "</td></tr>");
 
-                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td data-order=\"" + getTimestamp(value.scheduled_time) + "\">" + (value.scheduled_time==null?'-':value.scheduled_time) + "</td><td data-order=\"" + getTimestamp(value.scheduled_date) + "\">" + (value.scheduled_date==null?'-':value.scheduled_date) + "</td><td data-order=\"" + getTimestamp(value.stop_time) + "\">" + (value.stop_time==null?'-':value.stop_time) + "</td><td>"+ camp_status + "</td><td>" + action_items_campaign_table + "</td></tr>");
+                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" + (value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td data-order=\"" + (value.scheduled_time) + "\">" + (value.scheduled_time==null?'-':value.scheduled_time) + "</td><td data-order=\"" + (value.stop_time) + "\">" + (value.stop_time==null?'-':value.stop_time) + "</td><td>"+ camp_status + "</td><td>" + action_items_campaign_table + "</td></tr>");
+
+            
                 });
             }
             dt_mail_campaign_list = $('#table_mail_campaign_list').DataTable({
@@ -367,7 +412,7 @@ function loadTableCampaignList() {
                 'pageLength': 20,
                 'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
                 'columnDefs': [{
-                    "targets": [9,10],
+                    // "targets": [9,10],
                     "className": "dt-center"
                 }],
                 "preDrawCallback": function(settings) {
