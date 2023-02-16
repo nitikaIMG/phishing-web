@@ -7,6 +7,17 @@ require_once(dirname(__FILE__,2) . '/libs/qr_barcode/barcode.php');
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
+use PHPMailer\PHPMailer;
+use PHPMailer\SMTP;
+use PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer as PHPMailerPHPMailer;
+
+
+require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/Exception.php');
+require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php');
+require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
+
+
 if(isSessionValid() == false)
 	die("Access denied");
 //-------------------------------------------------------
@@ -37,7 +48,7 @@ if (isset($_POST)) {
 		if($POSTJ['action_type'] == "delete_user_group_from_group_id")
 			deleteUserGroupFromGroupId($conn,$POSTJ['user_group_id']);
 		if($POSTJ['action_type'] == "make_copy_user_group")
-			makeCopyUserGroup($conn, $POSTJ['user_group_id'], $POSTJ['new_user_group_id'], $POSTJ['new_user_group_name']);
+			makeCopyUserGroup($conn, $POSTJ['user_group_id'], $POSTJ['new_user_group_id'], $POSTJ['new_user_group_name'],$userid);
 
 		if($POSTJ['action_type'] == "save_mail_template")
 			saveMailTemplate($conn,$POSTJ);
@@ -59,15 +70,15 @@ if (isset($_POST)) {
 			uploadMailBodyFiles($conn,$POSTJ);
 
 		if($POSTJ['action_type'] == "save_sender_list")
-			saveSenderList($conn, $POSTJ);
+			saveSenderList($conn, $POSTJ,$userid);
 		if($POSTJ['action_type'] == "get_sender_list")
-			getSenderList($conn);	
+			getSenderList($conn,$userid);	
 		if($POSTJ['action_type'] == "get_sender_from_sender_list_id")
 			getSenderFromSenderListId($conn,$POSTJ['sender_list_id']);	
 		if($POSTJ['action_type'] == "delete_mail_sender_list_from_list_id")
 			deleteMailSenderListFromSenderId($conn,$POSTJ['sender_list_id']);
 		if($POSTJ['action_type'] == "make_copy_sender_list")
-			makeCopyMailSenderList($conn,$POSTJ['sender_list_id'],$POSTJ['new_sender_list_id'],$POSTJ['new_sender_list_name']);
+			makeCopyMailSenderList($conn,$POSTJ['sender_list_id'],$POSTJ['new_sender_list_id'],$POSTJ['new_sender_list_name'],$userid);
 		if($POSTJ['action_type'] == "verify_mailbox_access")
 			verifyMailboxAccess($conn,$POSTJ);
 
@@ -75,9 +86,17 @@ if (isset($_POST)) {
 			sendTestMailVerification($conn,$POSTJ);
 		if($POSTJ['action_type'] == "send_test_mail_sample")
 			sendTestMailSample($conn,$POSTJ);
+		if($POSTJ['action_type'] == "user_group_domain_verify")
+			domainverification($conn,$POSTJ);
+			
+	}
+	if(isset($_POST['action_type'])){
+		if($_POST['action_type'] == "add_mail_verification")
+			addverificationmail($conn,$_POST,$userid);
+		if($_POST['action_type'] == "domain_otp_verfication")
+			domainotpverification($conn,$_POST,$userid);
 	}
 }
-
 //-----------------------------
 function addUserToTable($conn, &$POSTJ){
 	$user_group_id = $POSTJ['user_group_id'];
@@ -327,8 +346,8 @@ function deleteUserGroupFromGroupId($conn,$user_group_id){
 	$stmt->close();
 }
 
-function makeCopyUserGroup($conn, $old_user_group_id, $new_user_group_id, $new_user_group_name){
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_user_group (user_group_id,user_group_name,user_data,date) SELECT ?, ?,user_data,? FROM tb_core_mailcamp_user_group WHERE user_group_id=?");
+function makeCopyUserGroup($conn, $old_user_group_id, $new_user_group_id, $new_user_group_name,$userid){
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_user_group (user_group_id,user_group_name,userid,user_data,date) SELECT ?, ?,userid,user_data,? FROM tb_core_mailcamp_user_group WHERE user_group_id=?");
 	$stmt->bind_param("ssss", $new_user_group_id, $new_user_group_name, $GLOBALS['entry_time'], $old_user_group_id);
 	
 	if($stmt->execute() === TRUE){
@@ -522,7 +541,8 @@ function uploadMailBodyFiles($conn,&$POSTJ){
 }
 
 //---------------------------------------Sender List Section --------------------------------
-function saveSenderList($conn, &$POSTJ){
+function saveSenderList($conn, &$POSTJ,$userid){
+
 	$sender_list_id = $POSTJ['sender_list_id'];
 	$sender_list_mail_sender_name = $POSTJ['sender_list_mail_sender_name'];
 	$sender_list_mail_sender_SMTP_server = $POSTJ['sender_list_mail_sender_SMTP_server'];
@@ -545,8 +565,8 @@ function saveSenderList($conn, &$POSTJ){
 		}
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list(sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,date) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param('sssssssssss', $sender_list_id,$sender_list_mail_sender_name,$sender_list_mail_sender_SMTP_server,$sender_list_mail_sender_from,$sender_list_mail_sender_acc_username,$sender_list_mail_sender_acc_pwd,$auto_mailbox,$mail_sender_mailbox,$sender_list_cust_headers,$dsn_type,$GLOBALS['entry_time']);
+		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list(sender_list_id,userid,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param('ssssssssssss', $sender_list_id,$userid,$sender_list_mail_sender_name,$sender_list_mail_sender_SMTP_server,$sender_list_mail_sender_from,$sender_list_mail_sender_acc_username,$sender_list_mail_sender_acc_pwd,$auto_mailbox,$mail_sender_mailbox,$sender_list_cust_headers,$dsn_type,$GLOBALS['entry_time']);
 	}
 	
 	if ($stmt->execute() === TRUE)
@@ -555,10 +575,10 @@ function saveSenderList($conn, &$POSTJ){
 		echo json_encode(['result' => 'failed']);
 }
 
-function getSenderList($conn){
+function getSenderList($conn,$userid){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date FROM tb_core_mailcamp_sender_list");
+	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date FROM tb_core_mailcamp_sender_list where userid=$userid");
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["cust_headers"] = json_decode($row["cust_headers"]);	//avoid double json encoding
@@ -598,8 +618,8 @@ function deleteMailSenderListFromSenderId($conn, $sender_list_id){
 	$stmt->close();
 }
 
-function makeCopyMailSenderList($conn, $old_sender_list_id, $new_sender_list_id, $new_sender_list_name){
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list (sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,date) SELECT ?, ?, sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,? FROM tb_core_mailcamp_sender_list WHERE sender_list_id=?");
+function makeCopyMailSenderList($conn, $old_sender_list_id, $new_sender_list_id, $new_sender_list_name,$userid){
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list (sender_list_id,sender_name,userid,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,date) SELECT ?, ?, userid, sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,? FROM tb_core_mailcamp_sender_list WHERE sender_list_id=?");
 	$stmt->bind_param("ssss", $new_sender_list_id, $new_sender_list_name, $GLOBALS['entry_time'], $old_sender_list_id);
 	
 	if ($stmt->execute() === TRUE)
@@ -734,4 +754,273 @@ function getSenderPwd(&$conn, &$sender_list_id){
 	else
 		return "";
 }
+
+function domainverification($conn,$POSTJ){
+	
+	$tablecon = '<form class="needs-validation" novalidate id="targetUserForm2" onsubmit="updateTarget()">
+					<div class="card-body">
+						<div class="form-group row center-block" id="addUserForm">
+							<div class="col-lg-2">
+								<button type="button" class="btn btn-primary" id="addTarget2"  data-bs-toggle="modal" data-bs-target="#Modal4">
+									<i class="fa fa-handshake"></i> Verify a New Domain
+								</button>
+							</div>
+						</div>
+						<div class="card">
+							<h4 class="col-md-12 m-t-10" style="text-align:center; border-bottom-style:inset; border-bottom-width:thin">Domain Status</h4>
+							<div class="table-responsive">
+								<style>
+									.domainV td {
+										padding: 0.25rem;
+									}
+								</style>
+								<table id="zero_config4" class="table editable-table table-bordered  m-b-0 domainV w-100" style="text-align:center">
+									<thead>
+										<tr>
+											<th>Domain Name</th>
+											<th>Email Address</th>
+											<th style="width:70px">Status</th>
+											<th style="width:70px">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+											<tr>
+												<td style="width:366px">techowl.in</td>
+												<td>abhishek@techowl.in</td>
+												<td>
+														<button type="button" class="btn btn-sm btn-success" disabled=""><i class="mdi mdi-verified"></i> Verified</button>
+												</td>
+												<td>
+													<a style="color:#2962FF; cursor:pointer" data-toggle="tooltip" data-placement="top" title="Delete Domain" onclick="return deleteDomain(\'techowl.in\')">
+														<i class="mdi mdi-close" style="font-size:large"></i>
+													</a>
+												</td>
+											</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</form>
+
+				<script>
+					//$("#zero_config4").DataTable();
+					$("#zero_config4").DataTable({
+						"columnDefs": [
+							{
+								"targets": [1],
+								"visible": false,
+								"searchable": false
+							}
+						]
+					});
+					//$("#zero_config4").DataTable();
+
+					$("#zero_config4").on("click", "a", function () {
+						console.log($(this).parent());
+						$("#zero_config4").DataTable().row($(this).parents("tr")).remove().draw(false);
+					});
+
+					$("#zero_config4").on("click", "button", function () {
+						console.log($(this).parent());
+						var email = $("#zero_config4").DataTable().row($(this).parents("tr")).data()[1];
+						$("#Modal4").modal("toggle");
+						$("#eVAddress").val(email);
+						$("#codeInputDiv").show();
+					});
+
+					function verifyDomain() {
+						$("#domainerr").html("");
+						$("#verifyDomainForm").addClass("was-validated");
+						var domainn = eVAddress.value.split("@")[1];
+						var freedomain = ["gmail.com","outlook.com","hotmail.com","yahoo.com"];
+						var res = freedomain.indexOf(domainn)
+						if(res != -1){
+							$("#domainerr").html("Email Delivery Failed - Domain verification of free email services is not supported e.g. gmail, hotmail, etc.")
+							return false;
+						}
+
+						// toastr.error(result, eVAddress.value);
+						if ($("#eVAddress")[0].checkValidity()) {
+							var dataPost = {
+								emailAddress: eVAddress.value,
+								action_type: "add_mail_verification",
+								emaildomain: domainn
+							};
+							console.log(dataPost);
+							$.ajax({
+								url: "manager/userlist_campaignlist_mailtemplate_manager",
+								type: "post",
+								traditional: true,
+								data: dataPost,
+								dataType: "text",
+								success: function (response) {
+									// console.log(response.result);
+									toastr.options.fadeOut = 20500;
+									toastr.success("", "Domain Verification",{fadeAway:10000});
+									if(response.result == "success"){
+										toastr.success("", "Domain Verification");
+									}
+									else {
+										toastr.error("", response.error);
+										$("#codeInputDiv").show();
+									}
+								},
+								error: function (xhr, status) {
+									toastr.error("Email Delivery API Failed - Try Again", "Domain Verification");
+								}
+							});
+
+							return true;
+						}
+					}
+
+					function reloadVerification() {
+						if ($("#codeInputDiv").is(":visible")) {
+							$("#Modal3").modal("toggle");
+							$(".modal-backdrop").remove();
+							viewDomainVerification();
+						}
+					}
+
+					function reloadPage() {
+						location.href = "/User/TargetUsers";
+					}
+
+					function codeVerification() {
+						$("#codeInputDiv").addClass("was-validated");
+						if ($("#eVCode")[0].checkValidity()) {
+							var dataPost = {
+								emailAddress: eVAddress.value,
+								code: eVCode.value,
+								action_type:"domain_otp_verfication"
+							};
+							console.log(dataPost);
+							$.ajax({
+								url: "manager/userlist_campaignlist_mailtemplate_manager",
+								type: "post",
+								traditional: true,
+								data: dataPost,
+								dataType: "text",
+								contentType: "application/x-www-form-urlencoded",
+								success: function (result) {
+									if (result.includes("Failed")) {
+										toastr.error(result, "Domain Verification");
+									}
+									else {
+										toastr.success(result, "Domain Verification");
+										$("#vCodeButton").attr("disabled", true);
+										//$("#Modal4").modal("toggle");
+										//$("#Modal3").modal("toggle");
+										//viewDomainVerification();
+									}
+								},
+								error: function (xhr, status) {
+									toastr.error("Code Verification API Failed - Try Again", "Domain Verification");
+								}
+							});
+
+							return true;
+						}
+					}
+
+					function deleteDomain(dDomain) {
+						var dataPost = {
+							domainName: dDomain
+						};
+						$.ajax({
+							url: "/Target/DeleteDomain",
+							type: "post",
+							traditional: true,
+							data: dataPost,
+							dataType: "text",
+							success: function (result) {
+								if (result.includes("Error")) {
+									toastr.error(result, "Domain Deletion");
+								}
+								else {
+									toastr.success("Domain Successfully Deleted", "Domain Deletion");
+								}
+							},
+							error: function (xhr, status) {
+								toastr.error("Error deleting domain - Back-end API issue", "Domain Deletion");
+							}
+						});
+						return true;
+					}
+				</script>';
+
+echo json_encode(['result' => 'success', 'msg'=>$tablecon]);
+}
+
+function addverificationmail($conn,$POST,$userid){
+
+	$email = $POST['emailAddress'];
+	$email_domain = $POST['emaildomain'];
+	$code = rand(100000,999999);
+	$stmt = $conn->prepare("INSERT INTO tb_mail_verify(userid,email,domain,code) VALUES(?,?,?,?)");
+	$stmt->bind_param('ssss', $userid,$email,$email_domain,$code);
+	if($stmt->execute() === TRUE){
+		$msg = "Hi,<p>It looks you requested for SnipierPhish domain verification. Use this code: ".$code." to verify your domain</p>";
+		$email = "waseemakram.img@gmail.com";
+
+		$headers = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+
+		$mail = new PHPMailerPHPMailer(true);
+		$mail->isSMTP();
+		$mail->Host = 'smtp.gmail.com';
+		$mail->SMTPAuth = true;
+		$mail->SMTPSecure = 'tls';
+		$mail->Port = 587;
+		$mail->Username = 'mamta01.img@gmail.com'; // YOUR email username
+		$mail->Password = 'dnegqdzkhyotrqvp'; // YOUR email password
+
+		// Sender and recipient settings
+		$mail->setFrom('mamta01.img@gmail.com', 'Phishing');
+		$mail->addAddress($email ,'Test');
+		$mail->IsHTML(true);
+		$mail->Subject = "Domain Verification";
+		$mail->Body = $msg;
+
+		$ismailsent = $mail->send();
+
+
+		if(!$ismailsent) {
+			die(json_encode(['error' => 'Mail sending failed!'])); 
+		}else{
+			echo(json_encode(['result' => 'success']));
+		}
+			
+	}
+	else 
+		echo(json_encode(['result' => 'failed', 'error' => 'Domain Verification']));	
+}
+
+
+function domainotpverification($conn,$POST,$userid){
+	$stmt = $conn->prepare("SELECT * FROM tb_mail_verify WHERE email = ? AND code = ?");
+	$stmt->bind_param("ss",$POST['emailAddress'],$POST['code']);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if($row = $result->fetch_assoc()){
+		$id = $row['id'];
+		$status = "1";
+		$code = rand(100000,999999);
+		$stmt = $conn->prepare("UPDATE tb_mail_verify SET status=?, code=? WHERE id=?");
+		$stmt->bind_param('sss', $status,$code,$id);
+		if($stmt->execute() === TRUE){
+			echo(json_encode(['result' => 'success']));	
+		}
+		else 
+			echo(json_encode(['result' => 'failed', 'error' => 'Error adding user!']));	
+
+	}else{
+
+	}
+
+}
+
+
 ?>

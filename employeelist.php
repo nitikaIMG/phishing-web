@@ -200,8 +200,17 @@ isSessionValid(true);
                      <div class="card-body">
                         <div class="row">
                            <div class="col-md-12" style="display: flex;justify-content: end;">
-                              <button type="button" class="btn btn-info btn-sm" style="padding-top: 11px; " onclick="document.location='employeelist?action=add&user=new'"><i class="fas fa-plus"></i> New User Group</button>
+                              <div class="row">
+                                 <div class="col-auto">
+                                    <button type="button" class="btn btn-purple btn-sm" onclick ="domainverification();" id="verificationdomain" style="padding-top: 11px; " data-bs-toggle="modal" data-bs-target="#exampleModal"> Domain Verification</button>
+                                 </div>
+                                 <div class="col-auto">
+                                    <button type="button" class="btn btn-info btn-sm" style="padding-top: 11px; " onclick="document.location='employeelist?action=add&user=new'"><i class="fas fa-plus"></i> New User Group</button>
+                              </div>
+                              </div>
+                              
                            </div>
+                           
                         </div>
                         <div class="row">
                            <div class="col-md-12 m-t-20">
@@ -443,6 +452,76 @@ isSessionValid(true);
                   </div>
                </div>
             </div>
+            <!-- Domain Verify Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                        <div class="modal-header">
+                           <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                              <svg> ... </svg>
+                           </button>
+                        </div>
+                        <div class="modal-body" id="verificationbody">
+                           
+                        </div>
+                        <div class="modal-footer">
+                           <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                           <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                  </div>
+               </div>
+            </div>
+
+            <div id="Modal4"  style="background: rgba(0,0,0,0.7);"  class="modal fade" id="Modal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                        <div class="modal-header d-flex align-items-center">
+                           <h4 class="modal-title" id="myModalLabel">Verify Domain</h4>
+                           <button type="button" class="btn-close ml-auto" data-bs-dismiss="modal" aria-hidden="true"   aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                           <p>
+                              Domain verification is performed through challenge-response authentication of the provided email address. <br /> (e.g. verifying support@mybusiness.com
+                              will enable mybusiness.com.)
+                           </p>
+                           <div class="form-group row" id="verifyDomainForm">
+                              <label for="eVAddress" class="col-sm-12 text-left control-label col-form-label">Email Address <span class="text-danger">*</span></label>
+                              <div class="col-sm-12">
+                                    <input type="email" class="form-control" id="eVAddress" placeholder="Email Address" required="" aria-invalid="false">
+                                    <div class="invalid-tooltip">
+                                       Please choose an email address.
+                                    </div>
+                                    <div class="text-danger bold" id="domainerr"></div>
+                              </div>
+                           </div>
+                           <div class="col-lg-2">
+                              <button type="button" class="btn btn-primary" id="vDomain" onclick="verifyDomain()">
+                                    <i class="mdi mdi-email-secure"></i> Generate Verification Email
+                              </button>
+                           </div>
+                           <div id="codeInputDiv" class="form-group row m-t-15" style="border-top-style:inset; border-top-width:thin; padding-top:15px; display:none">
+                              <label for="eVCode" class="col-sm-3 text-left control-label col-form-label p-l-25" style="text-align:center">Input Code: <span class="text-danger">*</span></label>
+                              <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="eVCode" placeholder="XXXX-XXXX" required="" aria-invalid="false">
+                              </div>
+                              <div class="col-sm-3">
+                                    <button type="button" class="btn btn-success" id="vCodeButton" onclick="codeVerification()">
+                                       <i class="mdi mdi-verified"></i> Verify
+                                    </button>
+                              </div>
+                           </div>
+
+                        </div>
+                        <div class="modal-footer">
+                           <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" onclick="reloadVerification()">Close</button>
+                        </div>
+                  </div>
+                  <!-- /.modal-content -->
+               </div>
+               <!-- /.modal-dialog -->
+            </div>
+
             <?php include(dirname(__FILE__).'/components/foot.php'); ?>
             <?php include dirname(__FILE__)."/components/script.php"; ?>
             <!-- ============================================================== -->
@@ -470,8 +549,8 @@ isSessionValid(true);
    <!-- <script src="js/libs/custom.min.js"></script> -->
    <!-- this page js -->
    <script src="<?php echo url ?>/js/libs/jquery/datatables.js" ></script>
+   <script src="<?php echo url ?>/js/common_scripts.js"></script>
    <script src="<?php echo url ?>/js/libs/moment.min.js"></script>
-   <script src="<?php echo url ?>/js/common_scripts.js" ></script>
    <script src="<?php echo url ?>/js/mail_user_group.js" ></script>
    <?php
    echo '<script>';
@@ -488,10 +567,15 @@ isSessionValid(true);
                   loadTableUserGroupList();';
    echo '</script>';
    ?>
-   <!-- <script defer src="js/libs/popper.min.js"></script>
-      <script defer src="js/libs/bootstrap.min.js"></script> -->
+    <script defer src="<?php echo url ?>/js/libs/popper.min.js"></script>
+   <script defer src="<?php echo url ?>/js/libs/bootstrap.min.js"></script>
    <script defer src="<?php echo url ?>/js/libs/select2.min.js" ></script>
    <script defer src="<?php echo url ?>/js/libs/toastr.min.js" ></script>
+   <script>
+   
+   </script>
 </body>
+
+
 
 </html>

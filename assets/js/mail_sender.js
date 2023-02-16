@@ -246,7 +246,7 @@ function MailSenderCopyAction() {
         $("#mail_sender_name").removeClass("is-invalid");
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "make_copy_sender_list",

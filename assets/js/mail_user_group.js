@@ -481,3 +481,26 @@ function loadTableUserGroupList() {
         }).draw();        
     });   
 }
+
+function domainverification() {
+    alert("sdgjklf");
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "user_group_domain_verify"
+        })
+    }).done(function (response) {
+        console.log(response)
+        $('#verificationbody').html(response.msg);
+        // if(response.result == "success"){
+        //    $('#modal_user_group_delete').modal('toggle');
+        //     toastr.success('', 'Deleted successfully!');
+        //     dt_user_group_list.destroy();
+        //     $("#table_user_group_list tbody > tr").remove();
+        //     loadTableUserGroupList();
+        // }
+        // else
+        //     toastr.error("", response.error);
+    });
+}
