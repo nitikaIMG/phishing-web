@@ -126,6 +126,22 @@ function getMailCampaignFromCampaignListId(id) {
                 $('#tb_campaign_time_val').val(data.campaign_data.msg_interval);
                 $('#tb_campaign_msg_retry').val(data.campaign_data.msg_fail_retry);
                 $('#range_campaign_msg_retry').val(data.campaign_data.msg_fail_retry);
+                
+                var date0 = data.date.split("-")[0]+''+data.scheduled_time+':00';
+                var date = moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss');
+                var diffTime = Math.abs(new Date().valueOf() - new Date(date).valueOf());
+                var days = diffTime / (24*60*60*1000);
+                var hours = (days % 1) * 24;
+                var minutes = (hours % 1) * 60;
+                var secs = (minutes % 1) * 60;
+                [days, hours, minutes, secs] = [Math.floor(days), Math.floor(hours), Math.floor(minutes), Math.floor(secs)]
+
+                if(new Date().valueOf() > new Date(date).valueOf() ){
+                    $('#remainingtime').append('First batch of emails are scheduled in the Past.Please ensure the campaign is scheduled to occur in the future.');
+                }else{
+                    $('#remainingtime').append(`First batch of emails scheduled to deliver in: <span style="color:red;">${days} day(s), ${hours} hour(s) and ${minutes} minute(s) and ${secs} second(s)</span>.`);
+                }
+
             }
             else
                 toastr.error('', 'Error getting data<br/>' + data.error);
@@ -402,7 +418,31 @@ function loadTableCampaignList() {
                             break;
                     }                
 
-                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" + (value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td data-order=\"" + (value.scheduled_time) + "\">" + (value.scheduled_time==null?'-':value.scheduled_time) + "</td><td data-order=\"" + (value.stop_time) + "\">" + (value.stop_time==null?'-':value.stop_time) + "</td><td>"+ camp_status + "</td><td>" + action_items_campaign_table + "</td></tr>");
+                    var date0 = value.date.split("-")[0]+''+value.scheduled_time+':00';
+                    var days = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'days');
+                    var hours = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'hours');
+                    var minutes = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'minutes');
+                    var secs = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'seconds');
+
+                    if(days>0){
+                        var next_del = days+'days';
+                    }else{
+                        if(hours>0){
+                            var next_del = hours+'hours';
+                        }else{
+                            if(minutes>0){
+                                var next_del = minutes+'minutes';
+                            }else {
+                                    if(secs>0){
+                                       var next_del = secs+'sec';
+                                    }else{
+                                        var next_del = '-';
+                                    }
+                            }
+                        }
+                    }
+
+                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" + (value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td data-order=\"" + (value.scheduled_time) + "\">" + (value.scheduled_time==null?'-':value.scheduled_time) + "</td><td data-order=\"" + (value.stop_time) + "\">" + (value.stop_time==null?'-':value.stop_time) + "</td><td data-order=\"" + (value.entry_time) + "\">" + (value.entry_time==null?'-':value.entry_time) + "</td><td>"+ camp_status + "</td><td>"+ next_del + "</td><td>" + action_items_campaign_table + "</td></tr>");
 
             
                 });

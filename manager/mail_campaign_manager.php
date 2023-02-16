@@ -69,12 +69,13 @@ function saveCampaignList($conn, & $POSTJ){
 	$stop_time = $POSTJ['stop_time'];
 	$camp_status = $POSTJ['camp_status'];
 	$employees = json_encode($POSTJ['employees']);
+	$entry_time = $GLOBALS['entry_time'];
 	
 	if(checkCampaignListIdExist($conn,$campaign_id)){
-		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_list` SET `campaign_name`='$campaign_name', `campaign_data`='$campaign_data',`date`='$date' ,`scheduled_time`='$scheduled_time', `stop_time`='$stop_time', `camp_status`='$camp_status',`employees`='$employees' ,`camp_lock`=0 WHERE `campaign_id`='$campaign_id'");
+		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_list` SET `campaign_name`='$campaign_name', `campaign_data`='$campaign_data',`date`='$date' ,`scheduled_time`='$scheduled_time', `stop_time`='$stop_time',`entry_time`='$entry_time', `camp_status`='$camp_status',`employees`='$employees' ,`camp_lock`=0 WHERE `campaign_id`='$campaign_id'");
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_list` (`campaign_id`, `campaign_name`, `campaign_data`, `date`, `scheduled_time`,`stop_time`, `camp_status`, `employees`, `camp_lock`) VALUES ('$campaign_id', '$campaign_name', '$campaign_data', '$date', '$scheduled_time','$stop_time', '$camp_status', '$employees', '0')");
+		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_list` (`campaign_id`, `campaign_name`, `campaign_data`, `date`, `scheduled_time`,`stop_time`,`entry_time`, `camp_status`, `employees`, `camp_lock`) VALUES ('$campaign_id', '$campaign_name', '$campaign_data', '$date', '$scheduled_time','$stop_time', null,'$camp_status', '$employees', '0')");
 	}
 	
 
@@ -91,16 +92,15 @@ function getCampaignList($conn){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
 
-	$result = mysqli_query($conn, "SELECT campaign_id,campaign_name,campaign_data,date,scheduled_time,stop_time,camp_status FROM tb_core_mailcamp_list");
+	$result = mysqli_query($conn, "SELECT campaign_id,campaign_name,campaign_data,date,scheduled_time,stop_time,entry_time,camp_status FROM tb_core_mailcamp_list");
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["campaign_data"] = json_decode($row["campaign_data"]);	//avoid double json encoding
 			$row['date'] = $row['date'];
 			$row['stop_time'] = $row['stop_time'];
-			// $row["scheduled_date"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'h:i A');
 			$row["scheduled_date"] = $row['scheduled_time'];
 			$row["scheduled_time"] = $row['scheduled_time'];
-			// $row["scheduled_time"] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'M d, Y ');
+			$row["entry_time"] = $row['entry_time'];
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
@@ -138,7 +138,7 @@ function getCampaignFromCampaignListId($conn, $campaign_id){
 	$resp['live_mcamp_data']['timestamp_conv'] = $scatter_data_mail_full['timestamp_conv'];
 
 	//-------------------
-	$stmt = $conn->prepare("SELECT campaign_name,campaign_data,date,scheduled_time,camp_status,employees FROM tb_core_mailcamp_list WHERE campaign_id = ?");
+	$stmt = $conn->prepare("SELECT campaign_name,campaign_data,date,scheduled_time,stop_time,entry_time,camp_status,employees FROM tb_core_mailcamp_list WHERE campaign_id = ?");
 	$stmt->bind_param("s", $campaign_id);
 	$stmt->execute();
 	$result = $stmt->get_result();
@@ -211,12 +211,12 @@ function pullMailCampaignFieldData($conn){
 
 function startStopMailCampaign($conn, $campaign_id, $action_value){	
 	if($action_value == 3)
-		$stop_time = $GLOBALS['entry_time'];
+		$entry_time = $GLOBALS['entry_time'];
 	else
-		$stop_time = null;
+		$entry_time = null;
 
-	$stmt = $conn->prepare("UPDATE tb_core_mailcamp_list SET camp_status=?,stop_time=? where campaign_id=?");
-	$stmt->bind_param('sss', $action_value,$stop_time,$campaign_id);
+	$stmt = $conn->prepare("UPDATE tb_core_mailcamp_list SET camp_status=?,entry_time=? where campaign_id=?");
+	$stmt->bind_param('sss', $action_value,$entry_time,$campaign_id);
 	if ($stmt->execute() === TRUE)
 		echo json_encode(['result' => 'success']);	
 	else 

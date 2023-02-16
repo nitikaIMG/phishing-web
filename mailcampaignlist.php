@@ -128,8 +128,10 @@ isSessionValid(true);
                                                    <th>Email Template</th>
                                                    <th>Scheduled Date</th>
                                                    <th>Scheduled Time</th>
+                                                   <th>Stop Time</th>
                                                    <th>End Time</th>
                                                    <th>Status</th>
+                                                   <th>Next Delivery</th>
                                                    <th>Actions</th>
 
                                                 </tr>
@@ -258,14 +260,7 @@ isSessionValid(true);
                                         <div class="container">
                                            <div class="row" >
                                               <div class="col">
-                                                <p>
-                                                 First batch of emails are scheduled in the    
-                                                 <span style="color:red;" class="time"></span>.
-                                                </p>
-                                                <p>
-                                                 Please ensure the campaign is scheduled to occur in the future.
-                                                 Emails delivered per hour:    
-                                                 <span style="color:red;" class="perhour"></span>
+                                                <p id="remainingtime">
                                                 </p>
                                                  <hr/>
                                               </div>
