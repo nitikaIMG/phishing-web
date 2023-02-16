@@ -41,7 +41,6 @@ $(function() {
 });
 
 function pullMailCampaignFieldData() {
-    console.log('pullMailCampaignFieldData');
     $.post({
         url: "manager/mail_campaign_manager",
         contentType: 'application/json; charset=utf-8',
@@ -169,7 +168,6 @@ function saveMailCampaignAction() {
     var campaignData = {};
 
     var campaign_name = $('#mail_campaign_name').val();
-    // var scheduled_time = moment.utc($("#datetimepicker_launch").data("DateTimePicker").date()).format('DD-MM-YYYY hh:mm A');
     campaignData.user_group = {id:$('#userGroupSelector').val(), name:$('#userGroupSelector :selected').text()};
     campaignData.mail_template = {id:$('#mailTemplateSelector').val(), name:$('#mailTemplateSelector :selected').text()};
     campaignData.mail_sender = {id:$('#mailSenderSelector').val(), name:$('#mailSenderSelector :selected').text()};
@@ -188,9 +186,9 @@ function saveMailCampaignAction() {
 
         var employees={id:$('#employees').val()};
 
-        if(employees.length === 0){
+        if(($('#employees').val()).length === 0){
             $("#employees").parent().css("border", "1px solid red");
-            toastr.error('', 'None selected!');
+            toastr.error('', 'None Choosen!');
             return;
         }
 

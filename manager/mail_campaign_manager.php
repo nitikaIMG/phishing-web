@@ -185,7 +185,7 @@ function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $ne
 
 function pullMailCampaignFieldData($conn){
 	$resp;
-	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group");
+	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%')");
 	if(mysqli_num_rows($result) > 0){
 		$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
