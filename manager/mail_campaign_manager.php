@@ -175,7 +175,8 @@ function deleteMailCampaignFromCampaignId($conn,$campaign_id){
 }
 
 function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $new_campaign_name){
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,campaign_name,campaign_data,date,scheduled_time,camp_status) SELECT ?, ?, campaign_data,?,scheduled_time,0 FROM tb_core_mailcamp_list WHERE campaign_id=?");
+	$userid=$_SESSION['user'][0];
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,userid,campaign_name,campaign_data,date,scheduled_time,camp_status) SELECT ?,userid, ?, campaign_data,?,scheduled_time,0 FROM tb_core_mailcamp_list WHERE campaign_id=?");
 	$stmt->bind_param("ssss", $new_campaign_id, $new_campaign_name, $GLOBALS['entry_time'], $old_campaign_id);
 	
 	if ($stmt->execute() === TRUE){
