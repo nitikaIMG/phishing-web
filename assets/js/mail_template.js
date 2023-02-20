@@ -519,7 +519,7 @@ function linkLandpage(){
     if(page_file_name == "Empty")
         toastr.error('', 'Error: Please create landing page from SniperHost first');
     else{
-        var url = window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name
+        var url = window.location.origin + '/sniperhost/lp_pages/' + page_file_name
         $('#summernote').summernote('pasteHTML', `<a href="` + url + `">` + url + `</a>`);
     }
     $('#modal_sniperhost_landpage_selection').modal('toggle');
@@ -673,7 +673,7 @@ function insertMedia(type){
 
 function getStoreList(){
     $.post({
-        url: "/../manager/settings_manager",
+        url: "manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",

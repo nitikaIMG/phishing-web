@@ -258,7 +258,7 @@ function landPageDeletionAction() {
 
 function generateAccessLink(page_file_name){
     if(validateFields()){
-        $("#link_output").text(window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name);
+        $("#link_output").text(window.location.origin + '/sniperhost/lp_pages/' + page_file_name);
         Prism.highlightAll();
     }
 }
@@ -266,7 +266,7 @@ function generateAccessLink(page_file_name){
 function copyAccessLink(e, page_file_name){
     var $temp = $("<input>");
     $("body").append($temp);
-    $temp.val(window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name).select();
+    $temp.val(window.location.origin + '/sniperhost/lp_pages/' + page_file_name).select();
     document.execCommand("copy");
     $temp.remove();
 

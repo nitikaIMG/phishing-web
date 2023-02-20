@@ -351,6 +351,7 @@ function getUserGroupFromGroupId($conn, $user_group_id){
 //---------------------------------------Email Template Section --------------------------------
 
 function saveMailTemplate($conn,&$POSTJ){
+	$userid=$_SESSION['user'][0];
 	$mail_template_id = $POSTJ['mail_template_id'];
 	if($mail_template_id == '')
 		$mail_template_id = null;
@@ -361,17 +362,15 @@ function saveMailTemplate($conn,&$POSTJ){
 	$timage_type = $POSTJ['timage_type'];
 	$attachments = json_encode($POSTJ['attachments']);
 	$mail_content_type = $POSTJ['mail_content_type'];
+	$entry_time=$GLOBALS['entry_time'];
 
 	if(checkAnIDExist($conn,$mail_template_id,'mail_template_id','tb_core_mailcamp_template_list')){
-		$stmt = $conn->prepare("UPDATE tb_core_mailcamp_template_list SET mail_template_name=?, mail_template_subject=?, mail_template_content=?, timage_type=?, mail_content_type=?, attachment=? WHERE mail_template_id=?");
-		$stmt->bind_param('sssssss', $mail_template_name,$mail_template_subject, $mail_template_content,$timage_type,$mail_content_type,$attachments,$mail_template_id);
+		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `mail_template_name`='$mail_template_name', `mail_template_subject`='$mail_template_subject', `mail_template_content`='$mail_template_content', `timage_type`='$timage_type', `mail_content_type`='$mail_content_type', `attachment`='$attachments',`userid`='$userid' WHERE `mail_template_id`='$mail_template_id'");
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_template_list(mail_template_id, mail_template_name, mail_template_subject, mail_template_content, timage_type, mail_content_type, attachment, date) VALUES(?,?,?,?,?,?,?,?)");
-		$stmt->bind_param('ssssssss', $mail_template_id,$mail_template_name,$mail_template_subject,$mail_template_content,$timage_type,$mail_content_type,$attachments,$GLOBALS['entry_time']);
 
+		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_template_list`(`mail_template_id`, `mail_template_name`, `mail_template_subject`, `mail_template_content`, `timage_type`, `mail_content_type`, `attachment`,`userid`, `date`) VALUES ('$mail_template_id','$mail_template_name','$mail_template_subject','$mail_template_content','$timage_type','$mail_content_type','$attachments',$userid,'$entry_time')");
 	}
-	
 	if ($stmt->execute() === TRUE){
 		echo(json_encode(['result' => 'success']));	
 	}
@@ -401,7 +400,8 @@ function getmailhtml($conn,$POSTJ){
 function getMailTemplateList($conn){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$result = mysqli_query($conn, "SELECT mail_template_id, mail_template_name, LEFT(mail_template_subject , 50) mail_template_subject, LEFT(mail_template_content , 50) mail_template_content,attachment,date FROM tb_core_mailcamp_template_list");
+	$userid=$_SESSION['user'][0];
+	$result = mysqli_query($conn, "SELECT mail_template_id, mail_template_name, LEFT(mail_template_subject , 50) mail_template_subject, LEFT(mail_template_content , 50) mail_template_content,attachment,date FROM tb_core_mailcamp_template_list WHERE userid='$userid'");
 
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){

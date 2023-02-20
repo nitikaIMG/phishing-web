@@ -115,7 +115,7 @@ function viewFileDetailsFromId(hf_id,quite) {
 
 function generateDownloadLink(){
     if ($('#tb_hf_name').val().match(/^[a-z\d\-_\s]+$/i)) {
-        $("#link_output").text(window.location.origin + '/spear/sniperhost/out?hf=' + nextRandomId);
+        $("#link_output").text(window.location.origin + '/sniperhost/out?hf=' + nextRandomId);
         Prism.highlightAll();
     }
 }

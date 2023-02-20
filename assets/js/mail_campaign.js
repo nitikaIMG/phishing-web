@@ -15,17 +15,6 @@ $(function() {
         minimumResultsForSearch: -1
     });
 
-    // $('#datetimepicker_launch').datetimepicker({
-    //     format: 'DD-MM-YYYY hh:mm A',
-    //     defaultDate: new Date(),
-    //     icons: {
-    //         time: "fa fa-clock",
-    //         date: "fa fa-calendar",
-    //         up: "fa fa-arrow-up",
-    //         down: "fa fa-arrow-down"
-    //     },
-    // });
-
     $('#datetimepicker_launch').daterangepicker({
         defaultDate: new Date(),
         startDate: moment().add(1, 'day'),
@@ -38,6 +27,17 @@ $(function() {
         }
     });
 
+
+    // $('#datetimepicker_launch').datetimepicker({
+    //     format: 'DD-MM-YYYY hh:mm A',
+    //     defaultDate: new Date(),
+    //     icons: {
+    //         time: "fa fa-clock",
+    //         date: "fa fa-calendar",
+    //         up: "fa fa-arrow-up",
+    //         down: "fa fa-arrow-down"
+    //     },
+    // });
 });
 
 function pullMailCampaignFieldData() {
@@ -66,6 +66,7 @@ function pullMailCampaignFieldData() {
                 $('#mailConfigSelector').append('<option value="' + this.mconfig_id + '">' + this.mconfig_name + '</option>');
             });
 
+            $('#mailConfigSelector').val("default").trigger('change'); 
             $('#mailConfigSelector').val("default").trigger('change'); 
             $('select[name="employees[]"]').bootstrapDualListbox({
                 nonSelectedListLabel: 'Available',
@@ -101,7 +102,7 @@ function getMailCampaignFromCampaignListId(id) {
                     $("#userGroupSelector").val(data.campaign_data.user_group.id);
                     $("#userGroupSelector").trigger('change');
                 } catch (err) {}
-                
+
                 try {
                     $("#mailTemplateSelector").val(data.campaign_data.mail_template.id);
                     $("#mailTemplateSelector").trigger('change');
@@ -117,16 +118,18 @@ function getMailCampaignFromCampaignListId(id) {
                     $('#mailConfigSelector').trigger('change');
                 } catch (err) {}
 
-                $("#datetimepicker_launch").val(data.date).trigger('change');
-                $("#stop_time").val(data.stop_time);
-                $("#scheduled_time").val(data.scheduled_time);
+                $("#datetimepicker_launch").val(data.scheduled_date).trigger('change');
+                $("#start_time").val(data.start_time);
+                $("#end_time").val(data.end_time);
+                
                 $('#range_campaign_time_min').val(data.campaign_data.msg_interval.split('-')[0]);
                 $('#range_campaign_time_max').val(data.campaign_data.msg_interval.split('-')[1]);
                 $('#tb_campaign_time_val').val(data.campaign_data.msg_interval);
                 $('#tb_campaign_msg_retry').val(data.campaign_data.msg_fail_retry);
                 $('#range_campaign_msg_retry').val(data.campaign_data.msg_fail_retry);
-                
-                var date0 = data.date.split("-")[0]+''+data.scheduled_time+':00';
+
+                // var date0 = data.date.split("-")[0]+''+data.scheduled_time+':00';
+                var date0 = data.scheduled_time;
                 var date = moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss');
                 var diffTime = Math.abs(new Date().valueOf() - new Date(date).valueOf());
                 var days = diffTime / (24*60*60*1000);
@@ -140,7 +143,6 @@ function getMailCampaignFromCampaignListId(id) {
                 }else{
                     $('#remainingtime').append(`First batch of emails scheduled to deliver in: <span style="color:red;">${days} day(s), ${hours} hour(s) and ${minutes} minute(s) and ${secs} second(s)</span>.`);
                 }
-
             }
             else
                 toastr.error('', 'Error getting data<br/>' + data.error);
@@ -150,12 +152,11 @@ function getMailCampaignFromCampaignListId(id) {
 
 function promptSaveMailCampaign() {
     var date = $("#datetimepicker_launch").val();
-    var start_date=date.split("-")[0];
-    var nowDate = new Date($.now());
-    var date1 = nowDate.getDate()+'/'+(nowDate.getMonth()+1)+'/'+nowDate.getFullYear();
+    var time = $("#start_time").val();
+    var date1 = date.split("-")[0]+''+time+':00';
+    var date = moment(date1, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss');
 
-
-    if ($("#cb_act_deact_campaign").is(':checked') && (start_date <= date1)== true) {
+    if ($("#cb_act_deact_campaign").is(':checked') && (new Date(date).valueOf()) <= (new Date($.now()))) {
         $('#modal_prompts').modal('toggle');
         $("#modal_prompts_body").text("");
         $("#modal_prompts_body").append("The scheduled time is in past. This will start the campaign immediately. Do you want to save and start campaign \"" + $('#mail_campaign_name').val() + "\"?<br/><br/><i>Note: This will delete previous results of this campaign</i>");
@@ -174,23 +175,28 @@ function saveMailCampaignAction() {
     campaignData.mail_config = {id:$('#mailConfigSelector').val(), name:$('#mailConfigSelector :selected').text()};
     campaignData.msg_interval = $('#tb_campaign_time_val').val();
     campaignData.msg_fail_retry = $('#range_campaign_msg_retry').val();
+    
+    var employees={id:$('#employees').val()};
 
-    var date = $("#datetimepicker_launch").val();
-    var scheduled_time = $("#scheduled_time").val();
-    var stop_time = $("#stop_time").val();
+    var emp_type=$('#emp_type').val();
 
-    if ($("#cb_act_deact_campaign").is(':checked'))
-        var cb_act_deact_campaign = 1;
-    else
-        var cb_act_deact_campaign = 0;
-
-        var employees={id:$('#employees').val()};
-
+    if(emp_type==0){
         if(($('#employees').val()).length === 0){
             $("#employees").parent().css("border", "1px solid red");
             toastr.error('', 'None Choosen!');
             return;
         }
+    }
+
+    var start_time = $("#start_time").val();
+    var end_time = $("#end_time").val();
+    // var scheduled_time = moment.utc($("#datetimepicker_launch").data("DateTimePicker").date()).format('DD-MM-YYYY hh:mm A');
+    var scheduled_time = $("#datetimepicker_launch").val();
+
+    if ($("#cb_act_deact_campaign").is(':checked'))
+        var cb_act_deact_campaign = 1;
+    else
+        var cb_act_deact_campaign = 0;
 
     if (RegTest(campaign_name, 'COMMON') == false) {
         $("#mail_campaign_name").addClass("is-invalid");
@@ -229,11 +235,11 @@ function saveMailCampaignAction() {
             campaign_id: nextRandomId,
             campaign_name: campaign_name,
             scheduled_time: scheduled_time,
-            stop_time:stop_time,
-            date:date,
             campaign_data: campaignData,
             camp_status: cb_act_deact_campaign,
-            employees:employees
+            employees:employees,
+            start_time:start_time,
+            end_time:end_time
          }),
     }).done(function (response) {
         if(response.result == "success"){ 
@@ -242,7 +248,7 @@ function saveMailCampaignAction() {
             }                
             toastr.success('', 'Saved successfully!');   
             setTimeout(function() {
-                document.location = "MailCampaignList";
+                document.location = "mailcampaignlist";
             }, 1000);
         }
         else
@@ -373,6 +379,7 @@ function loadTableCampaignList() {
          })
     }).done(function (data) {
         $(function() {
+            console.log(data);
             if(!data.error){
                 $.each(data, function(key, value) {
                     var action_items_campaign_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Report" onclick="document.location='MailCmpDashboard?mcamp=` + value.campaign_id + `'"><i class="mdi mdi-book-open"></i></button>`;
@@ -386,9 +393,9 @@ function loadTableCampaignList() {
                         action_items_campaign_table += `<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Deactivate" onClick="promptMailCampActDeact('` + value.campaign_id + `','` + value.campaign_name + `','` + value.camp_status + `',$(this))"><i class="mdi mdi-stop"></i></button>`;
                     
                     if(value.camp_status == 0 || value.camp_status == 3)
-                        var option_edit = `<a class="dropdown-item" href="#" onClick="document.location='mailcampaignlist?action=edit&campaign=` + value.campaign_id + `','` + value.campaign_name + `'">Edit</a>`;
+                        var option_edit = `<a class="dropdown-item" href="#" onClick="document.location='MailCampaignList?action=edit&campaign=` + value.campaign_id + `','` + value.campaign_name + `'">Edit</a>`;
                     else
-                        var option_edit = `<a class="dropdown-item disabled" href="#" disabled>Edit</a>`;
+                        var option_edit = `<a class="dropdown-item" href="#" disabled>Edit</a>`;
     
                     action_items_campaign_table += `<div class="btn-group ml-sm-1 btn-group-table">
                             <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>
@@ -415,34 +422,33 @@ function loadTableCampaignList() {
                             var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
                             break;
                     }                
-
-                    var date0 = value.date.split("-")[0]+''+value.scheduled_time+':00';
+                    
+                    var date0 = value.scheduled_time;
                     var days = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'days');
                     var hours = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'hours');
                     var minutes = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'minutes');
                     var secs = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment().format('YYYY-MM-DD hh:mm:ss')), 'seconds');
 
                     if(days>0){
-                        var next_del = days+'days';
+                        var next_del = days+' days';
                     }else{
                         if(hours>0){
-                            var next_del = hours+'hours';
+                            var next_del = hours+' hours';
                         }else{
                             if(minutes>0){
-                                var next_del = minutes+'minutes';
+                                var next_del = minutes+' minutes';
                             }else {
                                     if(secs>0){
-                                       var next_del = secs+'sec';
+                                       var next_del = secs+' sec';
                                     }else{
                                         var next_del = '-';
                                     }
                             }
                         }
                     }
+                    
 
-                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" + (value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td data-order=\"" + (value.scheduled_time) + "\">" + (value.scheduled_time==null?'-':value.scheduled_time) + "</td><td data-order=\"" + (value.stop_time) + "\">" + (value.stop_time==null?'-':value.stop_time) + "</td><td data-order=\"" + (value.entry_time) + "\">" + (value.entry_time==null?'-':value.entry_time) + "</td><td>"+ camp_status + "</td><td>"+ next_del + "</td><td>" + action_items_campaign_table + "</td></tr>");
-
-            
+                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" +(value.scheduled_date) + "\">" + (value.scheduled_date==null?'-':(value.scheduled_date)) + "</td><td data-order=\"" + (value.start_time) + "\">" + (value.start_time==null?'-':(value.start_time)+' - '+(value.end_time)) + "</td><td>"+ camp_status + "</td><td>"+ next_del+ "</td><td>" + action_items_campaign_table + "</td></tr>");
                 });
             }
             dt_mail_campaign_list = $('#table_mail_campaign_list').DataTable({

@@ -6,10 +6,10 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 //-------------------------------------------------------
 function checkInstallation(){
-    $db_file = '../includes/db.php';
+    $db_file = dirname(__FILE__,2) . '/includes/db.php';
     
     if (file_exists($db_file)) {
-        require_once('../includes/db.php');
+        require_once(dirname(__FILE__,2) . '/includes/db.php');
         
         $result = mysqli_query($conn, "SHOW TABLES FROM $curr_db");
         if (mysqli_num_rows($result) > 0)

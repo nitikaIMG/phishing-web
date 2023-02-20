@@ -27,6 +27,10 @@ isSessionValid(true);
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css"> 
       <style type="text/css">
          .note-editable { background-color: white !important; } /*Disabled background colour*/
+         .tab-header{ list-style-type: none; }
+         body.dark .table tbody tr td {
+            color: white;
+         }
       </style> 
    </head>
    <body class="layout-boxed alt-menu">
@@ -219,7 +223,7 @@ isSessionValid(true);
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Select Email Campaign</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
                      </div>
                      <div class="modal-body">
                         <div class="form-group row">
@@ -249,7 +253,7 @@ isSessionValid(true);
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Export Report</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
                      </div>
                      <div class="modal-body">
                         <div class="form-group row">
@@ -281,7 +285,7 @@ isSessionValid(true);
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title">Reply Emails</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
                      </div>
                      <div class="modal-body" id="modal_reply_mails_body" >
                         <ul class="nav nav-tabs" role="tablist">  
@@ -300,7 +304,7 @@ isSessionValid(true);
                   <div class="modal-content" style="width: 120%;">
                      <div class="modal-header">
                         <h5 class="modal-title">Dashboard Display Settings</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
                      </div>
                      <div class="modal-body">
                         <div class="form-group row">
@@ -344,7 +348,7 @@ isSessionValid(true);
                   <div class="modal-content">
                      <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Dashboard Access Link</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
                      </div>
                      <div class="modal-body">
                         <div class="form-group row">
