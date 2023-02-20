@@ -756,8 +756,14 @@ function getSenderPwd(&$conn, &$sender_list_id){
 }
 
 function domainverification($conn,$POSTJ){
-	
-	$tablecon = '<form class="needs-validation" novalidate id="targetUserForm2" onsubmit="updateTarget()">
+	$stmt = $conn->prepare("SELECT * FROM tb_mail_verify");
+	$stmt->execute();
+	$result = $stmt->get_result();
+	// $result->fetch_assoc();
+	$row = mysqli_fetch_all($result, MYSQLI_ASSOC) ;
+	// echo'<pre>';print_r($row);die;
+	$tablecon = '';
+	$tablecon .= '<form class="needs-validation" novalidate id="targetUserForm2" onsubmit="updateTarget()">
 					<div class="card-body">
 						<div class="form-group row center-block" id="addUserForm">
 							<div class="col-lg-2">
@@ -783,20 +789,29 @@ function domainverification($conn,$POSTJ){
 											<th style="width:70px">Action</th>
 										</tr>
 									</thead>
-									<tbody>
-											<tr>
-												<td style="width:366px">techowl.in</td>
-												<td>abhishek@techowl.in</td>
+									<tbody>';
+									foreach($row as $rrow){
+										if($rrow["status"] == "0"){
+											$name = "Pending";
+											$clr = "btn-danger";
+										}else{
+											$name = "Verified";
+											$clr = "btn-success";
+										}
+											$tablecon .='<tr>
+												<td style="width:366px">'.$rrow["domain"].'</td>
+												<td>'.$rrow["email"].'</td>
 												<td>
-														<button type="button" class="btn btn-sm btn-success" disabled=""><i class="mdi mdi-verified"></i> Verified</button>
+														<button type="button" class="btn btn-sm '.$clr.'" disabled=""><i class="mdi mdi-verified"></i> '.$name.'</button>
 												</td>
 												<td>
 													<a style="color:#2962FF; cursor:pointer" data-toggle="tooltip" data-placement="top" title="Delete Domain" onclick="return deleteDomain(\'techowl.in\')">
 														<i class="mdi mdi-close" style="font-size:large"></i>
 													</a>
 												</td>
-											</tr>
-									</tbody>
+											</tr>';
+									}
+									$tablecon .= '</tbody>
 								</table>
 							</div>
 						</div>

@@ -483,7 +483,6 @@ function loadTableUserGroupList() {
 }
 
 function domainverification() {
-    alert("sdgjklf");
     $.post({
         url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
