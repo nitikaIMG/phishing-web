@@ -422,6 +422,15 @@ function loadTableCampaignList() {
                     var secs = moment(moment(date0, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')).diff((moment.utc().format('YYYY-MM-DD hh:mm:ss')), 'seconds');
 
                     if(days>0){
+                        if(hours>0){
+                            if(minutes>0){
+                                if(secs>0){
+                                    var next_del = days+' days'+hours+' hours'+minutes+' minutes'+secs+' secs';
+                                }
+                                var next_del = days+' days'+hours+' hours'+minutes+' minutes';
+                            }
+                            var next_del = days+' days'+hours+' hours';
+                        }
                         var next_del = days+' days';
                     }else{
                         if(hours>0){
@@ -438,19 +447,13 @@ function loadTableCampaignList() {
                             }
                         }
                     }
-                    
+                  
+                    var start_date = value.scheduled_datetime[0]['start_date'];
+                    var end_date = value.scheduled_datetime[0]['end_date'];
+                    var start_time = value.scheduled_datetime[0]['start_time'];
+                    var end_time = value.scheduled_datetime[0]['end_time'];
 
-                    var date = (value.scheduled_date);
-
-                    var start_date = (date).split(' ')[0];
-                    var end_date = ((date).split(' - ')[1]).split(' ')[0];
-
-                    var start_time = (date).split(' ')[1]+' '+(date).split(' ')[2];
-                    var end_time = ((date).split(' - ')[1]).split(' ')[1]+' '+(date).split(' ')[2];
-
-                    console.log(date);
-
-                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" +(value.start_date) + "\">" + (start_date==null?'-':(start_date)+' / '+end_date) + "</td><td data-order=\"" + (date) + "\">" + (end_date==null?'-':(start_time)+' - '+(end_time)) + "</td><td>"+ camp_status + "</td><td>"+ next_del+ "</td><td>" + action_items_campaign_table + "</td></tr>");
+                    $("#table_mail_campaign_list tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + value.campaign_data.mail_template.name + "</td><td data-order=\"" +start_date+ "\">" + (start_date==null?'-':(start_date)+' / '+end_date) + "</td><td data-order=\"" + (start_time) + "\">" + (start_time==null?'-':(start_time)+' - '+(end_time)) + "</td><td>"+ camp_status + "</td><td>"+ next_del+ "</td><td>" + action_items_campaign_table + "</td></tr>");
                 });
             }
             dt_mail_campaign_list = $('#table_mail_campaign_list').DataTable({

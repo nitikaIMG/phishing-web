@@ -77,10 +77,10 @@ function isProcessRunning($conn, $os){ //Single instance manager (check if 'our'
 }
 function startProcess($os){
     if($os == "windows"){
-        pclose(popen('start /b '.getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'\core\SniperPhish_Manager.php quite','r'));    //background execution
+        pclose(popen('start /b '.getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'\core\sniperphish_manager.php quite','r'));    //background execution
     }
     else{        
-        pclose(popen(getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'/core/SniperPhish_Manager.php quite &','r'));
+        pclose(popen(getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'/core/sniperphish_manager.php quite &','r'));
     }
 }
 

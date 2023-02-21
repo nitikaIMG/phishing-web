@@ -112,6 +112,7 @@ function getCampaignList($conn){
 			$row['scheduled_time'] = $row['scheduled_time'];
 			$row['employees'] = $row['employees'];
 			$row['scheduled_date'] = $row['scheduled_date'];
+			$row['scheduled_datetime'] = chnageformate($row['scheduled_date']);
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
@@ -332,7 +333,7 @@ function getUserGroupData($conn, $campaign_id){
 }
 
 function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POSTJ){
-	$offset = htmlspecialchars($POSTJ['start']);
+	$offset = htmlspecialchars($POSTJ['end']);
 	$limit = htmlspecialchars($POSTJ['length']);
 	$draw = htmlspecialchars($POSTJ['draw']);
 	$search_value = htmlspecialchars($POSTJ['search']['value']);
@@ -568,6 +569,40 @@ function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name
 	
 }
 
+function chnageformate($date){
+    $resp = [];
+	if($date!=''){
+		$dates= explode(" - ",$date);
 
+		$tz = new DateTimeZone('Asia/Kolkata'); 
+
+		$start_date1 = new DateTime($dates[0]);
+		$start_date1->setTimezone($tz);
+		$start_date = $start_date1->format('Y-m-d h:i A');
+
+		$end_date1 = new DateTime($dates[1]);
+		$end_date1->setTimezone($tz);
+		$end_date = $end_date1->format('Y-m-d h:i A');
+
+		$date1 = explode(" ",$start_date);
+		$date2 = explode(" ",$end_date);
+
+		$start_time = $date1[1].' '.$date1[2];
+		$end_time =$date2[1].' '.$date2[2];
+		$start_date1= $date1[0];
+		$end_date1 =$date2[0];
+
+		$row['start_time'] = $start_time;
+		$row['end_time'] = $end_time;
+		$row['start_date'] = $start_date1;
+		$row['end_date'] = $end_date1;
+		array_push($resp,$row);
+
+
+		return $resp;
+	}else{
+		return false;
+	}
+}
 
 ?>
