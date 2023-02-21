@@ -70,18 +70,9 @@ function saveCampaignList($conn, &$POSTJ){
 	$sch_date = $POSTJ['scheduled_date'];
 	
 	$date = str_replace('/','-',explode("-",$sch_date));
-
-	$result = mysqli_query($conn, "SELECT time_zone FROM tb_main_variables")->fetch_assoc();
-	$val = json_decode($result['time_zone'],true);
-	$tz_from = $val['timezone'];
-
-	$newDateTime = new DateTime($date[0], new DateTimeZone($tz_from)); 
-	$newDateTime->setTimezone(new DateTimeZone("UTC")); 
-	$start_date = $newDateTime->format("d-m-Y h:i A");
-
-	$newDateTime1 = new DateTime($date[1], new DateTimeZone($tz_from)); 
-	$newDateTime1->setTimezone(new DateTimeZone("UTC")); 
-	$end_date = $newDateTime1->format("d-m-Y h:i A");
+	$dates = chnagelocalformate($conn,$date);
+	$start_date = $dates[0]['start_date'];
+	$end_date = $dates[0]['end_date'];
 	$scheduled_date = $start_date.' - '.$end_date;
 
 	if(checkCampaignListIdExist($conn,$campaign_id)){
@@ -112,7 +103,7 @@ function getCampaignList($conn){
 			$row['scheduled_time'] = $row['scheduled_time'];
 			$row['employees'] = $row['employees'];
 			$row['scheduled_date'] = $row['scheduled_date'];
-			$row['scheduled_datetime'] = chnageformate($row['scheduled_date']);
+			$row['scheduled_datetime'] = chnageutcformate($row['scheduled_date']);
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
@@ -569,7 +560,7 @@ function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name
 	
 }
 
-function chnageformate($date){
+function chnageutcformate($date){
     $resp = [];
 	if($date!=''){
 		$dates= explode(" - ",$date);
@@ -599,6 +590,31 @@ function chnageformate($date){
 		array_push($resp,$row);
 
 
+		return $resp;
+	}else{
+		return false;
+	}
+}
+
+function chnagelocalformate($conn,$date){
+    $resp = [];
+	if($date!=''){
+	
+		$result = mysqli_query($conn, "SELECT time_zone FROM tb_main_variables")->fetch_assoc();
+		$val = json_decode($result['time_zone'],true);
+		$tz_from = $val['timezone'];
+	
+		$newDateTime = new DateTime($date[0], new DateTimeZone($tz_from)); 
+		$newDateTime->setTimezone(new DateTimeZone("UTC")); 
+		$start_date = $newDateTime->format("d-m-Y h:i A");
+	
+		$newDateTime1 = new DateTime($date[1], new DateTimeZone($tz_from)); 
+		$newDateTime1->setTimezone(new DateTimeZone("UTC")); 
+		$end_date = $newDateTime1->format("d-m-Y h:i A");
+
+		$row['start_date'] = $start_date;
+		$row['end_date'] = $end_date;
+		array_push($resp,$row);
 		return $resp;
 	}else{
 		return false;
