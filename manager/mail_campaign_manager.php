@@ -66,20 +66,32 @@ function saveCampaignList($conn, &$POSTJ){
 	$campaign_data = json_encode($POSTJ['campaign_data']);
 	$camp_status = $POSTJ['camp_status'];
 	$employees = json_encode($POSTJ['employees']);
-	$start_time = $POSTJ['start_time'];
-	$end_time = $POSTJ['end_time'];
-	$date=$GLOBALS['entry_time'];
-	$scheduled_date = $POSTJ['scheduled_time'];
-	$scheduled_time = str_replace('/','-',explode("-",$scheduled_date)[0]).date("g:i A", strtotime($POSTJ['start_time']));
+	$globaldate = $GLOBALS['entry_time'];
+	$sch_date = $POSTJ['scheduled_date'];
+	
+	$date = str_replace('/','-',explode("-",$sch_date));
+
+	$result = mysqli_query($conn, "SELECT time_zone FROM tb_main_variables")->fetch_assoc();
+	$val = json_decode($result['time_zone'],true);
+	$tz_from = $val['timezone'];
+
+	$newDateTime = new DateTime($date[0], new DateTimeZone($tz_from)); 
+	$newDateTime->setTimezone(new DateTimeZone("UTC")); 
+	$start_date = $newDateTime->format("d-m-Y h:i A");
+
+	$newDateTime1 = new DateTime($date[1], new DateTimeZone($tz_from)); 
+	$newDateTime1->setTimezone(new DateTimeZone("UTC")); 
+	$end_date = $newDateTime1->format("d-m-Y h:i A");
+	$scheduled_date = $start_date.' - '.$end_date;
 
 	if(checkCampaignListIdExist($conn,$campaign_id)){
-		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_list` SET `campaign_name`='$campaign_name',`scheduled_time`='$scheduled_time',`scheduled_date`='$scheduled_date',`stop_time`=null,`campaign_data`='$campaign_data',`date`='$date', `camp_status`='$camp_status',`start_time`='$start_time',`end_time`='$end_time',`camp_lock`=0,`userid`='$userid' WHERE `campaign_id`='$campaign_id'");
+		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_list` SET `campaign_name`='$campaign_name',`scheduled_time`='$start_date',`scheduled_date`='$scheduled_date',`stop_time`=null,`campaign_data`='$campaign_data',`date`='$globaldate', `camp_status`='$camp_status',`camp_lock`=0,`userid`='$userid' WHERE `campaign_id`='$campaign_id'");
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_list` (`campaign_id`,`userid`, `campaign_name`, `campaign_data`, `date`, `scheduled_time`,`scheduled_date`,`camp_status`, `employees`,`start_time`,`end_time`,`camp_lock`) VALUES ('$campaign_id','$userid', '$campaign_name', '$campaign_data', '$date', '$scheduled_time','$scheduled_date','$camp_status', '$employees','$start_time','$end_time','0')");
+		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_list` (`campaign_id`,`userid`, `campaign_name`, `campaign_data`, `date`, `scheduled_time`,`scheduled_date`,`camp_status`, `employees`,`camp_lock`) VALUES ('$campaign_id','$userid', '$campaign_name', '$campaign_data', '$globaldate', '$start_date','$scheduled_date','$camp_status', '$employees','0')");
 	}
 
-	if ($stmt->execute() === TRUE){
+	if ($stmt->execute() === TRUE){	$scheduled_time = strtotime($sch_date);
 		deleteLiveMailcampData($conn,$campaign_id); /// Clear live data before starting or when campaign deletes
 		kickStartCampaign($conn,$campaign_id);
 		echo json_encode(['result' => 'success']);	
@@ -97,11 +109,8 @@ function getCampaignList($conn){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["campaign_data"] = json_decode($row["campaign_data"]);	//avoid double json encoding
 			$row['date'] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
-			$row['scheduled_time'] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'d-m-Y h:i A');
-			$row['stop_time'] = getInClientTime_FD($DTime_info,$row['stop_time'],null,'d-m-Y h:i A');
+			$row['scheduled_time'] = $row['scheduled_time'];
 			$row['employees'] = $row['employees'];
-			$row['start_time'] = $row['start_time'];
-			$row['end_time'] = $row['end_time'];
 			$row['scheduled_date'] = $row['scheduled_date'];
         	array_push($resp,$row);
 		}
@@ -151,8 +160,6 @@ function getCampaignFromCampaignListId($conn, $campaign_id){
 		$resp['scheduled_time'] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'d-m-Y h:i A');
 		$resp['camp_status'] = $row['camp_status'];
 		$resp['employees'] = json_decode($row['employees']);
-		$resp['start_time'] = $row['start_time'];
-		$resp['end_time'] = $row['end_time'];
 		$resp['scheduled_date'] = $row['scheduled_date'];
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
 	}
@@ -176,7 +183,7 @@ function deleteMailCampaignFromCampaignId($conn,$campaign_id){
 
 function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $new_campaign_name){
 	$userid=$_SESSION['user'][0];
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,userid,campaign_name,campaign_data,date,scheduled_time,camp_status) SELECT ?,userid, ?, campaign_data,?,scheduled_time,0 FROM tb_core_mailcamp_list WHERE campaign_id=?");
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,userid,campaign_name,campaign_data,date,scheduled_time,scheduled_date,camp_status) SELECT ?,userid, ?, campaign_data,?,scheduled_time,scheduled_date,0 FROM tb_core_mailcamp_list WHERE campaign_id=?");
 	$stmt->bind_param("ssss", $new_campaign_id, $new_campaign_name, $GLOBALS['entry_time'], $old_campaign_id);
 	
 	if ($stmt->execute() === TRUE){
@@ -560,5 +567,7 @@ function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name
 	}
 	
 }
+
+
 
 ?>

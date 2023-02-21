@@ -216,17 +216,6 @@ isSessionValid(true);
                               </label>
                            </div>
                            <div class="form-group row">
-                                       <label for=" " class="col-sm-4 text-left control-label col-form-label">Schedule (Between Times) </label>
-                                       <div class="col-sm-7 row">
-                                          <div class="col-sm-5">
-                                          <input type="time" id="start_time" name="start_time" class="form-control" value="09:00" step="60">
-                                          </div>
-                                          <div class="col-sm-5">
-                                          <input type="time" id="end_time" name="end_time" class="form-control" value="09:00" step="60">
-                                          </div> 
-                                       </div>
-                                    </div>
-                           <div class="form-group row">
                               <label for=" " class="col-sm-4 text-left control-label col-form-label">Message interval (seconds):</label>
                               <div class="col-sm-7 row">
                                  <div class="col-sm-5">
