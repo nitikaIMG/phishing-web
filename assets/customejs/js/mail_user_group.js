@@ -26,7 +26,7 @@ function exportUserAction() {
         var file_name = $('#user_group_name').val().trim();
         
         $.post({
-            url: "../manager/userlist_campaignlist_mailtemplate_manager",
+            url: "manager/userlist_campaignlist_mailtemplate_manager",
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({ 
                 action_type: "download_user",
@@ -76,7 +76,7 @@ function addUserToTable(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "add_user_to_table",
@@ -109,7 +109,7 @@ function deleteRowAction(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "delete_user",
@@ -158,7 +158,7 @@ function editRowAction(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "update_user",
@@ -216,7 +216,7 @@ $('input[type=file]').change(function() {
             var user_data = evt.target.result;
 
             $.post({
-                url: "../manager/userlist_campaignlist_mailtemplate_manager",
+                url: "manager/userlist_campaignlist_mailtemplate_manager",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                     action_type: "upload_user",
@@ -249,7 +249,7 @@ function saveUserGroup(e) {
 
     enableDisableMe(e);
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "save_user_group",
@@ -330,7 +330,7 @@ function promptUserGroupDeletion(id) {
 
 function userGroupDeletionAction() {
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "delete_user_group_from_group_id",
@@ -363,7 +363,7 @@ function UserGroupCopy() {
         $("#modal_new_user_group_name").removeClass("is-invalid");
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "make_copy_user_group",
@@ -386,7 +386,7 @@ function UserGroupCopy() {
 
 function loadTableUserGroupList() {
     $.post({
-        url: "/manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_user_group_list"

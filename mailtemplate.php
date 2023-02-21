@@ -26,6 +26,7 @@ isSessionValid(true);
 
 
 <body class="layout-boxed alt-menu">
+   
     <!-- BEGIN LOADER -->
     <div id="load_screen"> <div class="loader"> <div class="loader-content">
         <div class="spinner-grow align-self-center"></div>
@@ -519,7 +520,6 @@ isSessionValid(true);
 
       </div>
 
-        
 </div>
 <!-- END MAIN CONTAINER -->
 

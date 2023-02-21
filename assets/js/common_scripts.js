@@ -16,7 +16,7 @@ $(function() {
         $('.lb-login span').text(cookie_c_data.last_login + ' UTC' + moment.tz(cookie_c_data.timezone).format('Z'));
     }
     $('.profile-name').text('('+cookie_c_data.name+')');
-    $('.pro-pic').attr('src','/spear/images/users/' + cookie_c_data.dp_name + '.png');
+    $('.pro-pic').attr('src','/images/users/' + cookie_c_data.dp_name + '.png');
 });
 function displayLoader(dis_val,type="normal"){
     if(type == "small")
@@ -114,7 +114,7 @@ function checkSniperPhishProcess(){
     if(window.location.href.indexOf('?') == -1){    // works only in main pages
         setTimeout(function (){
             $.post({
-                url: window.location.href + "/../manager/home_manager",
+                url: "manager/home_manager",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                         action_type: "check_process",
@@ -130,7 +130,7 @@ function checkSniperPhishProcess(){
 
 function startSniperPhishService(e){
     $.post({
-            url: window.location.origin + "/../manager/home_manager",
+            url: window.location.origin + "manager/home_manager",
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({ 
                     action_type: "start_process",
@@ -256,7 +256,7 @@ function idleTimerFun() {
     idleTime++;
     if (idleTime > idleMax){
         $.post({
-            url: window.location.origin + "/spear/session_manager",
+            url: window.location.origin + "/session_manager",
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({ 
                     action_type: "terminate_session"
@@ -305,7 +305,7 @@ function doReLogin(){
     var pwd = $("input[name=password]").val();
 
     $.post({
-        url: window.location.origin + "../manager/session_manager",
+        url: window.location.origin + "manager/session_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
                 action_type: "re_login",

@@ -246,7 +246,7 @@ function MailSenderCopyAction() {
         $("#mail_sender_name").removeClass("is-invalid");
 
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "make_copy_sender_list",
@@ -274,7 +274,7 @@ function promptSenderListDeletion(id) {
 
 function senderListDeletionAction() {
     $.post({
-        url: "../manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "delete_mail_sender_list_from_list_id",

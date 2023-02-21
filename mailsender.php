@@ -31,7 +31,7 @@ isSessionValid(true);
    <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/toastr.min.css">
 </head>
 
-<body>
+<body class="layout-boxed alt-menu">
    <!-- ============================================================== -->
    <!-- Preloader - style you can find in spinners.css -->
    <!-- ============================================================== -->

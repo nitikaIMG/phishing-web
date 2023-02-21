@@ -174,7 +174,7 @@ function generateDownloadLink(file_extension){
             file_extension = $("#tb_extension_name").val();
 
     if(validateFields()){
-        $("#link_output").text(window.location.origin + '/spear/sniperhost/out?ht=' + nextRandomId + file_extension);
+        $("#link_output").text(window.location.origin + '/sniperhost/out?ht=' + nextRandomId + file_extension);
         Prism.highlightAll();
     }
 }
@@ -334,7 +334,7 @@ function copyDownloadLink(e,text, file_extension){
 
     var $temp = $("<input>");
     $("body").append($temp);
-    $temp.val(window.location.origin + '/spear/sniperhost/out?ht=' + text + file_extension).select();
+    $temp.val(window.location.origin + '/sniperhost/out?ht=' + text + file_extension).select();
     document.execCommand("copy");
     $temp.remove();
 

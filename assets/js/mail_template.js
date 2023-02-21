@@ -73,7 +73,7 @@ $(function() {
     }); 
 
     $.post({
-        url: "/manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_sender_list"
@@ -356,7 +356,7 @@ function loadTableMailTemplateList() {
 
                 var is_attachment =  Object.keys(value.attachment).length>0? "<i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i><span hidden>Yes</span>" : "<i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i><span hidden>No</span>";
 
-                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a href='http://localhost/phishing-web/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
+                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a target='_blank' href='http://localhost/phishing-web/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
                  + "\">" + value.date + "</td><td>" + action_items_mail_template_table + "</td></tr>");
             });
         }
@@ -519,7 +519,7 @@ function linkLandpage(){
     if(page_file_name == "Empty")
         toastr.error('', 'Error: Please create landing page from SniperHost first');
     else{
-        var url = window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name
+        var url = window.location.origin + '/sniperhost/lp_pages/' + page_file_name
         $('#summernote').summernote('pasteHTML', `<a href="` + url + `">` + url + `</a>`);
     }
     $('#modal_sniperhost_landpage_selection').modal('toggle');
@@ -673,7 +673,7 @@ function insertMedia(type){
 
 function getStoreList(){
     $.post({
-        url: "/../manager/settings_manager",
+        url: "manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_store_list",
