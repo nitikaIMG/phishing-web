@@ -744,6 +744,7 @@ function sendTestMailSample($conn,$POSTJ){
 	//---------------------------
 	shootMail($message,$smtp_server,$sender_username,$sender_pwd,$sender_from,$test_to_address,$cust_headers,$mail_subject,$mail_body,$mail_content_type);  
 }
+
 //===================================================================================================
 function getSenderPwd(&$conn, &$sender_list_id){
 	$stmt = $conn->prepare("SELECT sender_acc_pwd FROM tb_core_mailcamp_sender_list WHERE sender_list_id = ?");
@@ -760,9 +761,7 @@ function domainverification($conn,$POSTJ){
 	$stmt = $conn->prepare("SELECT * FROM tb_mail_verify");
 	$stmt->execute();
 	$result = $stmt->get_result();
-	// $result->fetch_assoc();
 	$row = mysqli_fetch_all($result, MYSQLI_ASSOC) ;
-	// echo'<pre>';print_r($row);die;
 	$tablecon = '';
 	$tablecon .= '<form class="needs-validation" novalidate id="targetUserForm2" onsubmit="updateTarget()">
 					<div class="card-body">

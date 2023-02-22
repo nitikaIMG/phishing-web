@@ -95,7 +95,7 @@ isSessionValid(true);
                <div class="card-body">
                   <div class="row">
                      <div class="col-md-12">
-                        <button type="button" class="btn btn-info btn-sm" onclick="document.location='MailSender?action=add&sender=new'"><i class="fas fa-plus"></i> New Mail Sender</button>
+                        <button type="button" class="btn btn-info btn-sm" onclick="document.location='mailsender?action=add&sender=new'"><i class="fas fa-plus"></i> New Mail Sender</button>
                      </div>
                   </div>
                   <div class="row">

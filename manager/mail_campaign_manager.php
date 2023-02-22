@@ -188,11 +188,10 @@ function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $ne
 
 function pullMailCampaignFieldData($conn){
 	$resp;
-	// $result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group");
-	// if(mysqli_num_rows($result) > 0){
-	// 	$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-	// }
-	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%')");
+	$userid=$_SESSION['contact_mail'];
+
+	// $result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%')");
+	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group");
 	if(mysqli_num_rows($result) > 0){
 		$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
@@ -202,7 +201,7 @@ function pullMailCampaignFieldData($conn){
 		$resp['mail_template'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
 
-	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name FROM tb_core_mailcamp_sender_list");
+	$result = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `userid` = 1");
 	if(mysqli_num_rows($result) > 0){
 		$resp['mail_sender'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
