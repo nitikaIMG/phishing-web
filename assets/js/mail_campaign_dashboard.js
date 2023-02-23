@@ -785,6 +785,97 @@ function loadTableCampaignResult() {
     });
 }
 
+function loadTableCampaignResult1(){
+    try {
+        dt_mail_campaign_result.destroy();
+    } catch (err) {}
+
+    $("#table_mail_campaign_result1 tbody > tr").remove();
+    $("#succ_camp").html("");
+    $("#del_camp").html("");
+    $("#past_camp").html("");
+
+    $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1",
+         }),
+    }).done(function (data) {
+        $(function() {
+            if(!data.error){
+                $("#succ_camp").append(data.total);
+                $("#del_camp").append(data.year_count);
+                $("#past_camp").append(data.past_camp);
+
+                $.each(data.resp, function(key, value) {
+                    var count = JSON.parse(value.employees);
+                    var emp_count = (count.user_group.id).split(",");
+
+                    var date = value.scheduled_datetime;
+                    var start_date = new Date(date[0]['start_date']);
+                    var end_date = new Date(date[0]['end_date']);
+                    var newDate = moment(start_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                    var newDate1 = moment(end_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+
+                    switch (value.sending_status) {
+                        case 1:     //In progress
+                          var status = '<span class="label label-table label-warning" style="color:black"><b>In Progress</b></span>';
+                          var delivered = emp_count.length;
+                            break;
+                        case 2:     //Sent success
+                        var status = '<span class="label label-table label-success"><b>Finished</b></span>';
+                        var delivered = (emp_count.length);
+                            break;
+                        case 3:     //Send error
+                        var status = '<span class="label label-table label-danger"><b>Error</b></span>';
+                        var delivered =emp_count.length;
+                            break;
+                    }
+
+                    if (value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null) {
+                          var mail_open = '0';
+                    }else{
+                        var mail_open = '1';
+                    }
+
+                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered + "</td><td>" + mail_open + "</td><td>" + emp_count.length + "</td><td>" + emp_count.length + "</td></tr>");
+                });
+            }
+            dt_mail_campaign_list = $('#table_mail_campaign_result1').DataTable({
+                "aaSorting": [6, 'desc'],
+                'pageLength': 20,
+                'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
+                'columnDefs': [{
+                    // "targets": [9,10],
+                    "className": "dt-center"
+                }],
+                "preDrawCallback": function(settings) {
+                    $('#table_mail_campaign_result1 tbody').hide();
+                },
+    
+                "drawCallback": function() {
+                    $('#table_mail_campaign_result1 tbody').fadeIn(500);
+                    $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                },
+
+                "initComplete": function() {
+                    $("label>select").select2({minimumResultsForSearch: -1, });
+                }
+            }); //initialize table
+    
+            dt_mail_campaign_list.on('order.dt_mail_campaign_list search.dt_mail_campaign_list', function() {
+                dt_mail_campaign_list.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();            
+        });
+    })
+}
+
 function exportReportAction(e) {
     if(dt_mail_campaign_result.rows().count() > 0){
         var file_name = $('#Modal_export_file_name').val().trim();
