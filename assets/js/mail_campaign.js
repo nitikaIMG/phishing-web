@@ -2,9 +2,7 @@ var globalModalValue = '';
 var dt_mail_campaign_list;
 
 $(function() {
-    $("#userGroupSelector").select2({
-        minimumResultsForSearch: -1
-    });
+
     $("#mailTemplateSelector").select2({
         minimumResultsForSearch: -1
     });
@@ -49,8 +47,7 @@ function pullMailCampaignFieldData() {
     }).done(function (data) {
         if(!data['error']){  // no data error
             $.each(data.user_group, function() {
-                $('#userGroupSelector').append('<option value="' + this.user_group_id + '">' + this.user_group_name + '</option>');
-                $('#employees').append('<option value="' + this.user_group_id + '">' + this.user_group_name + '</option>');
+                $('#employees').append('<option value="' + this.user_group_id +'/'+this.user_group_name +'">' + this.user_group_name + '</option>');
             });
 
             $.each(data.mail_template, function() {
@@ -96,11 +93,6 @@ function getMailCampaignFromCampaignListId(id) {
         }).done(function (data) {
             if(!data.result){  // if not error response
                 $('#mail_campaign_name').val(data.campaign_name);
-
-                try {
-                    $("#userGroupSelector").val(data.campaign_data.user_group.id);
-                    $("#userGroupSelector").trigger('change');
-                } catch (err) {}
 
                 try {
                     $("#mailTemplateSelector").val(data.campaign_data.mail_template.id);
@@ -163,18 +155,38 @@ function promptSaveMailCampaign() {
 }
 
 function saveMailCampaignAction() {
+    var employees1 = $('#employees').val();
+
+    var id=[];
+    var name=[];
+    $.each(employees1, function(key,val) {
+        var emp = val.split("/")
+        id.push(emp[0]);
+        name.push(emp[1]);
+    });
+
+    var emp_id = id.join();
+    var emp_name = name.join();
+
     var campaignData = {};
 
     var campaign_name = $('#mail_campaign_name').val();
-    campaignData.user_group = {id:$('#userGroupSelector').val(), name:$('#userGroupSelector :selected').text()};
+    campaignData.user_group = {id:emp_id, name:emp_name};
     campaignData.mail_template = {id:$('#mailTemplateSelector').val(), name:$('#mailTemplateSelector :selected').text()};
     campaignData.mail_sender = {id:$('#mailSenderSelector').val(), name:$('#mailSenderSelector :selected').text()};
     campaignData.mail_config = {id:$('#mailConfigSelector').val(), name:$('#mailConfigSelector :selected').text()};
     campaignData.msg_interval = $('#tb_campaign_time_val').val();
     campaignData.msg_fail_retry = $('#range_campaign_msg_retry').val();
     
-    var employees={id:$('#employees').val()};
-
+    var employees = {};
+    employees.user_group = {id:emp_id, name:emp_name};
+    employees.mail_template = {id:$('#mailTemplateSelector').val(), name:$('#mailTemplateSelector :selected').text()};
+    employees.mail_sender = {id:$('#mailSenderSelector').val(), name:$('#mailSenderSelector :selected').text()};
+    employees.mail_config = {id:$('#mailConfigSelector').val(), name:$('#mailConfigSelector :selected').text()};
+    employees.msg_interval = $('#tb_campaign_time_val').val();
+    employees.msg_fail_retry = $('#range_campaign_msg_retry').val();
+   
+    
     var emp_type=$('#emp_type').val();
 
     if(emp_type==0){
@@ -198,13 +210,6 @@ function saveMailCampaignAction() {
         return;
     } else
         $("#mail_campaign_name").removeClass("is-invalid");
-
-    if ($('#userGroupSelector').val() == null) {
-        $("#userGroupSelector").parent().css("border", "1px solid red");
-        toastr.error('', 'None selected!');
-        return;
-    } else
-        $("#userGroupSelector").parent().css("border", "0px");
 
     if ($('#mailTemplateSelector').val() == null) {
         $("#mailTemplateSelector").parent().css("border", "1px solid red");

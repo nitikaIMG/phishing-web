@@ -69,7 +69,7 @@ function saveCampaignList($conn, &$POSTJ){
 	$globaldate = $GLOBALS['entry_time'];
 	$sch_date = $POSTJ['scheduled_date'];
 	
-	$date = str_replace('/','-',explode("-",$sch_date));
+	$date = str_replace('/','-',explode(" - ",$sch_date));
 	$dates = chnagelocalformate($conn,$date);
 	$start_date = $dates[0]['start_date'];
 	$end_date = $dates[0]['end_date'];
@@ -175,7 +175,7 @@ function deleteMailCampaignFromCampaignId($conn,$campaign_id){
 
 function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $new_campaign_name){
 	$userid=$_SESSION['user'][0];
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,userid,campaign_name,campaign_data,date,scheduled_time,scheduled_date,camp_status) SELECT ?,userid, ?, campaign_data,?,scheduled_time,scheduled_date,0 FROM tb_core_mailcamp_list WHERE campaign_id=?");
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,userid,campaign_name,campaign_data,date,scheduled_time,scheduled_date,camp_status,employees) SELECT ?,userid, ?, campaign_data,?,scheduled_time,scheduled_date,0,employees FROM tb_core_mailcamp_list WHERE campaign_id=?");
 	$stmt->bind_param("ssss", $new_campaign_id, $new_campaign_name, $GLOBALS['entry_time'], $old_campaign_id);
 	
 	if ($stmt->execute() === TRUE){
@@ -188,10 +188,6 @@ function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $ne
 
 function pullMailCampaignFieldData($conn){
 	$resp;
-	// $result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group");
-	// if(mysqli_num_rows($result) > 0){
-	// 	$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-	// }
 	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%')");
 	if(mysqli_num_rows($result) > 0){
 		$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
