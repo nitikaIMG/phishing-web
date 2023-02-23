@@ -198,7 +198,7 @@ function pullMailCampaignFieldData($conn){
 		$resp['mail_template'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
 
-	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name FROM tb_core_mailcamp_sender_list");
+	$result = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `userid` = 1");
 	if(mysqli_num_rows($result) > 0){
 		$resp['mail_sender'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}

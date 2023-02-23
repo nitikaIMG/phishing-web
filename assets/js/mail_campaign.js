@@ -390,7 +390,7 @@ function loadTableCampaignList() {
                         action_items_campaign_table += `<button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Deactivate" onClick="promptMailCampActDeact('` + value.campaign_id + `','` + value.campaign_name + `','` + value.camp_status + `',$(this))"><i class="mdi mdi-stop"></i></button>`;
                     
                     if(value.camp_status == 0 || value.camp_status == 3)
-                        var option_edit = `<a class="dropdown-item" href="#" onClick="document.location='MailCampaignList?action=edit&campaign=` + value.campaign_id + `','` + value.campaign_name + `'">Edit</a>`;
+                        var option_edit = `<a class="dropdown-item" href="#" onClick="document.location='mailcampaignlist?action=edit&campaign=` + value.campaign_id + `','` + value.campaign_name + `'">Edit</a>`;
                     else
                         var option_edit = `<a class="dropdown-item" href="#" disabled>Edit</a>`;
     
