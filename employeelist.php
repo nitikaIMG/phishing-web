@@ -7,6 +7,46 @@ isSessionValid(true);
 <html dir="ltr" lang="en">
 
 <head>
+   <style>
+      .unverdom {
+         background-color: #f3866d;
+         padding: 5px 17px;
+         margin: 4px;
+         color: #000;
+         font-size: 10px;
+         border-radius: 2px;
+      }
+      .verdom {
+         background-color: #3eed54;
+         padding: 5px 17px;
+         margin: 4px;
+         color: #000;
+         text-transform: lowercase;
+         font-size: 10px;
+         border-radius: 2px;
+      }
+      .domver {
+         padding: 0.4375rem 1.25rem;
+         text-shadow: none;
+         font-size: 11px;
+         color: #fff;
+         font-weight: normal;
+         white-space: normal;
+         word-wrap: break-word;
+         transition: 0.2s ease-out;
+         touch-action: manipulation;
+         border-radius: 6px !important;
+         cursor: pointer;
+         background-color: #7460ee;
+         box-shadow: 0px 5px 20px 0 rgb(0 0 0 / 10%);
+         will-change: opacity, transform;
+         transition: all 0.3s ease-out;
+         -webkit-transition: all 0.3s ease-out;
+        
+         /* color: #fff;background-color: #7460ee;border-color: #7460ee !important; */
+      }
+
+   </style>
    <?php
    echo include(dirname(__FILE__).'/components/header.php');
    ?>
@@ -202,7 +242,7 @@ isSessionValid(true);
                            <div class="col-md-12" style="display: flex;justify-content: end;">
                               <div class="row">
                                  <div class="col-auto">
-                                    <button type="button" class="btn btn-purple btn-sm" onclick ="domainverification();" id="verificationdomain" style="padding-top: 11px; " data-bs-toggle="modal" data-bs-target="#exampleModal"> Domain Verification</button>
+                                    <button type="button"  class="btn btn-secondary waves-effect waves-light" onclick ="domainverification();" id="verificationdomain" style="padding-top: 11px; " data-bs-toggle="modal" data-bs-target="#exampleModal"> Domain Verification</button>
                                  </div>
                                  <div class="col-auto">
                                     <button type="button" class="btn btn-info btn-sm" style="padding-top: 11px; " onclick="document.location='employeelist?action=add&user=new'"><i class="fas fa-plus"></i> New User Group</button>
@@ -222,6 +262,7 @@ isSessionValid(true);
                                              <th>#</th>
                                              <th>Group Name</th>
                                              <th>Total Users</th>
+                                             <th>Domain</th>
                                              <th>Date Created</th>
                                              <th>Action</th>
                                           </tr>
@@ -495,7 +536,7 @@ isSessionValid(true);
                                     <div class="text-danger bold" id="domainerr"></div>
                               </div>
                            </div>
-                           <div class="col-lg-2">
+                           <div class="col">
                               <button type="button" class="btn btn-primary" id="vDomain" onclick="verifyDomain()">
                                     <i class="mdi mdi-email-secure"></i> Generate Verification Email
                               </button>
