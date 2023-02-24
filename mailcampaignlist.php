@@ -175,13 +175,6 @@ isSessionValid(true);
                               </div>
                            </div>
                            <div class="form-group row">
-                              <label for="userGroupSelector" class="col-sm-4 text-left control-label col-form-label">User Group:*</label>
-                              <div class="col-sm-7">
-                                 <select class="select2 form-control custom-select" id="userGroupSelector" style="height: 36px;width: 100%;">
-                                 </select>
-                              </div>
-                           </div>
-                           <div class="form-group row">
                               <label for="mailTemplateSelector" class="col-sm-4 text-left control-label col-form-label">Mail Template: *</label>
                               <div class="col-sm-7">
                                  <select class="select2 form-control custom-select" id="mailTemplateSelector" style="height: 36px;width: 100%;">

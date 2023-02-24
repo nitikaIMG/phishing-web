@@ -66,7 +66,7 @@ isSessionValid(true);
                <div class="row">
                   <div class="col-12 d-flex no-block align-items-center">
                      <h4 class="page-title">Email Campaign Dashboard</h4>
-                     <div class="ml-auto text-right">
+                     <!-- <div class="ml-auto text-right">
                         <button type="button" class="btn btn-info btn-sm item_private" data-toggle="modal" data-target="#ModalCampaignList"><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> Select Campaign</button>
                         <div class="btn-group">
                             <button type="button" class="btn btn-info btn-sm" onclick="refreshDashboard()" title="Refresh dashboard" data-toggle="tooltip" data-placement="bottom"><i class="mdi mdi-refresh"></i></button>
@@ -78,12 +78,12 @@ isSessionValid(true);
                                 <a class="dropdown-item item_private" href="#" data-toggle="modal" data-target="#modal_dashboard_link">Get Dashboard Link</a>
                             </div>
                         </div>
-                     </div>
+                     </div> -->
                   </div>
                </div>
             </div>
             <div class="container-fluid">
-               <div class="row">
+               <!-- <div class="row">
                     <div class="col-12">
                         <div class="card">
                               <div class="card-body">
@@ -146,63 +146,92 @@ isSessionValid(true);
                         </div>
                      </div>
                   </div>
-               </div>
+               </div> -->
+               
 
                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
+                  <div class="row draggable-cards" id="draggable-area">
+                        <div class="col-lg-4 col-md-6">
+                           <div class="card border-bottom border-success card-hover">
                               <div class="card-body">
-                                 <div class="form-group align-items-left col-12 d-flex no-block">
-                                    <div class="col-md-0 row">
-                                       <label class="m-t-10 m-r-5"> Colums:</label>
-                                    </div>  
-                                    <div class="col-md-9">  
-                                       <select class="select2 form-control m-t-16" style="width: 100%;" multiple="multiple"  id="tb_camp_result_colums_list_mcamp">
-                                          <optgroup label="User Info">
-                                             <option value="rid" selected>RID</option>
-                                             <option value="user_name" selected>Name</option>
-                                             <option value="user_email" selected>Email</option>
-                                             <option value="sending_status" selected>Status</option>
-                                             <option value="send_time" selected>Sent Time</option>
-                                             <option value="send_error" selected>Send Error</option>
-                                             <option value="mail_open" selected>Mail Open</option>
-                                             <option value="mail_open_count">Mail(open count)</option>
-                                             <option value="mail_first_open">Mail(first open)</option>
-                                             <option value="mail_last_open">Mail(last open)</option>
-                                             <option value="mail_open_times">Mail(all open times)</option>
-                                             <option value="public_ip" selected>Public IP</option>
-                                             <option value="user_agent">User Agent</option>
-                                             <option value="mail_client" selected>Mail Client</option>
-                                             <option value="platform" selected>Platform</option>
-                                             <option value="device_type" selected>Device Type</option>
-                                             <option value="all_headers">HTTP Headers</option>
-                                             <option value="mail_reply" selected>Mail Reply</option>
-                                             <option value="mail_reply_count">Mail (reply count)</option>
-                                             <option value="mail_reply_content">Mail (reply content)</option>
-                                          </optgroup>
-                                          <optgroup label="User/Mail Server IP Info">
-                                             <option value="country" selected>Country</option>
-                                             <option value="city">City</option>
-                                             <option value="zip">Zip</option>
-                                             <option value="isp">ISP</option>
-                                             <option value="timezone">Timezone</option>
-                                             <option value="coordinates">Coordinates</option>
-                                          </optgroup>
-                                       </select>                                     
-                                    </div>  
-                                    <div class="col-md-1">
-                                       <button type="button" class="btn btn-success mdi mdi-reload " data-toggle="tooltip" data-placement="top" title="Refresh table" onclick="loadTableCampaignResult()"></button>
-                                    </div>
-                                    <div class="align-items-right ml-auto">
-                                       <div class="row">                                  
-                                          <button type="button" class="btn btn-success item_private" data-toggle="modal" data-target="#ModalExport"><i class="m-r-10 fas fa-file-export"></i> Export</button>
+                                    <div class="d-flex no-block align-items-center">
+                                       <div>
+                                          <h2 id="succ_camp">
+                                                50
+                                          </h2>
+                                          <h6 class="text-success">Active &amp; Recurring Campaigns</h6>
+                                       </div>
+                                       <div class="ml-auto">
+                                          <span class="text-success display-6"><i class="ti-stats-up"></i></span>
                                        </div>
                                     </div>
-                                 </div>
-                                 <div class="form-group row">
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                           <div class="card border-bottom border-primary card-hover">
+                              <div class="card-body">
+                                    <div class="d-flex no-block align-items-center">
+                                       <div>
+                                          <h2 id="del_camp">12</h2>
+                                          <h6 class="text-primary">Yearly Emails Delivered</h6>
+                                       </div>
+                                       <div class="ml-auto">
+                                          <span class="text-primary display-6"><i class=" ti-calendar"></i></span>
+                                       </div>
+                                    </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                           <div class="card border-bottom border-info card-hover">
+                              <div class="card-body">
+                                    <div class="d-flex no-block align-items-center">
+                                       <div>
+                                          <h2 id="past_camp">0</h2>
+                                          <h6 class="text-info">Past Campaigns</h6>
+                                       </div>
+                                       <div class="ml-auto">
+                                          <span class="text-info display-6"><i class="ti-stats-down"></i></span>
+                                       </div>
+                                    </div>
+                              </div>
+                           </div>
+                        </div>
+                  </div>
+               </div>
+
+            <!-- ============================================================== -->
+            <!-- Start Table View  -->
+               <div class="row">
+                  <div class="col-12">
+                     <div class="card">
+                        <div class="card-body">
+                           <div class="row">
+                              <div class="col-md-12">
+                                 <p>Active Campaigns</p>
+                                 <button type="button" class="btn btn-success item_private" onclick="exportReportAction1($(this))" value="csv">Export as CSV</button>
+                                 <button type="button" class="btn btn-success item_private" onclick="exportReportAction1($(this))" value="pdf">Export as PDF</button>
+                                 <button type="button" class="btn btn-success item_private" onclick="exportReportAction1($(this))" value="html">Export as HTML</button>
+                              </div>
+                           </div>
+                           <div class="row">
+                              <div class="col-md-12 m-t-20">    
+                                 <div class="row">                    
                                     <div class="table-responsive">
-                                       <table id="table_mail_campaign_result" class="table table-striped table-bordered">
+                                       <table id="table_mail_campaign_result1" class="table table-striped table-bordered">
                                           <thead>
+                                             <tr>
+                                                <th>#</th>
+                                                <th>Campaign Name</th>
+                                                <th>Status</th>
+                                                <th>Scheduled Date</th>
+                                                <th>Employees</th>
+                                                <th>Email Delivered</th>
+                                                <th>Email Viewed</th>
+                                                <th>Payloads Clicked</th>
+                                                <th>Employees Compromised</th>
+                                             </tr>
                                           </thead>
                                           <tbody>
                                           </tbody>
@@ -210,9 +239,14 @@ isSessionValid(true);
                                     </div>
                                  </div>
                               </div>
+                           </div>
                         </div>
-                    </div>
-               </div>               
+                     </div>
+                  </div>
+               </div>
+            <!-- ============================================================== -->
+            <!-- End Table View  -->
+
             </div>
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
@@ -416,7 +450,8 @@ isSessionValid(true);
              echo '<script>var g_tk_id = getRandomId();</script>';            
             isSessionValid(true);
          }
-      //------------------------------------------
+
+         //------------------------------------------
          echo '<script>';
          
          if(isset($_GET['mcamp']))
@@ -426,6 +461,7 @@ isSessionValid(true);
             echo 'var g_campaign_id ="", g_tracker_id="";
                   $(function() {$("#ModalCampaignList").modal("toggle");});';
          
+                  echo'loadTableCampaignResult1()';
          echo '</script>';
       ?>
 
