@@ -114,7 +114,7 @@ function checkSniperPhishProcess(){
     if(window.location.href.indexOf('?') == -1){    // works only in main pages
         setTimeout(function (){
             $.post({
-                url: "manager/home_manager",
+                url: window.location.origin + "manager/home_manager",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                         action_type: "check_process",
@@ -130,7 +130,7 @@ function checkSniperPhishProcess(){
 
 function startSniperPhishService(e){
     $.post({
-            url: window.location.origin + "/../manager/home_manager",
+            url: window.location.origin + "manager/home_manager",
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({ 
                     action_type: "start_process",
@@ -305,7 +305,7 @@ function doReLogin(){
     var pwd = $("input[name=password]").val();
 
     $.post({
-        url: window.location.origin + "../manager/session_manager",
+        url: window.location.origin + "manager/session_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
                 action_type: "re_login",

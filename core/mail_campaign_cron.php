@@ -15,7 +15,7 @@ date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
 
 function getMC($conn, $campaign_id){
-	$stmt = $conn->prepare("SELECT campaign_name,campaign_data,date,scheduled_time,camp_status FROM tb_core_mailcamp_list WHERE campaign_id = ?");
+	$stmt = $conn->prepare("SELECT campaign_name,campaign_data,date,scheduled_time,camp_status,employees FROM tb_core_mailcamp_list WHERE campaign_id = ?");
 	$stmt->bind_param("s", $campaign_id);
 	$stmt->execute();
 	$result = $stmt->get_result();
@@ -102,8 +102,17 @@ function InitMailCampaign($conn, $campaign_id){
 
 	$MC_DATA = getMC($conn, $campaign_id);
 	$MC_name = $MC_DATA['campaign_name'];
-	$MC_user_group_id = $MC_DATA['campaign_data']['user_group']['id'];
-	$MC_user_group_name = $MC_DATA['campaign_data']['user_group']['name'];
+
+	$user_group_id = $MC_DATA['campaign_data']['user_group']['id'];
+	$user_group_name = $MC_DATA['campaign_data']['user_group']['name'];
+
+	$MC_emp  = explode(",",$user_group_id);
+	$MC_emp_name  = explode(",",$user_group_name);
+
+    foreach($MC_emp as $key=>$MC){
+
+	$MC_user_group_id = $MC;
+	$MC_user_group_name = $MC_emp_name[$key];
 	$MC_mail_template_id = $MC_DATA['campaign_data']['mail_template']['id'];
 	$MC_mail_template_name = $MC_DATA['campaign_data']['mail_template']['name'];
 	$MC_mail_sender_id = $MC_DATA['campaign_data']['mail_sender']['id'];
@@ -291,6 +300,7 @@ function InitMailCampaign($conn, $campaign_id){
 		if(isCampaignStopped($conn, $campaign_id))
 			break;
 	}
+    }
 	changeCampaignStatus($conn, $campaign_id, 4); //4=Mail sending completed (But campaign is in progress (2))
 }
 
@@ -324,7 +334,6 @@ function statusEntryUpdate(&$conn,$rid,$sending_status,$send_error=null){
 }
 
 function lockAndWaitProcess($conn, $campaign_id){
-
 	$stmt = $conn->prepare("SELECT scheduled_time,camp_lock FROM tb_core_mailcamp_list WHERE campaign_id=?");
 	$stmt->bind_param('s', $campaign_id);
 	$stmt->execute();
@@ -344,10 +353,10 @@ function lockAndWaitProcess($conn, $campaign_id){
 			$current_time = microtime(true)*1000;	//ms time
 		}
 		$stmt->close();
-
 		//Run campaign
 		changeCampaignStatus($conn, $campaign_id, 2);//Set status in-progress
 		InitMailCampaign($conn, $campaign_id);
+		
 	}
 }
 
@@ -361,5 +370,4 @@ function changeCampaignStatus($conn, $campaign_id, $status){
 }
 
 lockAndWaitProcess($conn, $argv[1]);
-//InitMailCampaign($conn, $argv[1]);	//For console testing
 ?>

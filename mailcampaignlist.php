@@ -175,13 +175,6 @@ isSessionValid(true);
                               </div>
                            </div>
                            <div class="form-group row">
-                              <label for="userGroupSelector" class="col-sm-4 text-left control-label col-form-label">User Group:*</label>
-                              <div class="col-sm-7">
-                                 <select class="select2 form-control custom-select" id="userGroupSelector" style="height: 36px;width: 100%;">
-                                 </select>
-                              </div>
-                           </div>
-                           <div class="form-group row">
                               <label for="mailTemplateSelector" class="col-sm-4 text-left control-label col-form-label">Mail Template: *</label>
                               <div class="col-sm-7">
                                  <select class="select2 form-control custom-select" id="mailTemplateSelector" style="height: 36px;width: 100%;">
@@ -215,17 +208,6 @@ isSessionValid(true);
                                  </div> 
                               </label>
                            </div>
-                           <div class="form-group row">
-                                       <label for=" " class="col-sm-4 text-left control-label col-form-label">Schedule (Between Times) </label>
-                                       <div class="col-sm-7 row">
-                                          <div class="col-sm-5">
-                                          <input type="time" id="start_time" name="start_time" class="form-control" value="09:00" step="60">
-                                          </div>
-                                          <div class="col-sm-5">
-                                          <input type="time" id="end_time" name="end_time" class="form-control" value="09:00" step="60">
-                                          </div> 
-                                       </div>
-                                    </div>
                            <div class="form-group row">
                               <label for=" " class="col-sm-4 text-left control-label col-form-label">Message interval (seconds):</label>
                               <div class="col-sm-7 row">

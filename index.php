@@ -6,10 +6,7 @@ isSessionValid(true);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-      <?php
-      echo include(dirname(__FILE__) . '/components/header.php');
-      ?>
-
+    <?php include(dirname(__FILE__).'/components/header.php'); ?>
 </head>
 <body class="layout-boxed alt-menu">
     <!-- BEGIN LOADER -->

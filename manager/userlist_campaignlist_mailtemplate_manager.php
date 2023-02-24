@@ -481,7 +481,8 @@ function deleteMailTemplateFromTemplateId($conn,$mail_template_id){
 }
 
 function makeCopyMailTemplate($conn, $old_mail_template_id, $new_mail_template_id, $new_mail_template_name){
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_template_list (mail_template_id,mail_template_name,mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,date) SELECT ?, ?, mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,? FROM tb_core_mailcamp_template_list WHERE mail_template_id=?");
+	$userid=$_SESSION['user'][0];
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_template_list (mail_template_id,userid,mail_template_name,mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,date) SELECT ?,userid,?, mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,? FROM tb_core_mailcamp_template_list WHERE mail_template_id=?");
 	$stmt->bind_param("ssss", $new_mail_template_id, $new_mail_template_name, $GLOBALS['entry_time'], $old_mail_template_id);
 	
 	if ($stmt->execute() === TRUE)
@@ -761,6 +762,7 @@ function sendTestMailSample($conn,$POSTJ){
 	//---------------------------
 	shootMail($message,$smtp_server,$sender_username,$sender_pwd,$sender_from,$test_to_address,$cust_headers,$mail_subject,$mail_body,$mail_content_type);  
 }
+
 //===================================================================================================
 function getSenderPwd(&$conn, &$sender_list_id){
 	$stmt = $conn->prepare("SELECT sender_acc_pwd FROM tb_core_mailcamp_sender_list WHERE sender_list_id = ?");
@@ -777,9 +779,7 @@ function domainverification($conn,$POSTJ,$userid){
 	$stmt = $conn->prepare("SELECT * FROM tb_mail_verify WHERE userid = $userid");
 	$stmt->execute();
 	$result = $stmt->get_result();
-	// $result->fetch_assoc();
 	$row = mysqli_fetch_all($result, MYSQLI_ASSOC) ;
-	// echo'<pre>';print_r($row);die;
 	$tablecon = '';
 	$tablecon .= '
 				<form class="needs-validation" novalidate id="targetUserForm2" onsubmit="updateTarget()">

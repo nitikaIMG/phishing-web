@@ -70,7 +70,7 @@ isSessionValid(true);
                   <div class="card-body">
                      <div class="row">
                         <div class="col-md-12">
-                           <button type="button" class="btn btn-info btn-sm" onclick="document.location='MailTemplate?action=add&template=new'"><i class="fas fa-plus"></i> New Email Template</button>
+                           <button type="button" class="btn btn-info btn-sm" onclick="document.location='mailtemplate?action=add&template=new'"><i class="fas fa-plus"></i> New Email Template</button>
                         </div>
                      </div>
                      <div class="row">

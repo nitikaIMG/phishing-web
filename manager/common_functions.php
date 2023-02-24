@@ -41,6 +41,7 @@ function isProcessRunning($conn, $os){ //Single instance manager (check if 'our'
     $row      = $result->fetch_assoc();
     $prev_pid = $row['pid'];
     
+
     if ($os == "windows") {
         $handle    = popen("tasklist | findstr php.exe", "r");
         $task_list = fread($handle, 2096);
@@ -64,7 +65,7 @@ function isProcessRunning($conn, $os){ //Single instance manager (check if 'our'
         $handle      = popen("ps ax | grep php | awk '{ print $1 }'", "r");
         $process_ids = explode("\n", fread($handle, 2096));
         $process_ids = array_filter($process_ids);
-
+        
         foreach ($process_ids as $pid) {
             if ($pid == $prev_pid){ //Exit if cron running
                 pclose($handle);
@@ -77,10 +78,10 @@ function isProcessRunning($conn, $os){ //Single instance manager (check if 'our'
 }
 function startProcess($os){
     if($os == "windows"){
-        pclose(popen('start /b '.getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'\core\SniperPhish_Manager.php quite','r'));    //background execution
+        pclose(popen('start /b '.getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'\core\sniperphish_manager.php quite','r'));    //background execution
     }
     else{        
-        pclose(popen(getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'/core/SniperPhish_Manager.php quite &','r'));
+        pclose(popen(getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'/core/sniperphish_manager.php quite &','r'));
     }
 }
 

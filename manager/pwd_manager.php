@@ -1,7 +1,8 @@
 <?php
-require_once('../manager/common_functions.php');
-require_once('../includes/config.php');
-require_once('../config/db.php');
+require_once(dirname(__FILE__) .'/manager/common_functions.php');
+require_once(dirname(__FILE__) .'/includes/config.php');
+require_once(dirname(__FILE__) .'/config/db.php');
+
 
 use PHPMailer\PHPMailer;
 use PHPMailer\SMTP;

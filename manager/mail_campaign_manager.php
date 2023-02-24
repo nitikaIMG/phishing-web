@@ -51,6 +51,8 @@ if (isset($_POST)) {
 			getMailReplied($conn, $POSTJ['campaign_id']);	
 		if($POSTJ['action_type'] == "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data")
 			multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn,$POSTJ);
+		if($POSTJ['action_type'] == "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1")
+			multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn,$POSTJ);
 		if($POSTJ['action_type'] == "download_report")
 			downloadReport($conn, $POSTJ['campaign_id'],$POSTJ['selected_col'],$POSTJ['dic_all_col'],$POSTJ['file_name'],$POSTJ['file_format'],$POSTJ['tb_data_single']);
 	}
@@ -66,20 +68,23 @@ function saveCampaignList($conn, &$POSTJ){
 	$campaign_data = json_encode($POSTJ['campaign_data']);
 	$camp_status = $POSTJ['camp_status'];
 	$employees = json_encode($POSTJ['employees']);
-	$start_time = $POSTJ['start_time'];
-	$end_time = $POSTJ['end_time'];
-	$date=$GLOBALS['entry_time'];
-	$scheduled_date = $POSTJ['scheduled_time'];
-	$scheduled_time = str_replace('/','-',explode("-",$scheduled_date)[0]).date("g:i A", strtotime($POSTJ['start_time']));
+	$globaldate = $GLOBALS['entry_time'];
+	$sch_date = $POSTJ['scheduled_date'];
+	
+	$date = str_replace('/','-',explode(" - ",$sch_date));
+	$dates = chnagelocalformate($conn,$date);
+	$start_date = $dates[0]['start_date'];
+	$end_date = $dates[0]['end_date'];
+	$scheduled_date = $start_date.' - '.$end_date;
 
 	if(checkCampaignListIdExist($conn,$campaign_id)){
-		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_list` SET `campaign_name`='$campaign_name',`scheduled_time`='$scheduled_time',`scheduled_date`='$scheduled_date',`stop_time`=null,`campaign_data`='$campaign_data',`date`='$date', `camp_status`='$camp_status',`start_time`='$start_time',`end_time`='$end_time',`camp_lock`=0,`userid`='$userid' WHERE `campaign_id`='$campaign_id'");
+		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_list` SET `campaign_name`='$campaign_name',`scheduled_time`='$start_date',`scheduled_date`='$scheduled_date',`stop_time`=null,`campaign_data`='$campaign_data',`date`='$globaldate', `camp_status`='$camp_status',`camp_lock`=0,`userid`='$userid' WHERE `campaign_id`='$campaign_id'");
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_list` (`campaign_id`,`userid`, `campaign_name`, `campaign_data`, `date`, `scheduled_time`,`scheduled_date`,`camp_status`, `employees`,`start_time`,`end_time`,`camp_lock`) VALUES ('$campaign_id','$userid', '$campaign_name', '$campaign_data', '$date', '$scheduled_time','$scheduled_date','$camp_status', '$employees','$start_time','$end_time','0')");
+		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_list` (`campaign_id`,`userid`, `campaign_name`, `campaign_data`, `date`, `scheduled_time`,`scheduled_date`,`camp_status`, `employees`,`camp_lock`) VALUES ('$campaign_id','$userid', '$campaign_name', '$campaign_data', '$globaldate', '$start_date','$scheduled_date','$camp_status', '$employees','0')");
 	}
 
-	if ($stmt->execute() === TRUE){
+	if ($stmt->execute() === TRUE){	$scheduled_time = strtotime($sch_date);
 		deleteLiveMailcampData($conn,$campaign_id); /// Clear live data before starting or when campaign deletes
 		kickStartCampaign($conn,$campaign_id);
 		echo json_encode(['result' => 'success']);	
@@ -97,12 +102,10 @@ function getCampaignList($conn){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["campaign_data"] = json_decode($row["campaign_data"]);	//avoid double json encoding
 			$row['date'] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
-			$row['scheduled_time'] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'d-m-Y h:i A');
-			$row['stop_time'] = getInClientTime_FD($DTime_info,$row['stop_time'],null,'d-m-Y h:i A');
+			$row['scheduled_time'] = $row['scheduled_time'];
 			$row['employees'] = $row['employees'];
-			$row['start_time'] = $row['start_time'];
-			$row['end_time'] = $row['end_time'];
 			$row['scheduled_date'] = $row['scheduled_date'];
+			$row['scheduled_datetime'] = chnageutcformate($row['scheduled_date']);
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
@@ -151,8 +154,6 @@ function getCampaignFromCampaignListId($conn, $campaign_id){
 		$resp['scheduled_time'] = getInClientTime_FD($DTime_info,$row['scheduled_time'],null,'d-m-Y h:i A');
 		$resp['camp_status'] = $row['camp_status'];
 		$resp['employees'] = json_decode($row['employees']);
-		$resp['start_time'] = $row['start_time'];
-		$resp['end_time'] = $row['end_time'];
 		$resp['scheduled_date'] = $row['scheduled_date'];
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
 	}
@@ -175,7 +176,8 @@ function deleteMailCampaignFromCampaignId($conn,$campaign_id){
 }
 
 function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $new_campaign_name){
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,campaign_name,campaign_data,date,scheduled_time,camp_status) SELECT ?, ?, campaign_data,?,scheduled_time,0 FROM tb_core_mailcamp_list WHERE campaign_id=?");
+	$userid=$_SESSION['user'][0];
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_list (campaign_id,userid,campaign_name,campaign_data,date,scheduled_time,scheduled_date,camp_status,employees) SELECT ?,userid, ?, campaign_data,?,scheduled_time,scheduled_date,0,employees FROM tb_core_mailcamp_list WHERE campaign_id=?");
 	$stmt->bind_param("ssss", $new_campaign_id, $new_campaign_name, $GLOBALS['entry_time'], $old_campaign_id);
 	
 	if ($stmt->execute() === TRUE){
@@ -188,10 +190,6 @@ function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $ne
 
 function pullMailCampaignFieldData($conn){
 	$resp;
-	// $result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group");
-	// if(mysqli_num_rows($result) > 0){
-	// 	$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
-	// }
 	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%')");
 	if(mysqli_num_rows($result) > 0){
 		$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -202,7 +200,7 @@ function pullMailCampaignFieldData($conn){
 		$resp['mail_template'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
 
-	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name FROM tb_core_mailcamp_sender_list");
+	$result = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `userid` = 1");
 	if(mysqli_num_rows($result) > 0){
 		$resp['mail_sender'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
@@ -324,7 +322,7 @@ function getUserGroupData($conn, $campaign_id){
 }
 
 function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POSTJ){
-	$offset = htmlspecialchars($POSTJ['start']);
+	$offset = htmlspecialchars($POSTJ['end']);
 	$limit = htmlspecialchars($POSTJ['length']);
 	$draw = htmlspecialchars($POSTJ['draw']);
 	$search_value = htmlspecialchars($POSTJ['search']['value']);
@@ -420,6 +418,39 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 		);
 
 	echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
+}
+
+function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POSTJ){
+    $resp = [];
+	$userid=$_SESSION['user'][0];
+	$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid'");
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$rows = $result->fetch_all(MYSQLI_ASSOC);
+
+	if(mysqli_num_rows($result) > 0){
+		$date_count=[];
+		$pastdate=[];
+		foreach ($rows as $row){
+			$now = date('d-m-y H:i:s');
+			$sc_date = $row['scheduled_time'];
+			// print_r($now);die;
+
+			array_push($date_count,$sc_date);
+			array_push($pastdate,$sc_date);
+
+			$row['scheduled_datetime'] = chnageutcformate($row['scheduled_date']);
+        	array_push($resp,$row);
+		}
+
+		$total = count($rows);
+		$year_count = count($date_count);
+        $past_camp  = count($pastdate);
+
+		echo json_encode(['resp'=>$resp,'total'=>$total,'year_count'=>$year_count,'past_camp'=>$past_camp], JSON_INVALID_UTF8_IGNORE);
+	}
+
 }
 
 function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name,$file_format,$tb_data_single){
@@ -558,6 +589,67 @@ function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name
 		echo getHTMLData($arr_odata,$file_name,$selected_col,$dic_all_col);
 	}
 	
+}
+
+function chnageutcformate($date){
+    $resp = [];
+	if($date!=''){
+		$dates= explode(" - ",$date);
+
+		$tz = new DateTimeZone('Asia/Kolkata'); 
+
+		$start_date1 = new DateTime($dates[0]);
+		$start_date1->setTimezone($tz);
+		$start_date = $start_date1->format('Y-m-d h:i A');
+
+		$end_date1 = new DateTime($dates[1]);
+		$end_date1->setTimezone($tz);
+		$end_date = $end_date1->format('Y-m-d h:i A');
+
+		$date1 = explode(" ",$start_date);
+		$date2 = explode(" ",$end_date);
+
+		$start_time = $date1[1].' '.$date1[2];
+		$end_time =$date2[1].' '.$date2[2];
+		$start_date1= $date1[0];
+		$end_date1 =$date2[0];
+
+		$row['start_time'] = $start_time;
+		$row['end_time'] = $end_time;
+		$row['start_date'] = $start_date1;
+		$row['end_date'] = $end_date1;
+		array_push($resp,$row);
+
+
+		return $resp;
+	}else{
+		return false;
+	}
+}
+
+function chnagelocalformate($conn,$date){
+    $resp = [];
+	if($date!=''){
+	
+		$result = mysqli_query($conn, "SELECT time_zone FROM tb_main_variables")->fetch_assoc();
+		$val = json_decode($result['time_zone'],true);
+		$tz_from = $val['timezone'];
+	
+		$newDateTime = new DateTime($date[0], new DateTimeZone($tz_from)); 
+		$newDateTime->setTimezone(new DateTimeZone("UTC")); 
+		$start_date = $newDateTime->format("d-m-Y h:i A");
+	
+		$newDateTime1 = new DateTime($date[1], new DateTimeZone($tz_from)); 
+		$newDateTime1->setTimezone(new DateTimeZone("UTC")); 
+		$end_date = $newDateTime1->format("d-m-Y h:i A");
+
+		$row['start_date'] = $start_date;
+		$row['end_date'] = $end_date;
+		array_push($resp,$row);
+		return $resp;
+	}else{
+		return false;
+	}
 }
 
 ?>

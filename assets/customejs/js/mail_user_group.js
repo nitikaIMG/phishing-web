@@ -386,7 +386,7 @@ function UserGroupCopy() {
 
 function loadTableUserGroupList() {
     $.post({
-        url: "/manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_user_group_list"
