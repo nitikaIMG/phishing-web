@@ -18,8 +18,9 @@ require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php'
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
 
 
-if(isSessionValid() == false)
+if(isSessionValid() == false && isAdminSessionValid() == false){
 	die("Access denied");
+}
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -88,6 +89,8 @@ if (isset($_POST)) {
 			sendTestMailSample($conn,$POSTJ);
 		if($POSTJ['action_type'] == "user_group_domain_verify")
 			domainverification($conn,$POSTJ,$userid);
+		if($POSTJ['action_type'] == "get_users_list")
+			getuserslist($conn,$POSTJ,$userid);
 			
 	}
 	if(isset($_POST['action_type'])){
@@ -254,6 +257,21 @@ function getUserGroupList($conn,$userid ){
 			$row["user_data"] = implode(' ', $userem);
 			//avoid double json encoding
 			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
+        	array_push($resp,$row);
+		}
+		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+}
+
+
+function getuserslist($conn,$userid ){
+	$resp = [];
+	$DTime_info = getTimeInfo($conn);
+	$result = mysqli_query($conn, "SELECT id,name,username, contact_mail FROM tb_main Where user_role = 0");
+	if(mysqli_num_rows($result) > 0){
+		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);

@@ -1,3 +1,4 @@
 /spear
 /lib
 /views
+/vendor

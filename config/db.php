@@ -1,6 +1,7 @@
 <?php
 
-  $curr_db = "phishing-web";
+  // $curr_db = "phishing-web";
+  $curr_db = "mamta_p";
   $conn = mysqli_connect("localhost","root","",$curr_db);
 
   if (mysqli_connect_errno()) {

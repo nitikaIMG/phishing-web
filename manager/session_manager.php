@@ -32,10 +32,45 @@ function validateLogin($contact_mail,$pwd){
 	else
 		return false;
 }
+function getlogindetails($contact_mail,$pwd){	
+	global $conn;
+	$pwdhash = hash("sha256", $pwd, false);
+	$stmt = $conn->prepare("SELECT * FROM tb_main where contact_mail='$contact_mail' AND password='$pwdhash'");
+	$stmt->execute();
+	$row = $stmt->get_result()->fetch_assoc();
+	if(count($row) > 0){
+		return $row;
+	}
+	else
+		return false;
+}
+
+function getaccessuser($id){	
+	global $conn;
+	$stmt = $conn->prepare("SELECT * FROM tb_main where id='$id'");
+	$stmt->execute();
+	$row = $stmt->get_result()->fetch_assoc();
+	if(count($row) > 0){
+		return $row;
+	}
+	else
+		return false;
+}
 
 function isSessionValid($f_redirection=false){	//this check refreshes session expiry
 	if (isset($_SESSION['contact_mail'])) {
 		createSession(false,$_SESSION['contact_mail']);
+		return true;
+	}
+	else{
+		terminateSession($f_redirection); //redirect to home if true
+		return false;
+	}
+}
+
+function isAdminSessionValid($f_redirection=false){	//this check refreshes session expiry
+	if (isset($_SESSION['admincontact_mail'])) {
+		createAdminSession(false,$_SESSION['admincontact_mail']);
 		return true;
 	}
 	else{
@@ -215,7 +250,8 @@ function doReLogin($contact_mail, $pwd){
 }
 
 function createSession($f_regenerate,$contact_mail){
-	session_destroy();
+	unset($_SESSION["contact_mail"]);
+	unset($_SESSION["user"]);
 	session_set_cookie_params([
             'lifetime' => 86400,	//86400=1 day
             'secure' => false,
@@ -236,6 +272,31 @@ function createSession($f_regenerate,$contact_mail){
 	$row = $stmt->get_result()->fetch_row();
 
 	$_SESSION['user'] = $row;
+}
+
+function createAdminSession($f_regenerate,$contact_mail){
+	unset($_SESSION["admincontact_mail"]);
+	unset($_SESSION["admin"]);
+	session_set_cookie_params([
+            'lifetime' => 86400,	//86400=1 day
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]);
+
+	session_start();
+	if($f_regenerate)
+		session_regenerate_id(true);
+
+      	$_SESSION['admincontact_mail'] = $contact_mail;
+
+	global $conn;
+	$contact_mail=$_SESSION['admincontact_mail'];
+	$stmt = $conn->prepare("SELECT * FROM tb_main where contact_mail='$contact_mail'");
+	$stmt->execute();
+	$row = $stmt->get_result()->fetch_row();
+
+	$_SESSION['admin'] = $row;
 }
 
 function terminateSession($redirection=true){

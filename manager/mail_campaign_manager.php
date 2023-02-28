@@ -429,10 +429,22 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POS
 	$result = $stmt->get_result();
 	$rows = $result->fetch_all(MYSQLI_ASSOC);
 
+	$stmt1 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid' AND tb_core_mailcamp_list.camp_status = '3' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) AND tb_data_mailcamp_live.sending_status='2'");
+	$stmt1->execute();
+	$result1 = $stmt1->get_result();
+	$rows1 = $result1->fetch_all(MYSQLI_ASSOC);
+
+	$stmt2 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE userid = '$userid' AND stop_time != 'NULL' ");
+	$stmt2->execute();
+	$result2 = $stmt2->get_result();
+	$rows2 = $result2->fetch_all(MYSQLI_ASSOC);
+
 	if(mysqli_num_rows($result) > 0){
 		$date_count=[];
 		$pastdate=[];
 		foreach ($rows as $row){
+			
 			$now = date('d-m-y H:i:s');
 			$sc_date = $row['scheduled_time'];
 			// print_r($now);die;
@@ -445,8 +457,8 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POS
 		}
 
 		$total = count($rows);
-		$year_count = count($date_count);
-        $past_camp  = count($pastdate);
+		$year_count = count($rows1);
+        $past_camp  = count($rows2);
 
 		echo json_encode(['resp'=>$resp,'total'=>$total,'year_count'=>$year_count,'past_camp'=>$past_camp], JSON_INVALID_UTF8_IGNORE);
 	}

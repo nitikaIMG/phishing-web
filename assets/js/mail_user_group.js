@@ -483,6 +483,54 @@ function loadTableUserGroupList() {
     });   
 }
 
+function loadTableUsersList() {
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_users_list"
+         })
+    }).done(function (data) {
+        console.log(data);
+        if(!data.error){  // no data
+             $.each(data, function(key, value) { 
+                var action_items_user_group_table = `<a class="" data-toggle="tooltip" data-placement="top" style="margin: 6px;" onclick="window.open('useraccess?action=login&id=` + value.id + `','_blank')" title="" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></a>`;
+
+                $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.name + "</td><td>" + value.username + "</td><td>"+value.contact_mail+"</td><td>" + action_items_user_group_table + "</td></tr>");
+            });
+        }
+        dt_user_group_list = $('#table_user_group_list').DataTable({
+            "bDestroy": true,
+            "aaSorting": [3, 'asc'],
+            'columnDefs': [{
+                "targets": 4,
+            }],
+            
+            "preDrawCallback": function(settings) {
+                $('#table_user_group_list tbody').hide();
+            },
+
+            "drawCallback": function() {
+                $('#table_user_group_list tbody').fadeIn(500);
+                $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+            },   
+
+            "initComplete": function() {
+                $('label>select').select2({minimumResultsForSearch: -1, });
+            }       
+        });
+
+        dt_user_group_list.on('order.dt_user_group_list search.dt_user_group_list', function() {
+            dt_user_group_list.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();        
+    });   
+}
+
 function domainverification() {
     $.post({
         url: "manager/userlist_campaignlist_mailtemplate_manager",

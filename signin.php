@@ -4,11 +4,20 @@
       header("Location: index.php");
       die();
   }
+
    
   if (!empty($_POST['contact_mail']) && !empty($_POST['password'])) {
+   
       if(validateLogin($_POST['contact_mail'],$_POST['password']) == true){
-         createSession(true,$_POST['contact_mail']);
-         header("Location: index.php");
+          $getloginde = getlogindetails($_POST['contact_mail'],$_POST['password']);
+          if(!empty($getloginde) && $getloginde["user_role"] == "1"){
+                createAdminSession(true,$_POST['contact_mail']);
+                header("Location: admin.php");
+            }else{
+                createSession(true,$_POST['contact_mail']);
+                header("Location: index.php");
+        }
+         
          die();
       }  
    }
