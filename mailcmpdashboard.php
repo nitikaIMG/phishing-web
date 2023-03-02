@@ -31,6 +31,99 @@ isSessionValid(true);
          body.dark .table tbody tr td {
             color: white;
          }
+         @import url(https://fonts.googleapis.com/css?family=Lato:700);
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: #ecf0f1;
+  color: #444;
+  font-family: "Lato", Tahoma, Geneva, sans-serif;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.set-size {
+  font-size: 10em;
+}
+
+.charts-container:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+/* .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #ffffff;
+  margin: 0 20px;
+  width: 280px;
+  height: 350px;
+  border-radius: 5px;
+  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2);
+} */
+.card2 {
+   display: inline-flex;
+   justify-content: center;
+}
+.card2 .percent2 {
+  position: relative;
+}
+
+.card2 svg {
+   position: relative;
+   width: 50px;
+   height: 50px;
+   transform: rotate(-90deg);
+}
+
+.card2 svg circle {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #f0f0f0;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.card2 svg circle:last-of-type {
+   stroke-dasharray: 135px;
+    stroke-dashoffset: calc(135px - (135px * var(--percent)) / 100);
+    stroke: #3498db;
+}
+
+.card2 .number2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card2 .number2 h6 {
+   font-weight: 200;
+    font-size: 0.7rem;
+    margin-bottom: 0;
+}
+
+
+.card2 .title h6 {
+  margin: 25px 0 0;
+}
+
+.card2:nth-child(1) svg circle:last-of-type {
+   stroke: #00ab55;
+}
+
+.card2:nth-child(2) svg circle:last-of-type {
+   stroke: #f0f0f0;
+}
       </style> 
    </head>
    <body class="layout-boxed alt-menu">

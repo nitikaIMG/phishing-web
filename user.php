@@ -1,7 +1,8 @@
 <?php
 require_once(dirname(__FILE__).'/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
-isSessionValid(true);
+isAdminSessionValid(true);
+
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -75,14 +76,14 @@ isSessionValid(true);
    <!-- ============================================================== -->
    <div class="main-container" id="container">
       <!-- ============================================================== -->
-      <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
+      <?php include(dirname(__FILE__).'/components/adminnavbar.php'); ?>
       <!-- Topbar header - style you can find in pages.scss -->
       <!-- ============================================================== -->
       <div class="overlay"></div>
       <div class="search-overlay"></div>
 
       <!--  BEGIN SIDEBAR  -->
-      <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
+      <?php include(dirname(__FILE__).'/components/adminsidebar.php'); ?>
       <!--  END SIDEBAR  -->
       <!-- ============================================================== -->
       <!-- End Left Sidebar - style you can find in sidebar.scss  -->
@@ -239,7 +240,7 @@ isSessionValid(true);
                <div class="card">
                      <div class="card-body">
                         <div class="row">
-                           <div class="col-md-12" style="display: flex;justify-content: end;">
+                           <!-- <div class="col-md-12" style="display: flex;justify-content: end;">
                               <div class="row">
                                  <div class="col-auto">
                                     <button type="button"  class="btn btn-secondary waves-effect waves-light" onclick ="domainverification();" id="verificationdomain" style="padding-top: 11px; " data-bs-toggle="modal" data-bs-target="#exampleModal"> Domain Verification</button>
@@ -249,7 +250,7 @@ isSessionValid(true);
                               </div>
                               </div>
                               
-                           </div>
+                           </div> -->
                            
                         </div>
                         <div class="row">
@@ -260,10 +261,9 @@ isSessionValid(true);
                                        <thead>
                                           <tr>
                                              <th>#</th>
-                                             <th>Group Name</th>
-                                             <th>Total Users</th>
-                                             <th>Domain</th>
-                                             <th>Date Created</th>
+                                             <th>Name</th>
+                                             <th>Username</th>
+                                             <th>Email</th>
                                              <th>Action</th>
                                           </tr>
                                        </thead>
@@ -605,7 +605,7 @@ isSessionValid(true);
       }
    } else
       echo '$("#section_adduser").hide();
-                  loadTableUserGroupList();';
+      loadTableUsersList();';
    echo '</script>';
    ?>
     <script defer src="<?php echo url ?>/js/libs/popper.min.js"></script>

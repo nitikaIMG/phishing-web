@@ -18,8 +18,9 @@ require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php'
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
 
 
-if(isSessionValid() == false)
+if(isSessionValid() == false && isAdminSessionValid() == false){
 	die("Access denied");
+}
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -87,7 +88,9 @@ if (isset($_POST)) {
 		if($POSTJ['action_type'] == "send_test_mail_sample")
 			sendTestMailSample($conn,$POSTJ);
 		if($POSTJ['action_type'] == "user_group_domain_verify")
-			domainverification($conn,$POSTJ);
+			domainverification($conn,$POSTJ,$userid);
+		if($POSTJ['action_type'] == "get_users_list")
+			getuserslist($conn,$POSTJ,$userid);
 			
 	}
 	if(isset($_POST['action_type'])){
@@ -95,6 +98,8 @@ if (isset($_POST)) {
 			addverificationmail($conn,$_POST,$userid);
 		if($_POST['action_type'] == "domain_otp_verfication")
 			domainotpverification($conn,$_POST,$userid);
+		if($_POST['action_type'] == "delete_domain_verfication")
+		delete_domain($conn,$_POST,$userid);
 	}
 }
 //-----------------------------
@@ -230,11 +235,43 @@ function downloadUser($conn, $user_group_id){
 function getUserGroupList($conn,$userid ){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name,JSON_LENGTH(user_data) as user_count,date FROM tb_core_mailcamp_user_group WHERE userid=$userid");
+	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name,user_data,JSON_LENGTH(user_data) as user_count,date FROM tb_core_mailcamp_user_group WHERE userid=$userid");
+	$stmt = $conn->prepare("SELECT domain FROM tb_mail_verify WHERE userid = $userid AND status = 1");
+	$stmt->execute();
+	$result1 = $stmt->get_result();
+	$row1 = mysqli_fetch_all($result1, MYSQLI_ASSOC);
+	$test = array_column($row1, 'domain');
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
-			$row["user_data"] = json_decode($row["user_data"]);	//avoid double json encoding
+			$row["user_data"] = array_column(json_decode($row["user_data"]),"email");
+			$userem =array();
+			foreach($row["user_data"] as $key => $useremail){
+				$usere = end(explode('@',$useremail));
+				if(in_array($usere, $test)){
+					array_push($userem,'<span class="verdom label-table" style="display: inline-block; margin-bottom: 1px; color:black"><b>'.$usere.'</b></span>');
+				}else{
+					array_push($userem,'<span class=" unverdom label-table" style="display: inline-block; margin-bottom: 1px; color:black"><b>'.$usere.'</b></span>');
+				}
+				
+			}
+			$row["user_data"] = implode(' ', $userem);
+			//avoid double json encoding
 			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
+        	array_push($resp,$row);
+		}
+		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+}
+
+
+function getuserslist($conn,$userid ){
+	$resp = [];
+	$DTime_info = getTimeInfo($conn);
+	$result = mysqli_query($conn, "SELECT id,name,username, contact_mail FROM tb_main Where user_role = 0");
+	if(mysqli_num_rows($result) > 0){
+		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
         	array_push($resp,$row);
 		}
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
@@ -543,7 +580,6 @@ function uploadMailBodyFiles($conn,&$POSTJ){
 
 //---------------------------------------Sender List Section --------------------------------
 function saveSenderList($conn, &$POSTJ,$userid){
-
 	$sender_list_id = $POSTJ['sender_list_id'];
 	$sender_list_mail_sender_name = $POSTJ['sender_list_mail_sender_name'];
 	$sender_list_mail_sender_SMTP_server = $POSTJ['sender_list_mail_sender_SMTP_server'];
@@ -757,17 +793,21 @@ function getSenderPwd(&$conn, &$sender_list_id){
 		return "";
 }
 
-function domainverification($conn,$POSTJ){
-	$stmt = $conn->prepare("SELECT * FROM tb_mail_verify");
+function domainverification($conn,$POSTJ,$userid){
+	$stmt = $conn->prepare("SELECT * FROM tb_mail_verify WHERE userid = $userid");
 	$stmt->execute();
 	$result = $stmt->get_result();
 	$row = mysqli_fetch_all($result, MYSQLI_ASSOC) ;
 	$tablecon = '';
-	$tablecon .= '<form class="needs-validation" novalidate id="targetUserForm2" onsubmit="updateTarget()">
+	$tablecon .= '
+				<form class="needs-validation" novalidate id="targetUserForm2" onsubmit="updateTarget()">
 					<div class="card-body">
 						<div class="form-group row center-block" id="addUserForm">
 							<div class="col-lg-2">
-								<button type="button" class="btn btn-primary" id="addTarget2"  data-bs-toggle="modal" data-bs-target="#Modal4">
+								<button type="button" style="
+								height: 41px;
+								width: 197px;
+							" class="btn btn-primary" id="addTarget2"  data-bs-toggle="modal" data-bs-target="#Modal4">
 									<i class="fa fa-handshake"></i> Verify a New Domain
 								</button>
 							</div>
@@ -805,7 +845,7 @@ function domainverification($conn,$POSTJ){
 														<button type="button" class="btn btn-sm '.$clr.'" disabled=""><i class="mdi mdi-verified"></i> '.$name.'</button>
 												</td>
 												<td>
-													<a style="color:#2962FF; cursor:pointer" data-toggle="tooltip" data-placement="top" title="Delete Domain" onclick="return deleteDomain(\'techowl.in\')">
+													<a style="color:#2962FF; cursor:pointer" data-toggle="tooltip" data-placement="top" title="Delete Domain" onclick="return deleteDomain(\''.$rrow["id"].'\')">
 														<i class="mdi mdi-close" style="font-size:large"></i>
 													</a>
 												</td>
@@ -832,12 +872,10 @@ function domainverification($conn,$POSTJ){
 					//$("#zero_config4").DataTable();
 
 					$("#zero_config4").on("click", "a", function () {
-						console.log($(this).parent());
 						$("#zero_config4").DataTable().row($(this).parents("tr")).remove().draw(false);
 					});
 
 					$("#zero_config4").on("click", "button", function () {
-						console.log($(this).parent());
 						var email = $("#zero_config4").DataTable().row($(this).parents("tr")).data()[1];
 						$("#Modal4").modal("toggle");
 						$("#eVAddress").val(email);
@@ -868,17 +906,25 @@ function domainverification($conn,$POSTJ){
 								type: "post",
 								traditional: true,
 								data: dataPost,
-								dataType: "text",
+								dataType: "json",
 								success: function (response) {
-									// console.log(response.result);
-									toastr.options.fadeOut = 20500;
-									toastr.success("", "Domain Verification",{fadeAway:10000});
 									if(response.result == "success"){
-										toastr.success("", "Domain Verification");
-									}
-									else {
-										toastr.error("", response.error);
+										Swal.fire({
+											position: "center",
+											icon: "success",
+											title: "mail successfully send",
+											text: "otp send to your mail please verify your domain",
+											showConfirmButton: true,
+										})
 										$("#codeInputDiv").show();
+								}
+								else {
+										Swal.fire({
+											position: "center",
+											icon: "error",
+											title: "Something went wrong",
+											showConfirmButton: true,
+										})
 									}
 								},
 								error: function (xhr, status) {
@@ -910,24 +956,30 @@ function domainverification($conn,$POSTJ){
 								code: eVCode.value,
 								action_type:"domain_otp_verfication"
 							};
-							console.log(dataPost);
 							$.ajax({
 								url: "manager/userlist_campaignlist_mailtemplate_manager",
 								type: "post",
 								traditional: true,
 								data: dataPost,
-								dataType: "text",
+								dataType: "json",
 								contentType: "application/x-www-form-urlencoded",
 								success: function (result) {
-									if (result.includes("Failed")) {
-										toastr.error(result, "Domain Verification");
+									if (result.result) {
+										Swal.fire({
+											position: "center",
+											icon: "success",
+											title: "OTP Verified",
+											showConfirmButton: true,
+										})
+										$("#vCodeButton").attr("disabled", true);
 									}
 									else {
-										toastr.success(result, "Domain Verification");
-										$("#vCodeButton").attr("disabled", true);
-										//$("#Modal4").modal("toggle");
-										//$("#Modal3").modal("toggle");
-										//viewDomainVerification();
+										Swal.fire({
+											position: "center",
+											icon: "error",
+											title: "Something went wrong",
+											showConfirmButton: true,
+										})
 									}
 								},
 								error: function (xhr, status) {
@@ -941,20 +993,32 @@ function domainverification($conn,$POSTJ){
 
 					function deleteDomain(dDomain) {
 						var dataPost = {
-							domainName: dDomain
+							domainName: dDomain,
+							action_type:"delete_domain_verfication"
 						};
 						$.ajax({
-							url: "/Target/DeleteDomain",
+							url: "manager/userlist_campaignlist_mailtemplate_manager",
 							type: "post",
 							traditional: true,
 							data: dataPost,
-							dataType: "text",
+							dataType: "json",
 							success: function (result) {
-								if (result.includes("Error")) {
-									toastr.error(result, "Domain Deletion");
+								console.log(result)
+								if (result.result == "success") {
+										Swal.fire({
+											position: "center",
+											icon: "success",
+											title: "Successfully Deleted",
+											showConfirmButton: true,
+										})
 								}
 								else {
-									toastr.success("Domain Successfully Deleted", "Domain Deletion");
+										Swal.fire({
+											position: "center",
+											icon: "error",
+											title: "Something went wrong",
+											showConfirmButton: true,
+										})
 								}
 							},
 							error: function (xhr, status) {
@@ -965,7 +1029,7 @@ function domainverification($conn,$POSTJ){
 					}
 				</script>';
 
-echo json_encode(['result' => 'success', 'msg'=>$tablecon]);
+	echo json_encode(['result' => 'success', 'msg'=>$tablecon]);
 }
 
 function addverificationmail($conn,$POST,$userid){
@@ -989,11 +1053,12 @@ function addverificationmail($conn,$POST,$userid){
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'tls';
 		$mail->Port = 587;
-		$mail->Username = 'mamta01.img@gmail.com'; // YOUR email username
-		$mail->Password = 'dnegqdzkhyotrqvp'; // YOUR email password
-
+		// $mail->Username = 'mamta01.img@gmail.com'; // YOUR email username
+		// $mail->Password = 'eqvmfchxczllmkpb'; // YOUR email password
+		$mail->Username = 'waseemakram.img@gmail.com'; // YOUR email username
+		$mail->Password = 'rigdfypfwijjzgut'; // YOUR email password
 		// Sender and recipient settings
-		$mail->setFrom('mamta01.img@gmail.com', 'Phishing');
+		$mail->setFrom('waseemakram.img@gmail.com', 'Phishing');
 		$mail->addAddress($email ,'Test');
 		$mail->IsHTML(true);
 		$mail->Subject = "Domain Verification";
@@ -1003,7 +1068,7 @@ function addverificationmail($conn,$POST,$userid){
 
 
 		if(!$ismailsent) {
-			die(json_encode(['error' => 'Mail sending failed!'])); 
+			die(json_encode(['result' => 'failed'])); 
 		}else{
 			echo(json_encode(['result' => 'success']));
 		}
@@ -1037,5 +1102,15 @@ function domainotpverification($conn,$POST,$userid){
 
 }
 
+function delete_domain($conn,$POST,$userid){
+	$stmt = $conn->prepare("DELETE FROM tb_mail_verify WHERE id = ?");
+	$stmt->bind_param("s", $POST["domainName"]);
+	$stmt->execute();
+	if($stmt->affected_rows != 0)
+		echo json_encode(['result' => 'success']);	
+	else
+		echo json_encode(['result' => 'failed', 'error' => 'Error deleting sender!']);	
+	$stmt->close();
+}
 
 ?>

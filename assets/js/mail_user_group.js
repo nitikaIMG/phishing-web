@@ -444,10 +444,59 @@ function loadTableUserGroupList() {
             action_type: "get_user_group_list"
          })
     }).done(function (data) {
+        console.log(data);
         if(!data.error){  // no data
              $.each(data, function(key, value) { 
                 var action_items_user_group_table = `<a class="" data-toggle="tooltip" data-placement="top" style="margin: 6px;" onclick="document.location='employeelist?action=edit&user=` + value.user_group_id + `'" title="View/Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" data-toggle="tooltip"  style="margin: 6px;"  data-placement="top" title="Copy" onclick="promptUserGroupCopy('` + value.user_group_id + `')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><a class="" data-toggle="tooltip"   style="margin: 0px;"  data-placement="top" title="Delete" onclick="promptUserGroupDeletion('` + value.user_group_id + `')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>`;
-                $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.user_group_name + "</td><td>" + value.user_count + "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + value.date + "</td><td>" + action_items_user_group_table + "</td></tr>");
+                $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.user_group_name + "</td><td>" + value.user_count + "</td><td>"+value.user_data+"</td><td data-order=\"" + getTimestamp(value.date) + "\">" + value.date + "</td><td>" + action_items_user_group_table + "</td></tr>");
+            });
+        }
+        dt_user_group_list = $('#table_user_group_list').DataTable({
+            "bDestroy": true,
+            "aaSorting": [3, 'asc'],
+            'columnDefs': [{
+                "targets": 4,
+            }],
+            
+            "preDrawCallback": function(settings) {
+                $('#table_user_group_list tbody').hide();
+            },
+
+            "drawCallback": function() {
+                $('#table_user_group_list tbody').fadeIn(500);
+                $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+            },   
+
+            "initComplete": function() {
+                $('label>select').select2({minimumResultsForSearch: -1, });
+            }       
+        });
+
+        dt_user_group_list.on('order.dt_user_group_list search.dt_user_group_list', function() {
+            dt_user_group_list.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();        
+    });   
+}
+
+function loadTableUsersList() {
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_users_list"
+         })
+    }).done(function (data) {
+        console.log(data);
+        if(!data.error){  // no data
+             $.each(data, function(key, value) { 
+                var action_items_user_group_table = `<a class="" data-toggle="tooltip" data-placement="top" style="margin: 6px;" onclick="window.open('useraccess?action=login&id=` + value.id + `','_blank')" title="" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></a>`;
+
+                $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.name + "</td><td>" + value.username + "</td><td>"+value.contact_mail+"</td><td>" + action_items_user_group_table + "</td></tr>");
             });
         }
         dt_user_group_list = $('#table_user_group_list').DataTable({

@@ -809,6 +809,7 @@ function loadTableCampaignResult1(){
                 $("#past_camp").append(data.past_camp);
 
                 $.each(data.resp, function(key, value) {
+                    console.log(value)
                     var count = JSON.parse(value.employees);
                     var emp_count = (count.user_group.id).split(",");
 
@@ -832,14 +833,57 @@ function loadTableCampaignResult1(){
                         var delivered =emp_count.length;
                             break;
                     }
+                    if(emp_count.length != 0){
+                        var perc = (emp_count.length/delivered)*100;
+                    }else{
+                        var perc = 0;
+                    }
+                    if(perc  == 100){
+                        var newper = '✓';
+                        var signper = '';
+                    }else{
+                        var newper = perc;
+                        var signper = '%';
+                    }
+                    var html = `<div class="card2">
+                                    <div class="percent2">
+                                    <svg>
+                                        <circle cx="25" cy="25" r="22"></circle>
+                                        <circle cx="25" cy="25" r="22" style="--percent: ${perc};"></circle>
+                                    </svg>
+                                    <div class="number2">
+                                        <h6>${newper}<span>${signper}</span></h6>
+                                    </div>
+                                    </div>
+                                </div>`;
 
+                   
                     if (value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null) {
                           var mail_open = '0';
+                          var mailnewper = mail_open;
+                        var mailsignper = '%';
+                        var mailpercentage = 0;
                     }else{
                         var mail_open = '1';
+                        var mailnewper = '✓';
+                        var mailsignper = '';
+                        var mailpercentage = 100;
                     }
+                  
+                    
+                    var mailhtml = `<div class="card2">
+                                <div class="percent2">
+                                <svg>
+                                    <circle cx="25" cy="25" r="22"></circle>
+                                    <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentage};"></circle>
+                                </svg>
+                                <div class="number2">
+                                    <h6>${mailnewper}<span>${mailsignper}</span></h6>
+                                </div>
+                                </div>
+                            </div>`;
 
-                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered + "</td><td>" + mail_open + "</td><td>" + emp_count.length + "</td><td>" + emp_count.length + "</td></tr>");
+                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + emp_count.length + "</td><td>" + emp_count.length + "</td></tr>");
                 });
             }
             dt_mail_campaign_list = $('#table_mail_campaign_result1').DataTable({
