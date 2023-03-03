@@ -909,7 +909,7 @@ function loadTableCampaignResult1(){
                     'copyHtml5',
                     'excelHtml5',
                     'csvHtml5',
-                    // 'pdfHtml5'
+                    'pdfHtml5'
                 ],
                 "preDrawCallback": function(settings) {
                     $('#table_mail_campaign_result1 tbody').hide();
@@ -935,23 +935,20 @@ function loadTableCampaignResult1(){
             }).draw();  
 
             var months = { 01:0, 02:0, 03:0 ,04:0,05:0,06:0,07:0,08:0,09:0,10:0,11:0,12:0};
-           
             $.each(data.phishingmail, function(key, value) {
              var date = value.scheduled_time;
-             var start_date = new Date(date);
-             var newDate = moment(start_date, 'YYYY-MM-DD').format('MM');
-
+             var newDate = moment(date, 'YYYY-MM-DD').format('MM');
              if(months[parseInt(newDate)] == '0'){
                 var arr = [];
                 var sent = 0;
                 if(value.sending_status=='2'){
-                 sent = +1;
+                 sent = sent+1;
                 }
 
                 var open = 0;
                 if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
                 }else{
-                    open = +1;
+                    open = open+1;
                 }
                 var payload = 0;
                 var comp = 0;
@@ -982,6 +979,12 @@ function loadTableCampaignResult1(){
             });
 
             mailchart(months);
+            var sent_mail_percent = ((data.year_count)/data.total)*100;
+            var open_mail_percent = ((data.opend_mail)/data.total)*100;
+            updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
+            updatePieTotalSent(data.total, data.year_count, data.sent_failed_count)
+            updatePieTotalMailOpen(data.total, data.opend_mail, open_mail_percent)
+            updatePieTotalMailReplied(data.total)
         });
     })
 }
@@ -1056,7 +1059,7 @@ function mailchart(months) {
           opacity: 0.5
         },
       },
-      colors: ['#666869','#000', '#f39e18' ,'#ff3000','#249f27'],
+      colors: ['#666869','#67686a', '#f39e18' ,'#ff3000','#249f27'],
       xaxis: {
         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','Oct','Nov','Dec'],
       }

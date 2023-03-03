@@ -233,7 +233,8 @@ isSessionValid(true);
             <!-- ============================================================== -->
             <!-- Start Chart View  -->
 
-               <!-- <div class="row">
+             <!-- Start Pie Chart View  -->
+               <div class="row">
                   <div class="col-md-12">   
                      <div class="card">
                         <div class="card-body">     
@@ -257,9 +258,11 @@ isSessionValid(true);
                            </div>
                         </div>
                      </div>
-                  </div> -->
-               <!-- </div> -->
+                  </div>
+               </div>
+               <!-- End Pie Chart View  -->
         
+               <!-- Start Area Chart View  -->
                <div class="row">
                   <div class="col-12">
                      <div class="card">
@@ -274,6 +277,8 @@ isSessionValid(true);
                      </div>
                   </div>
                </div>
+               <!-- End Area Chart View  -->
+
             <!-- ============================================================== -->
             <!-- Ent Chart View  -->
 
