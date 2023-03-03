@@ -24,7 +24,9 @@ isSessionValid(true);
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/style.min.css">
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/toastr.min.css">
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/dataTables.foundation.min.css">
-      <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css"> 
+      <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css">
+     
+     
       <style type="text/css">
          .note-editable { background-color: white !important; } /*Disabled background colour*/
          .tab-header{ list-style-type: none; }
@@ -32,99 +34,111 @@ isSessionValid(true);
             color: white;
          }
          @import url(https://fonts.googleapis.com/css?family=Lato:700);
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
+         *,
+         *:before,
+         *:after {
+         box-sizing: border-box;
+         }
 
-html,
-body {
-  background: #ecf0f1;
-  color: #444;
-  font-family: "Lato", Tahoma, Geneva, sans-serif;
-  font-size: 16px;
-  padding: 10px;
-}
+         html,
+         body {
+         background: #ecf0f1;
+         color: #444;
+         font-family: "Lato", Tahoma, Geneva, sans-serif;
+         font-size: 16px;
+         padding: 10px;
+         }
 
-.set-size {
-  font-size: 10em;
-}
+         .set-size {
+         font-size: 10em;
+         }
 
-.charts-container:after {
-  clear: both;
-  content: "";
-  display: table;
-}
+         .charts-container:after {
+         clear: both;
+         content: "";
+         display: table;
+         }
 
-/* .card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: #ffffff;
-  margin: 0 20px;
-  width: 280px;
-  height: 350px;
-  border-radius: 5px;
-  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2);
-} */
-.card2 {
-   display: inline-flex;
-   justify-content: center;
-}
-.card2 .percent2 {
-  position: relative;
-}
+         /* .card {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-direction: column;
+         background-color: #ffffff;
+         margin: 0 20px;
+         width: 280px;
+         height: 350px;
+         border-radius: 5px;
+         box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2);
+         } */
+         .card2 {
+            display: inline-flex;
+            justify-content: center;
+         }
+         .card2 .percent2 {
+         position: relative;
+         }
 
-.card2 svg {
-   position: relative;
-   width: 50px;
-   height: 50px;
-   transform: rotate(-90deg);
-}
+         .card2 svg {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            transform: rotate(-90deg);
+         }
 
-.card2 svg circle {
-  width: 100%;
-  height: 100%;
-  fill: none;
-  stroke: #f0f0f0;
-  stroke-width: 2;
-  stroke-linecap: round;
-}
+         .card2 svg circle {
+         width: 100%;
+         height: 100%;
+         fill: none;
+         stroke: #f0f0f0;
+         stroke-width: 2;
+         stroke-linecap: round;
+         }
 
-.card2 svg circle:last-of-type {
-   stroke-dasharray: 135px;
-    stroke-dashoffset: calc(135px - (135px * var(--percent)) / 100);
-    stroke: #3498db;
-}
+         .card2 svg circle:last-of-type {
+            stroke-dasharray: 135px;
+            stroke-dashoffset: calc(135px - (135px * var(--percent)) / 100);
+            stroke: #3498db;
+         }
 
-.card2 .number2 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+         .card2 .number2 {
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         }
 
-.card2 .number2 h6 {
-   font-weight: 200;
-    font-size: 0.7rem;
-    margin-bottom: 0;
-}
+         .card2 .number2 h6 {
+            font-weight: 200;
+            font-size: 0.7rem;
+            margin-bottom: 0;
+         }
 
 
-.card2 .title h6 {
-  margin: 25px 0 0;
-}
+         .card2 .title h6 {
+         margin: 25px 0 0;
+         }
 
-.card2:nth-child(1) svg circle:last-of-type {
-   stroke: #00ab55;
-}
+         .card2:nth-child(1) svg circle:last-of-type {
+            stroke: #00ab55;
+         }
 
-.card2:nth-child(2) svg circle:last-of-type {
-   stroke: #f0f0f0;
-}
+         .card2:nth-child(2) svg circle:last-of-type {
+            stroke: #f0f0f0;
+         }
+         body.dark button.dt-button{
+          color:white !important;
+         }
+
+         div.dataTables_wrapper div.dataTables_filter input {
+            background-color: white !important;
+         }
       </style> 
+
+      <!--Datatable js -->
+      <link rel="stylesheet" type="text/css" href=" https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">  
+      <link rel="stylesheet" type="text/css" href=" https://cdn.datatables.net/buttons/2.3.5/css/buttons.dataTables.min.css"> 
+
    </head>
    <body class="layout-boxed alt-menu">
     <!-- BEGIN LOADER -->
@@ -159,88 +173,10 @@ body {
                <div class="row">
                   <div class="col-12 d-flex no-block align-items-center">
                      <h4 class="page-title">Email Campaign Dashboard</h4>
-                     <!-- <div class="ml-auto text-right">
-                        <button type="button" class="btn btn-info btn-sm item_private" data-toggle="modal" data-target="#ModalCampaignList"><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> Select Campaign</button>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info btn-sm" onclick="refreshDashboard()" title="Refresh dashboard" data-toggle="tooltip" data-placement="bottom"><i class="mdi mdi-refresh"></i></button>
-                            <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal_settings">Display Settings</a>
-                                <a class="dropdown-item item_private" href="#" data-toggle="modal" data-target="#modal_dashboard_link">Get Dashboard Link</a>
-                            </div>
-                        </div>
-                     </div> -->
                   </div>
                </div>
             </div>
             <div class="container-fluid">
-               <!-- <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                              <div class="card-body">
-                                 <div class="row">
-                                    <div class="align-items-left col-12 d-flex no-block row">
-                                       <div class="col-md-4">
-                                          <span><strong>Campaign: </strong></span><span id="disp_camp_name">NA</span>
-                                       </div>  
-                                       <div class="col-md-4 text-center m-l-5" id="disp_camp_status">                            
-                                       </div>  
-                                       <div class="align-items-right ml-auto row">                                  
-                                          <div>
-                                             <span><strong>Start: </strong></span><span id="disp_camp_start">NA</span>
-                                          </div> 
-                                       </div>
-                                    </div>                                    
-                                 </div>
-                                 <div class="progress m-t-15" title="Sending status" data-toggle="tooltip" data-placement="top" id="progressbar_status" style="height:20px; background-color:#ccccff;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%"></div>
-                                 </div>
-                              </div>
-                        </div>
-                    </div>
-               </div>
-               <div class="row">
-                  <div class="col-md-12">
-                     <div class="card">
-                        <div class="card-body">
-                           <h5 class="card-title "><span>Campaign Timeline</span></h5>
-                           <div id="chart_live_mailcamp">                           
-                              <apexchart type="scatter" height="350"/>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="row">
-                  <div class="col-md-12">   
-                     <div class="card">
-                        <div class="card-body">     
-                           <div class="align-items-left col-12 d-flex no-block">             
-                              <div class="col-md-3">                             
-                                 <h5 class="card-title text-center"><span>Email Overview</span></h5> 
-                                 <div id="radialchart_overview_mailcamp" ></div>
-                              </div>
-                                 
-                              <div class="col-md-3">    
-                                 <h5 class="card-title text-center"><span>Email Sent</span></h5>
-                                 <div id="piechart_mail_total_sent" ></div>
-                              </div>
-                              <div class="col-md-3">
-                                 <h5 class="card-title text-center"><span>Email Opened</span></h5>
-                                 <div id="piechart_mail_total_mail_open" ></div>
-                              </div>
-                              <div class="col-md-3">                           
-                                 <h5 class="card-title text-center"><span>Email Replied</span></h5>
-                                 <div id="piechart_mail_total_replied" class="center"></div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div> -->
-               
 
                <div class="row">
                   <div class="row draggable-cards" id="draggable-area">
@@ -295,6 +231,53 @@ body {
                </div>
 
             <!-- ============================================================== -->
+            <!-- Start Chart View  -->
+
+               <!-- <div class="row">
+                  <div class="col-md-12">   
+                     <div class="card">
+                        <div class="card-body">     
+                           <div class="align-items-left col-12 d-flex no-block">             
+                              <div class="col-md-3">                             
+                                 <h5 class="card-title text-center"><span>Email Overview</span></h5> 
+                                 <div id="radialchart_overview_mailcamp" ></div>
+                              </div>
+                              <div class="col-md-3">    
+                                 <h5 class="card-title text-center"><span>Email Sent</span></h5>
+                                 <div id="piechart_mail_total_sent" ></div>
+                              </div>
+                              <div class="col-md-3">
+                                 <h5 class="card-title text-center"><span>Email Opened</span></h5>
+                                 <div id="piechart_mail_total_mail_open" ></div>
+                              </div>
+                              <div class="col-md-3">                           
+                                 <h5 class="card-title text-center"><span>Email Replied</span></h5>
+                                 <div id="piechart_mail_total_replied" class="center"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div> -->
+               <!-- </div> -->
+        
+               <div class="row">
+                  <div class="col-12">
+                     <div class="card">
+                        <div class="card-body">
+                           <div class="row">
+                                 <h4 class="card-title">Phishing Success</h4>
+                                 <h5 class="card-subtitle">Statistics over the last 12 months (Updated Daily)</h5>
+                                 <div id="chartmail">
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            <!-- ============================================================== -->
+            <!-- Ent Chart View  -->
+
+            <!-- ============================================================== -->
             <!-- Start Table View  -->
                <div class="row">
                   <div class="col-12">
@@ -303,10 +286,7 @@ body {
                            <div class="row">
                               <div class="col-md-12">
                                  <p>Active Campaigns</p>
-                                 <button type="button" class="btn btn-success item_private" onclick="exportReportAction1($(this))" value="csv">Export as CSV</button>
-                                 <button type="button" class="btn btn-success item_private" onclick="exportReportAction1($(this))" value="pdf">Export as PDF</button>
-                                 <button type="button" class="btn btn-success item_private" onclick="exportReportAction1($(this))" value="html">Export as HTML</button>
-                              </div>
+                                </div>
                            </div>
                            <div class="row">
                               <div class="col-md-12 m-t-20">    
@@ -324,6 +304,7 @@ body {
                                                 <th>Email Viewed</th>
                                                 <th>Payloads Clicked</th>
                                                 <th>Employees Compromised</th>
+                                                <th>Emails Reported</th>
                                              </tr>
                                           </thead>
                                           <tbody>
@@ -344,36 +325,6 @@ body {
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
 
-            <!-- Modal -->
-            <div class="modal fade" id="ModalCampaignList" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true ">
-               <div class="modal-dialog modal-large" role="document ">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Select Email Campaign</h5>
-                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
-                     </div>
-                     <div class="modal-body">
-                        <div class="form-group row">
-                           <div class="table-responsive">
-                              <table id="table_mail_campaign_list" class="table table-striped table-bordered">
-                                 <thead>
-                                    <tr>
-                                       <th>#</th>
-                                       <th>Tracker Name</th>
-                                       <th>Date Created</th>
-                                       <th>Status</th>
-                                       <th>Action</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
             <!-- Modal -->
             <div class="modal fade" id="ModalExport" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                <div class="modal-dialog" role="document">
@@ -533,6 +484,15 @@ body {
       <script src="<?php echo url ?>/js/libs/apexcharts.js"></script>
       <script src="<?php echo url ?>/js/common_scripts.js"></script>
       <script src="<?php echo url ?>/js/mail_campaign_dashboard.js"></script>
+
+      <!--Datatable js -->
+      <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
+
       <?php
          if(isset($_GET['tk']) && isset($_GET['mcamp']) && amIPublic($_GET['tk'],$_GET['mcamp']) == true)
             echo '<script>

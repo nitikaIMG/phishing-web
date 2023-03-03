@@ -25,5 +25,6 @@
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM Daterangepicker STYLES -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM Daterangepicker STYLES -->
 
