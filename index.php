@@ -8,14 +8,12 @@ isSessionValid(true);
 <head>
     <?php include(dirname(__FILE__).'/components/header.php'); ?>
 </head>
+   
 <body class="layout-boxed alt-menu">
     <!-- BEGIN LOADER -->
-    <div class="preloader">
-         <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
-         </div>
-      </div>
+    <div id="load_screen"> <div class="loader"> <div class="loader-content">
+        <div class="spinner-grow align-self-center"></div>
+    </div></div></div>
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->

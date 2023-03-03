@@ -4,11 +4,11 @@ require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
 
 <head>
    <?php
-   echo include(dirname(__FILE__).'/components/header.php');
+    include(dirname(__FILE__).'/components/header.php');
    ?>
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css">
@@ -68,7 +68,7 @@ isSessionValid(true);
                
                <div class="card">
                   <div class="card-body">
-                     <div class="row">
+                     <div class="row mb-2">
                         <div class="col-md-12">
                            <button type="button" class="btn btn-info btn-sm" onclick="document.location='mailtemplate?action=add&template=new'"><i class="fas fa-plus"></i> New Email Template</button>
                         </div>
