@@ -76,6 +76,9 @@
                     </li>
                     <li>
                         <a href="mailsender"> Sender List </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo App ?>sniperhost/LandingPage"> Landing Page</a>
                     </li>                              
                 </ul>
         </li>

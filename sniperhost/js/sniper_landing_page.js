@@ -165,7 +165,7 @@ function saveLandPage(e) {
     var page_name = $('#tb_page_name').val();
     var page_file_name = $('#tb_page_file_name').val();
     var page_content = $('#summernote').summernote('code');    
-
+    console.log(page_content);
     enableDisableMe(e);
     $.post({
         url: "../sniperhost/manager/sniperhost_manager",
@@ -175,7 +175,7 @@ function saveLandPage(e) {
             hlp_id: nextRandomId,
             page_name: page_name,
             page_file_name: page_file_name,
-            page_content: btoa(page_content)
+            page_content: btoa(unescape(encodeURIComponent(page_content)))
          }),
     }).done(function (response) {
         if(response.result == "success"){ 
@@ -258,7 +258,7 @@ function landPageDeletionAction() {
 
 function generateAccessLink(page_file_name){
     if(validateFields()){
-        $("#link_output").text(window.location.origin + '/sniperhost/lp_pages/' + page_file_name);
+        $("#link_output").text(window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name);
         Prism.highlightAll();
     }
 }
@@ -266,7 +266,7 @@ function generateAccessLink(page_file_name){
 function copyAccessLink(e, page_file_name){
     var $temp = $("<input>");
     $("body").append($temp);
-    $temp.val(window.location.origin + '/sniperhost/lp_pages/' + page_file_name).select();
+    $temp.val(window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name).select();
     document.execCommand("copy");
     $temp.remove();
 
