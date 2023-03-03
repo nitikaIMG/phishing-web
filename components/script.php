@@ -18,3 +18,7 @@
    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM Daterangpicker SCRIPTS -->
+
+   <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM Toastr SCRIPTS -->
+   <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+   <!-- END PAGE LEVEL PLUGINS/CUSTOM Toastr SCRIPTS -->

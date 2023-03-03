@@ -104,8 +104,17 @@ function addAccount($conn,$name,$username,$contact_mail,$dp_name,$current_pwd,$n
 		echo(json_encode(['result' => 'failed', 'error' => 'Authorization failed! Your password is incorrect!']));
 }
 
-
 function modifyAccount($conn,$name,$username,$contact_mail,$dp_name,$current_pwd,$new_pwd){	
+
+	if($current_pwd==''){
+		$stmt = $conn->prepare("UPDATE tb_main SET name=?, contact_mail=?, dp_name=? WHERE username=?");
+		$stmt->bind_param('ssss', $name,$contact_mail,$dp_name,$username);
+		if ($stmt->execute() === TRUE){
+			echo(json_encode(['result' => 'success']));	
+		}
+		else 
+			echo(json_encode(['result' => 'failed', 'error' => 'Contact mail update failed!']));
+	}else{
 	if(isCurrentPwdCorrect($conn,$current_pwd)){	//current password is correct
 		if($new_pwd == ''){	//update email only
 			$stmt = $conn->prepare("UPDATE tb_main SET name=?, contact_mail=?, dp_name=? WHERE username=?");
@@ -129,6 +138,7 @@ function modifyAccount($conn,$name,$username,$contact_mail,$dp_name,$current_pwd
 	}
 	else
 		echo(json_encode(['result' => 'failed', 'error' => 'Authorization failed! Your password is incorrect!']));
+    }
 }
 
 function isCurrentPwdCorrect(&$conn, &$current_pwd){	
