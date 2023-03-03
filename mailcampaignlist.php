@@ -5,10 +5,10 @@ require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
    <head>
       <?php
-      echo include(dirname(__FILE__) . '/components/header.php');
+       include(dirname(__FILE__) . '/components/header.php');
       ?>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,12 +63,14 @@ isSessionValid(true);
             color: #3e5569 !important
          }
       </style>
+      
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/toastr.min.css">
       <!-- Employee List libraries -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
       <link rel="stylesheet" type="text/css" href="https://www.virtuosoft.eu/code/bootstrap-duallistbox/bootstrap-duallistbox/v3.0.2/bootstrap-duallistbox.css">
       <!-- Employee List libraries -->
    </head>
+   
    <body class="layout-boxed alt-menu">
     <!-- BEGIN LOADER -->
     <div id="load_screen"> <div class="loader"> <div class="loader-content">
@@ -80,19 +82,18 @@ isSessionValid(true);
     <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
     <!--  END NAVBAR  -->
 
+   <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
 
-      <!--  BEGIN MAIN CONTAINER  -->
-      <div class="main-container" id="container">
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
 
-         <div class="overlay"></div>
-         <div class="search-overlay"></div>
+        <!--  BEGIN SIDEBAR  -->
+        <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
+        <!--  END SIDEBAR  -->
 
-         <!--  BEGIN SIDEBAR  -->
-         <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
-         <!--  END SIDEBAR  -->
-
-         <!--  BEGIN CONTENT AREA  -->
-         <div id="content" class="main-content">
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
 
          <div id="main-wrapper">
 
@@ -114,7 +115,7 @@ isSessionValid(true);
                <div class="card">
                   <div class="card-body">
                      <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
                            <button type="button" class="btn btn-info btn-sm" onclick="document.location='MailCampaignList?action=add&campaign=new'"><i class="fas fa-plus"></i> New Mail Campaign</button>
                         </div>
                      </div>

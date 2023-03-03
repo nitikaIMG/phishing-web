@@ -5,10 +5,10 @@ require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
    <head>
    <?php
-      echo include(dirname(__FILE__) . '/components/header.php');
+       include(dirname(__FILE__) . '/components/header.php');
       ?>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -42,7 +42,7 @@ isSessionValid(true);
 
          html,
          body {
-         background: #ecf0f1;
+         /* background: #ecf0f1; */
          color: #444;
          font-family: "Lato", Tahoma, Geneva, sans-serif;
          font-size: 16px;
@@ -142,7 +142,9 @@ isSessionValid(true);
    </head>
    <body class="layout-boxed alt-menu">
     <!-- BEGIN LOADER -->
-    <div id="load_screen"> <div class="loader"> <div class="loader-content">
+    <div id="load_screen"> 
+      <div class="loader">
+       <div class="loader-content">
         <div class="spinner-grow align-self-center"></div>
     </div></div></div>
     <!--  END LOADER -->
