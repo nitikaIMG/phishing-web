@@ -114,7 +114,7 @@ function checkSniperPhishProcess(){
     if(window.location.href.indexOf('?') == -1){    // works only in main pages
         setTimeout(function (){
             $.post({
-                url: window.location.origin + "manager/home_manager",
+                url: window.location.origin + "/manager/home_manager",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                         action_type: "check_process",

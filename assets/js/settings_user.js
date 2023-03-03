@@ -16,8 +16,8 @@ function getCurrentUser() {
             $('#lb_uname').text(data.username);
             $('#lb_mail').text(data.contact_mail);
             $('#lb_created_date').text(data.date);
-            $('#user_dp').attr('src','/images/users/' + data.dp_name + '.png');
-            $('.pro-pic').attr('src','/images/users/' + data.dp_name + '.png');
+            $('#user_dp').attr('src','images/users/' + data.dp_name + '.png');
+            $('.pro-pic').attr('src','images/users/' + data.dp_name + '.png');
             $('#bt_edit_current_user').click(function(){
                 prompModifyUser(data.id, data.name, data.username, data.contact_mail, data.dp_name);
             });
@@ -110,11 +110,11 @@ function modifyUserAction(e){
     } else
         $("#tb_update_name").removeClass("is-invalid");
 
-    if(RegTest(mail, 'EMAIL') == false){
-        $("#tb_update_mail").addClass("is-invalid");
-        return;
-    } else
-        $("#lb_update_mail").removeClass("is-invalid");
+    // if(RegTest(mail, 'EMAIL') == false){
+    //     $("#tb_update_mail").addClass("is-invalid");
+    //     return;
+    // } else
+    //     $("#lb_update_mail").removeClass("is-invalid");
 
     if (current_pwd == '') {
         $("#tb_update_current_pwd").addClass("is-invalid");
