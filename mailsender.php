@@ -4,11 +4,11 @@ require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
 
 <head>
    <?php
-   echo include(dirname(__FILE__) . '/components/header.php');
+    include(dirname(__FILE__) . '/components/header.php');
    ?>
    <meta charset="utf-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -93,7 +93,7 @@ isSessionValid(true);
             <!-- ============================================================== -->
             <div class="card">
                <div class="card-body">
-                  <div class="row">
+                  <div class="row mb-2">
                      <div class="col-md-12">
                         <button type="button" class="btn btn-info btn-sm" onclick="document.location='mailsender?action=add&sender=new'"><i class="fas fa-plus"></i> New Mail Sender</button>
                      </div>

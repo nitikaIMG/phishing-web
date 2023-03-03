@@ -3,7 +3,7 @@ require_once(dirname(__FILE__, 2) . '/manager/session_manager.php');
 isSessionValid(true);
 ?>
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
 
 <head>
 
@@ -17,7 +17,7 @@ isSessionValid(true);
    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url ?>/customecss/images/favicon.png">
    <title>SniperPhish - The Web-Email Spear Phishing Toolkit</title>
    <?php
-   echo include(dirname(__FILE__) . '../../components/header.php');
+   include(dirname(__FILE__) . '../../components/header.php');
    ?>
    <!-- Custom CSS -->
    <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">

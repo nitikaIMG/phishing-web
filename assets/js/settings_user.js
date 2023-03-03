@@ -116,11 +116,34 @@ function modifyUserAction(e){
     // } else
     //     $("#lb_update_mail").removeClass("is-invalid");
 
-    if (current_pwd == '') {
-        $("#tb_update_current_pwd").addClass("is-invalid");
+    if(new_pwd!='' || confirm_pwd!='' || current_pwd!=''){
+
+        if (new_pwd == '') {
+        $("#tb_update_new_pwd").addClass("is-invalid");
+        toastr.error('', 'New Password is required!');
         return;
-    } else
+        } else{
+        $("#tb_update_new_pwd").removeClass("is-invalid");
+        }
+
+        if (confirm_pwd == '') {
+        $("#tb_update_confirm_pwd").addClass("is-invalid");
+        toastr.error('', 'Confirm Password is required!');
+        return;
+        } else{
+        $("#tb_update_confirm_pwd").removeClass("is-invalid");
+        }
+
+        if (current_pwd == '') {
+        $("#tb_update_current_pwd").addClass("is-invalid");
+        toastr.error('', 'Current Password is required!');
+        return;
+        } else{
         $("#tb_update_current_pwd").removeClass("is-invalid");
+        }
+
+    }
+    
 
 	if(!(new_pwd=='' && confirm_pwd==''))
         if(!isPwdSecure(new_pwd, confirm_pwd, '#tb_add_pwd', '#tb_add_confirm_pwd'))
@@ -263,12 +286,12 @@ function isPwdSecure(new_pwd, confirm_pwd, new_pwd_field, confirm_pwd_field){
     }
 
     if(f_valid){
-        $(new_pwd_field).removeClass("is-invalid");
-        $(confirm_pwd_field).removeClass("is-invalid");
+        $('#tb_update_new_pwd').removeClass("is-invalid");
+        $('#tb_update_confirm_pwd').removeClass("is-invalid");
     }
     else{
-        $(new_pwd_field).addClass("is-invalid");
-        $(confirm_pwd_field).addClass("is-invalid");
+        $('#tb_update_new_pwd').addClass("is-invalid");
+        $('#tb_update_confirm_pwd').addClass("is-invalid");
     }
     return f_valid;
 }

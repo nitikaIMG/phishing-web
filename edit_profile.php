@@ -3,10 +3,10 @@
    isAdminSessionValid(true);
 ?>
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
    <head>
       <?php
-         echo include(dirname(__FILE__).'/components/header.php');
+          include(dirname(__FILE__).'/components/header.php');
       ?>
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/summernote-lite.min.css">
