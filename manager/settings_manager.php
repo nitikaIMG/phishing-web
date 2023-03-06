@@ -52,7 +52,8 @@ if (isset($_POST)) {
 //-----------------------------
 
 function getCurrentUser($conn){
-	$username = $_SESSION['username'];
+	// $username = $_SESSION['username'];
+	$username = $_SESSION['user'][2];
 	$DTime_info = getTimeInfo($conn);
 
 	$stmt = $conn->prepare("SELECT id,name,username,contact_mail,dp_name,date FROM tb_main WHERE username=?");

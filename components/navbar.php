@@ -25,7 +25,8 @@ if(isSessionValid() == true){
                     <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="avatar-container">
                             <div class="avatar avatar-sm avatar-indicators avatar-online">
-                                <img alt="avatar" src="<?php echo url?>/src/assets/img/profile-30.png" class="rounded-circle">
+                            <?php $img = (basename($_SERVER['PHP_SELF'])) == 'LandingPage.php' ? '../images/users/' : 'images/users/'; ?>
+                                <img alt="avatar" class="avatar_profile" src="<?= $img.$_SESSION['user'][5] ?>.png" class="rounded-circle">
                             </div>
                         </div>
                     </a>
@@ -43,7 +44,7 @@ if(isSessionValid() == true){
                             </div>
                         </div>
                         <div class="dropdown-item">
-                        <a href="edit_profile.php">
+                        <a href="edit_profile">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                     <polyline points="16 17 21 12 16 7"></polyline>
@@ -51,8 +52,17 @@ if(isSessionValid() == true){
                                 </svg> <span>Edit Profile</span>
                             </a>
                         </div> 
+                        <!-- <div class="dropdown-item">
+                        <a href="mailserver">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg> <span> Manage Mail Servers</span>
+                            </a>
+                        </div>  -->
                         <div class="dropdown-item">
-                            <a href="logout.php">
+                            <a href="logout">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span>Log Out</span>
                             </a>
                     </div>

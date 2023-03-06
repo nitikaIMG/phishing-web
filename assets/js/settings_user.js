@@ -18,6 +18,7 @@ function getCurrentUser() {
             $('#lb_created_date').text(data.date);
             $('#user_dp').attr('src','images/users/' + data.dp_name + '.png');
             $('.pro-pic').attr('src','images/users/' + data.dp_name + '.png');
+            $('.avatar_profile').attr('src','images/users/' + data.dp_name + '.png');
             $('#bt_edit_current_user').click(function(){
                 prompModifyUser(data.id, data.name, data.username, data.contact_mail, data.dp_name);
             });

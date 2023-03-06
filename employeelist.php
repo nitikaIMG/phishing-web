@@ -92,6 +92,7 @@ isSessionValid(true);
       <!-- Page wrapper  -->
       <!-- ============================================================== -->
       <div id="content" class="main-content">
+
          <div class="layout-px-spacing" id="section_adduser">
 
             <div class="container-xxl p-0">
