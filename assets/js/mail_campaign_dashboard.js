@@ -809,7 +809,7 @@ function loadTableCampaignResult1(){
                 $("#past_camp").append(data.past_camp);
 
                 $.each(data.resp, function(key, value) {
-                    var count = JSON.parse(value.employees);
+                    var count = JSON.parse(value.campaign_data);
                     var emp_count = (count.user_group.id).split(",");
          
                     var date = value.scheduled_datetime;
