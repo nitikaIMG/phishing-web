@@ -93,10 +93,10 @@
                                     <div class="p-2"><img src="images/users/get_user_list" alt="user" width="150" class="rounded-circle" id="user_dp"></div>
                                     <div class="comment-text w-200">
                                        <h4 class="font-medium m-b-20" id="lb_name"></h4>
-                                       <span class="m-b-10 d-block">User Name: <span class="m-l-5" id="lb_uname"></span></span> 
-                                       <span class="m-b-10 d-block">Email: <span class="m-l-5" id="lb_mail"></span></span>  
-                                       <span class="m-b-15 d-block">Account Created: <span class="m-l-5" id="lb_created_date"></span></span> 
-                                       <div class="comment-footer">
+                                       <span class="m-b-10 d-block mt-2">User Name: <span class="m-l-5" id="lb_uname"></span></span> 
+                                       <span class="m-b-10 d-block mt-2">Email: <span class="m-l-5" id="lb_mail"></span></span>  
+                                       <span class="m-b-15 d-block mt-2">Account Created: <span class="m-l-5" id="lb_created_date"></span></span> 
+                                       <div class="comment-footer mt-3">
                                           <button type="button" class="btn btn-cyan btn-sm" id="bt_edit_current_user">Edit Details</button>
                                        </div>
                                     </div>
