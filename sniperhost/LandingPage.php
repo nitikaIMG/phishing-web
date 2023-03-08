@@ -53,7 +53,7 @@ isAdminSessionValid(true);
       <!-- ============================================================== -->
       <!-- Topbar header - style you can find in pages.scss -->
       <!-- ============================================================== -->
-      <?php include(dirname(__FILE__) . '../../components/navbar.php'); ?>
+      <?php include(dirname(__FILE__) . '../../components/adminnavbar.php'); ?>
       <!-- ============================================================== -->
       <!-- End Left Sidebar - style you can find in sidebar.scss  -->
       <!-- ============================================================== -->
@@ -63,7 +63,7 @@ isAdminSessionValid(true);
       <div class="search-overlay"></div>
 
       <!--  BEGIN SIDEBAR  -->
-      <?php include(dirname(__FILE__) . '../../components/sidebar.php'); ?>
+      <?php include(dirname(__FILE__) . '../../components/adminsidebar.php'); ?>
       <!-- ============================================================== -->
       <!-- <div class="page-wrapper"> -->
       <!-- ============================================================== -->
