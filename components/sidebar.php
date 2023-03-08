@@ -5,12 +5,12 @@
     <div class="navbar-nav theme-brand flex-row  text-center">
         <div class="nav-logo">
             <div class="nav-item theme-logo">
-                <a href="./index.html">
+                <a href="javascript:void(0)">
                     <img src="<?php echo url?>/src/assets/img/logo.png" class="" alt="logo">
                 </a>
             </div>
             <div class="nav-item theme-text">
-                <a href="./index.html" class="nav-link"> Phishing </a>
+                <a href="javascript:void(0)" class="nav-link"> Phishing </a>
             </div>
         </div>
         <div class="nav-item sidebar-toggle">
