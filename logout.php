@@ -14,8 +14,8 @@ $stmt = $conn->prepare("DELETE FROM tb_log WHERE id NOT IN (SELECT id FROM (SELE
 $stmt->execute();
 
 session_destroy();
-$redirecturl = App;
-header("Location:$redirecturl/signin");
+$redirecturl = App."signin";
+header("Location:$redirecturl");
 
 //---------------------------------------------------------------
 ?>
