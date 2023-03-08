@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__FILE__, 2) . '/manager/session_manager.php');
-isSessionValid(true);
+isAdminSessionValid(true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +53,7 @@ isSessionValid(true);
       <!-- ============================================================== -->
       <!-- Topbar header - style you can find in pages.scss -->
       <!-- ============================================================== -->
-      <?php include(dirname(__FILE__) . '../../components/navbar.php'); ?>
+      <?php include(dirname(__FILE__) . '../../components/adminnavbar.php'); ?>
       <!-- ============================================================== -->
       <!-- End Left Sidebar - style you can find in sidebar.scss  -->
       <!-- ============================================================== -->
@@ -63,7 +63,7 @@ isSessionValid(true);
       <div class="search-overlay"></div>
 
       <!--  BEGIN SIDEBAR  -->
-      <?php include(dirname(__FILE__) . '../../components/sidebar.php'); ?>
+      <?php include(dirname(__FILE__) . '../../components/adminsidebar.php'); ?>
       <!-- ============================================================== -->
       <!-- <div class="page-wrapper"> -->
       <!-- ============================================================== -->

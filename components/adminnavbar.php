@@ -5,6 +5,7 @@ if (isAdminSessionValid() == true) {
     $username = $_SESSION['admin'][1];
 }
 ?>
+<?php $img = (basename($_SERVER['PHP_SELF'])) == 'LandingPage.php' ? '../' : ''; ?> 
 <div class="header-container container-xxl">
     <header class="header navbar navbar-expand-sm expand-header">
 
@@ -36,12 +37,11 @@ if (isAdminSessionValid() == true) {
                     </svg>
                 </a>
             </li>
-
             <li class="nav-item dropdown user-profile-dropdown  order-lg-0 order-1">
                 <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="avatar-container">
                         <div class="avatar avatar-sm avatar-indicators avatar-online">
-                            <img alt="avatar" src="<?php echo url ?>/src/assets/img/profile-30.png" class="rounded-circle">
+                            <img alt="avatar" class="avatar_profile" src="<?= $img?>images/users/<?=$_SESSION['admin'][5]?>.png" class="rounded-circle">
                         </div>
                     </div>
                 </a>
@@ -59,14 +59,15 @@ if (isAdminSessionValid() == true) {
                         </div>
                     </div>
                     <div class="dropdown-item">
-                        <div class="dropdown-item">
-                            <!-- <a href="edit_profile.php">
+                        <a href="<?=$img?>edit_profile">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                     <polyline points="16 17 21 12 16 7"></polyline>
                                     <line x1="21" y1="12" x2="9" y2="12"></line>
                                 </svg> <span>Edit Profile</span>
-                            </a> -->
+                            </a>
+                    </div> 
+                    <div class="dropdown-item">
                             <a href="logout.php">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>

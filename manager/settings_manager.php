@@ -3,7 +3,11 @@ require_once(dirname(__FILE__) . '/session_manager.php');
 require_once(dirname(__FILE__) . '/common_functions.php');
 require_once(dirname(__FILE__,2) . '/libs/tcpdf_min/tcpdf.php');
 
-if(isSessionValid() == false)
+if(isset($_SESSION['admincontact_mail'])){
+	if(!isAdminSessionValid(true)){
+		die("Access denied");
+	}
+}else if(isSessionValid() == false)
 	die("Access denied");
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
@@ -52,8 +56,12 @@ if (isset($_POST)) {
 //-----------------------------
 
 function getCurrentUser($conn){
-	// $username = $_SESSION['username'];
-	$username = $_SESSION['user'][2];
+	if(isset($_SESSION['admincontact_mail'])){
+		$username = $_SESSION['admin'][2];
+	}else{
+		$username = $_SESSION['user'][2];
+	}
+	
 	$DTime_info = getTimeInfo($conn);
 
 	$stmt = $conn->prepare("SELECT id,name,username,contact_mail,dp_name,date FROM tb_main WHERE username=?");

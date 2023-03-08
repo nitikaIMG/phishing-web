@@ -1,7 +1,10 @@
 <?php
    require_once(dirname(__FILE__) . '/manager/session_manager.php');
-   // isAdminSessionValid(true);
-   isSessionValid(true);
+   if(isset($_SESSION['admincontact_mail'])){
+      isAdminSessionValid(true);
+   }else{
+      isSessionValid(true);
+   }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +37,12 @@
          <!-- ============================================================== -->
          <!-- Topbar header - style you can find in pages.scss -->
          <!-- ============================================================== -->
-         <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
+         <?php 
+         if(isset($_SESSION['admincontact_mail'])){
+            include(dirname(__FILE__).'/components/adminnavbar.php');
+         }else{
+            include(dirname(__FILE__).'/components/navbar.php');
+         } ?>
          <!-- ============================================================== -->
          <!-- End Left Sidebar - style you can find in sidebar.scss  -->
          <!-- ============================================================== -->
@@ -44,7 +52,12 @@
       <div class="search-overlay"></div>
 
       <!--  BEGIN SIDEBAR  -->
-      <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
+      <?php 
+         if(isset($_SESSION['admincontact_mail'])){
+            include(dirname(__FILE__).'/components/adminsidebar.php');
+         }else{
+            include(dirname(__FILE__).'/components/sidebar.php');
+         } ?>
          <!-- ============================================================== -->
          <!-- <div class="page-wrapper"> -->
             <!-- ============================================================== -->
@@ -77,7 +90,7 @@
                            <div class="comment-widgets col-md-12">
                               <!-- Comment Row -->
                               <div class="d-flex flex-row comment-row m-t-0">
-                                    <div class="p-2"><img src="images/users/1.png" alt="user" width="150" class="rounded-circle" id="user_dp"></div>
+                                    <div class="p-2"><img src="images/users/get_user_list" alt="user" width="150" class="rounded-circle" id="user_dp"></div>
                                     <div class="comment-text w-200">
                                        <h4 class="font-medium m-b-20" id="lb_name"></h4>
                                        <span class="m-b-10 d-block">User Name: <span class="m-l-5" id="lb_uname"></span></span> 

@@ -41,7 +41,6 @@ function isProcessRunning($conn, $os){ //Single instance manager (check if 'our'
     $row      = $result->fetch_assoc();
     $prev_pid = $row['pid'];
     
-
     if ($os == "windows") {
         $handle    = popen("tasklist | findstr php.exe", "r");
         $task_list = fread($handle, 2096);

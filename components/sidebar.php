@@ -76,10 +76,7 @@
                     </li>
                     <li class="menu <?php echo basename($_SERVER['PHP_SELF']) == 'mailsender.php' ? 'active' : ''; ?>">
                         <a href="<?=$base_url?>mailsender"> Sender List </a>
-                    </li>
-                    <li class="menu <?php echo basename($_SERVER['PHP_SELF']) == 'LandingPage.php' ? 'active' : ''; ?>">
-                        <a href="<?php echo App ?>sniperhost/LandingPage"> Landing Page</a>
-                    </li>                              
+                    </li>         
                 </ul>
         </li>
 
