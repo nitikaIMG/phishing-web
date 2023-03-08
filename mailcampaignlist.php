@@ -116,7 +116,7 @@ isSessionValid(true);
                   <div class="card-body">
                      <div class="row">
                         <div class="col-md-12 mb-2">
-                           <button type="button" class="btn btn-info btn-sm" onclick="document.location='MailCampaignList?action=add&campaign=new'"><i class="fas fa-plus"></i> New Mail Campaign</button>
+                           <button type="button" class="btn btn-info btn-sm" onclick="document.location='mailcampaignlist?action=add&campaign=new'"><i class="fas fa-plus"></i> New Mail Campaign</button>
                         </div>
                      </div>
                      <div class="row">

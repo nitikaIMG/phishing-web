@@ -530,7 +530,7 @@ function updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed
 function updatePieTotalMailOpen(total_user_email_count, open_mail_count, open_mail_percent) {
     $("#piechart_mail_total_mail_open").attr("hidden", false);
     $("#piechart_mail_total_mail_open").parent().children().remove('.loadercust');
-    var non_open_percent = +(100 - open_mail_percent).toFixed(2);;
+    var non_open_percent = +(100 - open_mail_percent).toFixed(2);
     var options = {
         series: [open_mail_percent, non_open_percent],
         chart: {
@@ -760,7 +760,6 @@ function loadTableCampaignResult() {
                     else
                         resp.data[i].mail_open = "<center><i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i></center>";
                     resp.data[i].sending_status= camp_table_status_def[resp.data[i].sending_status];
-
                     if(Object.keys(reply_emails).length >= 0 &&  reply_emails.hasOwnProperty('msg_info') && reply_emails.msg_info.hasOwnProperty(resp.data[i].user_email) ){
                         resp.data[i].mail_reply = `<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>`;
                         resp.data[i].mail_reply_count = reply_emails.msg_info[resp.data[i].user_email].msg_time.length;
@@ -811,7 +810,6 @@ function loadTableCampaignResult1(){
                 $.each(data.resp, function(key, value) {
                     var count = JSON.parse(value.campaign_data);
                     var emp_count = (count.user_group.id).split(",");
-         
                     var date = value.scheduled_datetime;
                     var start_date = new Date(date[0]['start_date']);
                     var end_date = new Date(date[0]['end_date']);

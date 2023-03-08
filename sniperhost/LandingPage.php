@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__FILE__, 2) . '/manager/session_manager.php');
-isSessionValid(true);
+isAdminSessionValid(true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
