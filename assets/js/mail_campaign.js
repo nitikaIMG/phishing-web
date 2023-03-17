@@ -379,7 +379,7 @@ function loadTableCampaignList() {
         $(function() {
             if(!data.error){
                 $.each(data, function(key, value) {
-                    var action_items_campaign_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Report" onclick="document.location='MailCmpDashboard?mcamp=` + value.campaign_id + `'"><i class="mdi mdi-book-open"></i></button>`;
+                    var action_items_campaign_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Report" onclick="document.location='mailcmpdashboard?mcamp=` + value.campaign_id + `'"><i class="mdi mdi-book-open"></i></button>`;
                     if (value.camp_status == 0)
                         action_items_campaign_table += `<button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Activate" onClick="promptMailCampActDeact('` + value.campaign_id + `','` + value.campaign_name + `','` + value.camp_status + `',$(this))"><i class="mdi mdi-play"></i></button>`;
                     if (value.camp_status == 2 || value.camp_status == 4)

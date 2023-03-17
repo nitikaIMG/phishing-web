@@ -114,7 +114,7 @@ function checkSniperPhishProcess(){
     if(window.location.href.indexOf('?') == -1){    // works only in main pages
         setTimeout(function (){
             $.post({
-                url:window.location.origin + "/phishing-web/manager/home_manager",
+                url:window.location.origin + "/phishing/manager/home_manager",
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 
                         action_type: "check_process",
@@ -130,7 +130,7 @@ function checkSniperPhishProcess(){
 
 function startSniperPhishService(e){
     $.post({
-            url: "/phishing-web/manager/home_manager",
+            url: "/phishing/manager/home_manager",
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({ 
                     action_type: "start_process",

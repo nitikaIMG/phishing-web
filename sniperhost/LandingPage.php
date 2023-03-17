@@ -13,9 +13,7 @@ isAdminSessionValid(true);
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta name="description" content="">
    <meta name="author" content="">
-   <!-- Favicon icon -->
-   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo url ?>/customecss/images/favicon.png">
-   <title>Phishing</title>
+
    <?php
    include(dirname(__FILE__) . '../../components/header.php');
    ?>
