@@ -46,14 +46,14 @@ isAdminSessionValid(true);
    <!-- ============================================================== -->
    <div class="main-container" id="container">
       <!-- ============================================================== -->
-      <?php include(dirname(__FILE__) . '/components/navbar.php'); ?>
+      <?php include(dirname(__FILE__) . '/components/adminnavbar.php'); ?>
       <!-- Topbar header - style you can find in pages.scss -->
       <!-- ============================================================== -->
       <div class="overlay"></div>
       <div class="search-overlay"></div>
 
       <!--  BEGIN SIDEBAR  -->
-      <?php include(dirname(__FILE__) . '/components/sidebar.php'); ?>
+      <?php include(dirname(__FILE__) . '/components/adminsidebar.php'); ?>
       <!-- ============================================================== -->
       <!-- End Left Sidebar - style you can find in sidebar.scss  -->
       <!-- ============================================================== -->

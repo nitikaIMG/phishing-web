@@ -79,60 +79,90 @@ isSessionValid(true);
                <?php } ?>
             </div>
          </div>
-         <div class="container-fluid">
-               <table class="table" >
-  <thead class="thead-dark" >
-    <tr>
-      <th scope="col fs-1">Service Provider</th>
-      <th scope="col">Integration</th>
-      <th scope="col">Features</th>
-      <th scope="col">Requirements</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>CanIPhish</td>
-      <td>N/A - Native</td>
-      <td><ul>
-         <li>Supports domain spoofing</li>
-         <li>Preconfigured list of sending profiles to choose from</li>
-         <li>Preconfigured list of phishing emails to choose from</li>
-         <li>Preconfigured list of phishing websites to choose from</li>
-         <li>Preconfigured mail service</li>
-         
-   </ul></td>
-      <td><ul>
-         <li>Allowlisting of CanIPhish mail server IPs (see Knowledge Base)</li>
-         <li>Verification of target domains</li>
-      </ul></td>
-      <td><button class="btn btn-success" disabled>Integrated</button></td>
-    </tr>
-    
-    <tr>
-      <td>Third-party SMTP Server</td>
-      <td>SMTP Relay</td>
-      <td><ul>
-         <li>Sender profiles may be from any domain under your control</li>
-         <li>Preconfigured list of phishing emails to choose from</li>
-         <li>Preconfigured list of phishing websites to choose from</li>
-         <li>Provides full control over mail delivery</li>
-      </ul></td>
-      <td><ul>
-         <li>SMTP Server must accept emails via the secure SMTP protocol (TCP port 587)</li>
-         <li>SMTP server credentials must be provided</li>
-         <li>Use of default sender profiles will fail SPF checks and require allowlisting</li>
-         <li>Verification of target domains</li>
-      </ul></td>
-      <!-- <td><button class="btn btn-success">New Integration</button></td> -->
-      <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#mailIntemodal">
-  New Integration
-</button></td>
 
-    </tr>
-  </tbody>
-</table>
-</div>
+         <!-- ============================================================== -->
+         <!-- Mail Server Integrations -->
+         <!-- ============================================================== -->
+         <div class="container-fluid">
+            <div class="card">
+                  <div class="card-body">
+                     <div class="row">
+                        <div class="col-md-12 m-t-20">
+                           <div class="row">
+                              <div class="table-responsive">
+                                 <table class="table" class="table table-bordered">
+                                       <thead class="thead-dark" >
+                                          <tr>
+                                             <th scope="col fs-1">Service Provider</th>
+                                             <th scope="col">Integration</th>
+                                             <th scope="col">Features</th>
+                                             <th scope="col">Requirements</th>
+                                             <th scope="col">Action</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                             <tr>
+                                                <td>CanIPhish</td>
+                                                <td>N/A - Native</td>
+                                                <td>
+                                                   <ul>
+                                                   <li>Supports domain spoofing</li>
+                                                   <li>Preconfigured list of sending profiles to choose from</li>
+                                                   <li>Preconfigured list of phishing emails to choose from</li>
+                                                   <li>Preconfigured list of phishing websites to choose from</li>
+                                                   <li>Preconfigured mail service</li>
+                                                   </ul>
+                                                </td>
+                                                <td>
+                                                   <ul>
+                                                   <li>Allowlisting of CanIPhish mail server IPs (see Knowledge Base)</li>
+                                                   <li>Verification of target domains</li>
+                                                </ul>
+                                                </td>
+                                                <td>
+                                                   <button class="btn btn-success" disabled>Integrated</button>
+                                                </td>
+                                             </tr>
+                                             <tr>
+                                                <td>Third-party SMTP Server</td>
+                                                <td>SMTP Relay</td>
+                                                <td>
+                                                   <ul>
+                                                   <li>Sender profiles may be from any domain under your control</li>
+                                                   <li>Preconfigured list of phishing emails to choose from</li>
+                                                   <li>Preconfigured list of phishing websites to choose from</li>
+                                                   <li>Provides full control over mail delivery</li>
+                                                   </ul>
+                                                </td>
+                                                <td>
+                                                   <ul>
+                                                   <li>SMTP Server must accept emails via the secure SMTP protocol (TCP port 587)</li>
+                                                   <li>SMTP server credentials must be provided</li>
+                                                   <li>Use of default sender profiles will fail SPF checks and require allowlisting</li>
+                                                   <li>Verification of target domains</li>
+                                                   </ul>
+                                                </td>
+                                                <!-- <td><button class="btn btn-success">New Integration</button></td> -->
+                                                <td>
+                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#mailIntemodal">
+                                                   New Integration
+                                                </button></td>
+
+                                             </tr>
+                                       </tbody>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            </div>
+         </div>
+         <!-- ============================================================== -->
+         <!-- Mail Server Integrations -->
+         <!-- ============================================================== -->
+
+
          <!-- ============================================================== -->
          <!-- End Bread crumb and right sidebar toggle -->
          <!-- ============================================================== -->

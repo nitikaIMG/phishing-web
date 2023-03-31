@@ -108,7 +108,9 @@ function editRowHeaderTableAction() {
     $('#modal_mail_header_edit').modal('toggle');
 }
 function saveMailIntegrationbyadmin(e,val){
-    newRandomId = Math.random().toString(36).substring(2, 8);
+    if(nextRandomId==""){
+        nextRandomId  = Math.random().toString(36).substring(2, 8);
+    }
     var cust_header_name = dt_mail_headers_list.rows().data().pluck(0).toArray();
     var cust_header_val = dt_mail_headers_list.rows().data().pluck(1).toArray();
      if(val == 1){
@@ -162,7 +164,7 @@ function saveMailIntegrationbyadmin(e,val){
             data: JSON.stringify({ 
                 status_val:val,
                 action_type: "save_sender_list_by_admin",
-                sender_list_id: newRandomId,
+                sender_list_id: nextRandomId,
                 sender_list_mail_sender_name: mail_sender_name,
                 sender_list_mail_sender_SMTP_server: mail_sender_SMTP_server,
                 sender_list_mail_sender_from: mail_sender_from,
@@ -179,6 +181,7 @@ function saveMailIntegrationbyadmin(e,val){
         }).done(function (response) {
             console.log(response);
             if(response.result == "success"){
+                location.reload();
                 toastr.success('', 'Saved successfully!');
                 $('#mailIntemodal').modal('hide');
                 window.history.replaceState(null,null, location.pathname + '?action=edit&sender=' + nextRandomId);
@@ -190,6 +193,9 @@ function saveMailIntegrationbyadmin(e,val){
         });
 }
 function saveMailIntegration(e){
+    if(nextRandomId==""){
+        nextRandomId  = Math.random().toString(36).substring(2, 8);
+    }
     var cust_header_name = dt_mail_headers_list.rows().data().pluck(0).toArray();
     var cust_header_val = dt_mail_headers_list.rows().data().pluck(1).toArray();
 
@@ -227,7 +233,6 @@ function saveMailIntegration(e){
     } 
     // else
         // $("#mail_sender_from").removeClass("is-invalid");
-
         var cust_headers = [];
         $.each(cust_header_name, function(index, value) {
             cust_headers[cust_header_name[index]] = cust_header_val[index];
@@ -252,7 +257,6 @@ function saveMailIntegration(e){
              }),
             contentType: 'application/json; charset=utf-8'
         }).done(function (response) {
-            console.log(response);
             if(response.result == "success"){
                 // toastr.success('', 'Saved successfully!');
                 location.reload();
@@ -260,7 +264,7 @@ function saveMailIntegration(e){
                 g_deny_navigation = null;
             }
             else
-                toastr.error('', 'Error saving data!');
+                toastr.error('', response.msg);
             enableDisableMe(e);
         });
    }
@@ -567,7 +571,7 @@ function loadTableSenderListAdmin() {
                 var action_items_sender_table = '<div class="d-flex no-block align-items-center"><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="" onclick="document.location=\'mailsenderadmin?action=edit&sender=' + value['sender_list_id'] + '\'" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailSenderCopy(\'' + value['sender_list_id'] + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><a class="" style="margin: 0px;" data-toggle="tooltip" data-placement="top" title="" onclick="promptSenderListDeletion(\'' + value['sender_list_id'] + '\')" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></div>';
                  
 
-                $("#table_mail_sender_list tbody").append("<tr><td></td><td>" + value.sender_name + "</td><td>" + value.sender_SMTP_server + "</td><td>" + value.sender_from + "</td><td>" + value.sender_acc_username + "</td><td>" + cust_header +  "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null || value.status == 0?'-':value.date) + "</td><td>" + action_items_sender_table + "</td><td>" + (value.status == 1?'Third Party':'Default') + "</td></tr>");
+                $("#table_mail_sender_list tbody").append("<tr><td></td><td>" + value.sender_name + "</td><td>" + value.sender_SMTP_server + "</td><td>" + value.sender_from + "</td><td>" + value.sender_acc_username + "</td><td>" + cust_header +  "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null ?'-':value.date) + "</td><td>" + action_items_sender_table + "</td><td>" + (value.status == 1?'Third Party':'Default') + "</td></tr>");
             });
         }
         dt_mail_sender_list = $('#table_mail_sender_list').DataTable({

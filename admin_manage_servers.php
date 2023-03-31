@@ -64,6 +64,8 @@ isAdminSessionValid(true);
          <!-- ============================================================== -->
          <!-- Bread crumb and right sidebar toggle -->
          <!-- ============================================================== -->
+
+
          <div class="page-breadcrumb breadcrumb-withbutton">
             <div class="row align-items-center my-3">
                <div class="col-sm d-flex no-block align-items-center">
@@ -81,69 +83,90 @@ isAdminSessionValid(true);
                <?php } ?>
             </div>
          </div>
+
+         <!-- ============================================================== -->
+         <!-- Mail Server Integrations -->
+         <!-- ============================================================== -->
          <div class="container-fluid">
-            <table class="table">
-               <thead class="thead-dark">
-                  <tr>
-                     <th scope="col fs-1">Service Provider</th>
-                     <th scope="col">Integration</th>
-                     <th scope="col">Features</th>
-                     <th scope="col">Requirements</th>
-                     <th scope="col">Action</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr>
-                     <td>CanIPhish</td>
-                     <td>N/A - Native</td>
-                     <td>
-                        <ul>
-                           <li>Supports domain spoofing</li>
-                           <li>Preconfigured list of sending profiles to choose from</li>
-                           <li>Preconfigured list of phishing emails to choose from</li>
-                           <li>Preconfigured list of phishing websites to choose from</li>
-                           <li>Preconfigured mail service</li>
+            <div class="card">
+                  <div class="card-body">
+                     <div class="row">
+                        <div class="col-md-12 m-t-20">
+                           <div class="row">
+                              <div class="table-responsive">
+                                 <table class="table" class="table table-bordered">
+                                    <thead class="thead-dark">
+                                       <tr>
+                                          <th scope="col fs-1">Service Provider</th>
+                                          <th scope="col">Integration</th>
+                                          <th scope="col">Features</th>
+                                          <th scope="col">Requirements</th>
+                                          <th scope="col">Action</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr>
+                                          <td>CanIPhish</td>
+                                          <td>N/A - Native</td>
+                                          <td>
+                                             <ul>
+                                                <li>Supports domain spoofing</li>
+                                                <li>Preconfigured list of sending profiles to choose from</li>
+                                                <li>Preconfigured list of phishing emails to choose from</li>
+                                                <li>Preconfigured list of phishing websites to choose from</li>
+                                                <li>Preconfigured mail service</li>
 
-                        </ul>
-                     </td>
-                     <td>
-                        <ul>
-                           <li>Allowlisting of CanIPhish mail server IPs (see Knowledge Base)</li>
-                           <li>Verification of target domains</li>
-                        </ul>
-                     </td>
-                     <td><button type="button" class="btn btn-success" data-toggle="modal"
-                           data-target="#mailDefaultIntemodal" id="adminIntegration">Integration
-                        </button></td>
-                  </tr>
-                  <tr>
-                     <td>Third-party SMTP Server</td>
-                     <td>SMTP Relay</td>
-                     <td>
-                        <ul>
-                           <li>Sender profiles may be from any domain under your control</li>
-                           <li>Preconfigured list of phishing emails to choose from</li>
-                           <li>Preconfigured list of phishing websites to choose from</li>
-                           <li>Provides full control over mail delivery</li>
-                        </ul>
-                     </td>
-                     <td>
-                        <ul>
-                           <li>SMTP Server must accept emails via the secure SMTP protocol (TCP port 587)</li>
-                           <li>SMTP server credentials must be provided</li>
-                           <li>Use of default sender profiles will fail SPF checks and require allowlisting</li>
-                           <li>Verification of target domains</li>
-                        </ul>
-                     </td>
-                     <!-- <td><button class="btn btn-success">New Integration</button></td> -->
-                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#mailIntemodal">
-                           New Integration
-                        </button></td>
+                                             </ul>
+                                          </td>
+                                          <td>
+                                             <ul>
+                                                <li>Allowlisting of CanIPhish mail server IPs (see Knowledge Base)</li>
+                                                <li>Verification of target domains</li>
+                                             </ul>
+                                          </td>
+                                          <td><button type="button" class="btn btn-success" data-toggle="modal"
+                                                data-target="#mailDefaultIntemodal" id="adminIntegration">Integration
+                                             </button></td>
+                                       </tr>
+                                       <tr>
+                                          <td>Third-party SMTP Server</td>
+                                          <td>SMTP Relay</td>
+                                          <td>
+                                             <ul>
+                                                <li>Sender profiles may be from any domain under your control</li>
+                                                <li>Preconfigured list of phishing emails to choose from</li>
+                                                <li>Preconfigured list of phishing websites to choose from</li>
+                                                <li>Provides full control over mail delivery</li>
+                                             </ul>
+                                          </td>
+                                          <td>
+                                             <ul>
+                                                <li>SMTP Server must accept emails via the secure SMTP protocol (TCP port 587)</li>
+                                                <li>SMTP server credentials must be provided</li>
+                                                <li>Use of default sender profiles will fail SPF checks and require allowlisting</li>
+                                                <li>Verification of target domains</li>
+                                             </ul>
+                                          </td>
+                                          <!-- <td><button class="btn btn-success">New Integration</button></td> -->
+                                          <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#mailIntemodal">
+                                                New Integration
+                                             </button></td>
 
-                  </tr>
-               </tbody>
-            </table>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+            </div>
          </div>
+          <!-- ============================================================== -->
+         <!-- Mail Server Integrations -->
+         <!-- ============================================================== -->
+
+
          <!-- ============================================================== -->
          <!-- End Bread crumb and right sidebar toggle -->
          <!-- ============================================================== -->
@@ -281,61 +304,6 @@ isAdminSessionValid(true);
                            </div>
                         </div>
 
-                        <!-- <div class="form-group row">
-                                 <label for="mail_sender_mailbox" class="col-sm-3 text-left control-label col-form-label">Mailbox:</label>
-                                 <div class="col-sm-7">
-                                    <div class="row">
-                                       <label class="col-sm-6 text-left control-label col-form-label">Auto mailbox lookup</label>
-                                       <div class="custom-control custom-switch m-t-5 ml-auto row">
-                                          <label class="switch">
-                                             <input type="checkbox" id="cb_auto_mailbox" checked>
-                                             <span class="slider round"></span>
-                                          </label>
-                                       </div>
-                                    </div>
-
-                                    <input type="text" class="form-control" id="mail_sender_mailbox" placeholder="{imap.mailserver.com:993/imap/ssl}INBOX" disabled="">
-                                    <div class="text-right m-t-5">
-                                       <i class="mdi mdi-information cursor-pointer" data-container="body" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Mailbox path receiving replies from users. Mailbox of email account provided in 'Account username' is selected by default if no mai header 'REPLY-TO' is specified. Ref: https://www.php.net/manual/en/function.imap-open.php"></i>
-                                       <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" title="Verify mailbox access" onclick="verifyMailBoxAccess()">Verify</button>
-                                    </div>
-                                 </div>
-                              </div> -->
-                        <!-- </div> -->
-                        <!-- <div class="col-md-6">
-                              <div class="form-group row">
-                                 <label class="text-left control-label col-form-label">Custom Email Header:</label>
-                              </div>
-                              <div class="form-group row">
-                                 <div class="col-sm-5">
-                                    <input type="text" class="row form-control" id="mail_sender_custome_header_name" placeholder="X-Header Name">
-                                 </div>
-                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="mail_sender_custome_header_val" placeholder="Header value">
-                                 </div>
-                                 <div class="col-sm-2 d-flex align-items-center">
-                                    <button type="button" class="btn btn-success gap-1 justify-content-center d-flex align-items-center" onclick="addMailHeaderToTable()"><i class="mdi mdi-plus-outline"></i> Add</button>
-                                 </div>
-                              </div>
-                              <div class="form-group row m-r-0">
-                                 <div class="table-responsive">
-                                    <table id="table_mail_headers_list" class="table table-bordered">
-                                       <thead>
-                                          <tr>
-                                             <th>Header Name</th>
-                                             <th>Header Value</th>
-                                             <th>Actions</th>
-                                          </tr>
-                                       </thead>
-                                       <tbody>
-                                       </tbody>
-                                    </table>
-                                 </div>
-                              </div>
-                              <hr />
-                              
-                           </div> -->
-                        <!-- </div> -->
                         <hr />
                      </div>
                   </div>

@@ -17,10 +17,10 @@ require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/Exception.php'
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php');
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
 
-
-if(isSessionValid() == false && isAdminSessionValid() == false){
-	die("Access denied");
-}
+// print_r(isSessionValid());die;
+// if(isSessionValid() == false && isAdminSessionValid() == false){
+// 	die("Access denied");
+// }
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -592,6 +592,12 @@ function uploadMailBodyFiles($conn,&$POSTJ){
 
 //---------------------------------------Sender List Section --------------------------------
 function saveSenderList($conn, &$POSTJ,$userid){
+	$adminid = $_SESSION['admincontact_mail'];
+	if(isset($adminid)){
+		$user_id = 1;
+	}else{
+		$user_id = $_SESSION['user'][0];
+	}
 	$sender_list_id = $POSTJ['sender_list_id'];
 	$sender_list_mail_sender_name = $POSTJ['sender_list_mail_sender_name'];
 	$sender_list_mail_sender_SMTP_server = $POSTJ['sender_list_mail_sender_SMTP_server'];
@@ -614,14 +620,22 @@ function saveSenderList($conn, &$POSTJ,$userid){
 		}
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list(sender_list_id,userid,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param('ssssssssssss', $sender_list_id,$userid,$sender_list_mail_sender_name,$sender_list_mail_sender_SMTP_server,$sender_list_mail_sender_from,$sender_list_mail_sender_acc_username,$sender_list_mail_sender_acc_pwd,$auto_mailbox,$mail_sender_mailbox,$sender_list_cust_headers,$dsn_type,$GLOBALS['entry_time']);
+
+		$resultexists = mysqli_query($conn, "SELECT * FROM `tb_core_mailcamp_sender_list` WHERE `userid` = $user_id AND `sender_acc_username` LIKE '$sender_list_mail_sender_acc_username' AND `sender_acc_pwd` LIKE '$sender_list_mail_sender_acc_pwd'");
+
+		if(mysqli_num_rows($resultexists) > 0 ){
+			echo json_encode(['result' => 'failed','msg'=>'sender already exists !']);
+			exit();			
+		}else{
+			$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list(sender_list_id,userid,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,date) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+			$stmt->bind_param('ssssssssssss', $sender_list_id,$userid,$sender_list_mail_sender_name,$sender_list_mail_sender_SMTP_server,$sender_list_mail_sender_from,$sender_list_mail_sender_acc_username,$sender_list_mail_sender_acc_pwd,$auto_mailbox,$mail_sender_mailbox,$sender_list_cust_headers,$dsn_type,$GLOBALS['entry_time']);
+		}
 	}
 	
 	if ($stmt->execute() === TRUE)
-		echo json_encode(['result' => 'success']);
+		echo json_encode(['result' => 'success','msg'=>'successfully added !']);
 	else 
-		echo json_encode(['result' => 'failed']);
+		echo json_encode(['result' => 'failed' ,'msg'=>'error saving data !']);
     }
 function saveSenderListByAdmin($conn, &$POSTJ){
 
@@ -677,9 +691,6 @@ function getSenderList($conn,$userid){
         	array_push($resp1,$row);
 		}
 		$main_resp = array_merge($resp,$resp1);
-		// print_r($main_resp);
-		// die();
-
 		echo json_encode($main_resp, JSON_INVALID_UTF8_IGNORE);
 	}
 	else
