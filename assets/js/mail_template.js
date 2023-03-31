@@ -1,6 +1,7 @@
 var dt_mail_template_list, store_info;
 var g_tracker_image_type = ''; //0=no tracker image, 1= default tracker image, 2= custom tracker image
 var g_sender_list;
+var app_url = (window.location.href).split('phishing')[0];
 
 var bt_media = `<div class="note-btn-group btn-group note-style">
         <button type="button" class="note-btn btn btn-light btn-sm note-btn-bold" tabindex="-1" title="Link" data-toggle="tooltip" data-placement="bottom" onclick="$('#modal_media_link_text').val($('#summernote').summernote('createRange').toString());$('#modal_media_link').modal('toggle');">
@@ -349,14 +350,14 @@ function loadTableMailTemplateList() {
             action_type: "get_mail_template_list"
          })
     }).done(function (data) {
-        console.log(data);
+        console.log(data);   
            if(!data['error']){  // no data
             $.each(data, function(key, value) {
                 var action_items_mail_template_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='mailtemplate?action=edit&template=` + value.mail_template_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailTemplateCopy('` + value.mail_template_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptMailTemplateDeletion('` + value.mail_template_id + `')"><i class="mdi mdi-delete-variant"></i></button></div>`;
 
                 var is_attachment =  Object.keys(value.attachment).length>0? "<i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i><span hidden>Yes</span>" : "<i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i><span hidden>No</span>";
 
-                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a target='_blank' href='http://localhost/phishing/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
+                $("#table_mail_template_list tbody").append("<tr><td></td><td>" + value.mail_template_name + "</td><td>" + value.mail_template_subject + "</td><td><a target='_blank' href="+app_url+"'/phishing/mail.php?id="+ value.mail_template_id + "'>" + $('<div>').text(value.mail_template_content).html() + "...</a></td><td>" + is_attachment + "</td><td data-order=\"" + getTimestamp(value.date)
                  + "\">" + value.date + "</td><td>" + action_items_mail_template_table + "</td></tr>");
             });
         }
@@ -695,7 +696,6 @@ $('#selector_sample_mailtemplates').on('change', function() {
 });
 
 function insertMailTemplate(){
-    console.log("eee");
     $.post({
         url: "manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
@@ -708,7 +708,7 @@ function insertMailTemplate(){
         if(!data.error){ 
             $('#mail_template_name').val($("#selector_sample_mailtemplates").val());
             $('#mail_template_subject').val(data.mail_template_subject);
-            $('#summernote').summernote('code', data.mail_template_content.replace("http://localhost", location.protocol + `//` + document.domain));
+            $('#summernote').summernote('code', data.mail_template_content.replace(app_url, location.protocol + `//` + document.domain));
             $("#mail_content_type_selector").val(data.mail_content_type).trigger("change");
 
             if(data.timage_type == 0)
