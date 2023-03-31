@@ -11,6 +11,11 @@ isSessionValid(true);
     <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
    <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/style.min.css">
    <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/dataTables.foundation.min.css">
+   <style>
+    .table-bordered{
+        border: 1px solid #dee2e6 !important;
+    }
+   </style>
 </head>
 
 <body class="layout-boxed alt-menu">
@@ -41,10 +46,18 @@ isSessionValid(true);
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
 
+        <div id="main-wrapper">
+
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-12 ms-2 d-flex no-block align-items-center">
+                        <h4 class="page-title">User Dashboard</h4>
+                    </div>
+                </div>
+            </div>
+
             <div class="layout-px-spacing">
-
                 <div class="middle-content container-xxl p-0">
-
                     <div class="row layout-top-spacing">
                         <div class="row">
                             <div class="col-12">
@@ -160,7 +173,7 @@ isSessionValid(true);
                                                 <div class="col-md-12 m-t-20">
                                                     <div class="row">
                                                         <div class="table-responsive">
-                                                            <table id="table_mail_report_list" class="table table-bordered">
+                                                            <table id="table_mail_report_list" class="table table-bordered w-100 style-3 dt-table-hover dataTable no-footer">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Reported By</th>
@@ -191,7 +204,7 @@ isSessionValid(true);
                                                 <div class="col-md-12 m-t-20">
                                                     <div class="row">
                                                         <div class="table-responsive">
-                                                            <table id="table_mail_search_history_list" class="table table-bordered">
+                                                            <table id="table_mail_search_history_list" class="table table-bordered w-100 style-3 dt-table-hover dataTable no-footer">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Domain Name</th>
@@ -906,11 +919,8 @@ isSessionValid(true);
                         </div> -->
 
                     </div>
-
                 </div>
-
             </div>
-
 
             <?php include(dirname(__FILE__).'/components/foot.php'); ?>
 
@@ -921,23 +931,45 @@ isSessionValid(true);
     <!-- END MAIN CONTAINER -->
 
     <?php include(dirname(__FILE__).'/components/script.php'); ?>
+
     <script src="<?php echo url ?>/js/mail_campaign_dashboard.js"></script>
     <script src="<?php echo url ?>/js/libs/apexcharts.js"></script>
-    <script src="<?php echo url ?>/js/libs/jquery/datatables.js"></script>
-    <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script>
+    <!-- <script src="<?php echo url ?>/js/libs/jquery/datatables.js"></script> -->
+    <!-- <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script>
     <script src="<?php echo url ?>/js/libs/custom.min.js"></script>
-    <script src="<?php echo url ?>/js/libs/jquery/jquery-3.6.0.min.js"></script>
+    <script src="<?php echo url ?>/js/libs/jquery/jquery-3.6.0.min.js"></script> -->
 
-    <!-- database js -->
-    <link rel="stylesheet" type="text/css" href=" https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">  
-      <link rel="stylesheet" type="text/css" href=" https://cdn.datatables.net/buttons/2.3.5/css/buttons.dataTables.min.css"> 
 
-    <script>
+
+    <script src="<?php echo url ?>/js/libs/js.cookie.min.js"></script>
+      <!-- Bootstrap tether Core JavaScript -->
+      <script src="<?php echo url ?>/js/libs/popper.min.js"></script>
+      <script src="<?php echo url ?>/js/libs/bootstrap.min.js"></script>
+      <!--Menu sidebar -->
+      <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script>
+      <!--Custom JavaScript -->
+      <script src="<?php echo url ?>/js/libs/custom.min.js"></script>
+      <!-- this page js -->   
+      <script src="<?php echo url ?>/js/common_scripts.js"></script>
+      <!-- Employee List libraries -->
+      <script src="https://www.virtuosoft.eu/code/bootstrap-duallistbox/bootstrap-duallistbox/v3.0.2/jquery.bootstrap-duallistbox.js"></script>
+      <!-- Employee List libraries -->/
+
+
+      <script>
         loadTableCampaignResult2();
         loadTableCampaignResult3();
         loadEmpReportData();
     </script>
 
+
+      <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/jquery/datatables.js"></script> 
+      <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/moment.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/bootstrap-datetimepicker.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/moment.min.js"></script>
+      <script defer src="<?php echo url ?>/js/libs/moment-timezone-with-data.min.js"></script>
 
 </body>
 

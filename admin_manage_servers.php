@@ -198,8 +198,8 @@ isAdminSessionValid(true);
                                        <th>Acc Username</th>
                                        <th>Custom Headers</th>
                                        <th>Date Created</th>
-                                       <th>Actions</th>
                                        <th>Status</th>
+                                       <th>Actions</th>
                                     </tr>
                                  </thead>
                                  <tbody>
