@@ -26,7 +26,11 @@ date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
 header('Content-Type: application/json');
 $userid = $_SESSION['user'][0];
-if (isset($_POST)) {
+// $userid = $_SESSION['admincontact_mail'];
+
+
+if (isset($_POST)){
+	
 	$POSTJ = json_decode(file_get_contents('php://input'),true);
 
 	if(isset($POSTJ['action_type'])){
@@ -72,8 +76,16 @@ if (isset($_POST)) {
 
 		if($POSTJ['action_type'] == "save_sender_list")
 			saveSenderList($conn, $POSTJ,$userid);
+		if($POSTJ['action_type'] == "save_sender_list_by_admin")
+			saveSenderListByAdmin($conn, $POSTJ);
 		if($POSTJ['action_type'] == "get_sender_list")
-			getSenderList($conn,$userid);	
+			getSenderList($conn,$userid);
+		if($POSTJ['action_type'] == "get_employee_report")
+		    getEmployeeReport($conn);	
+		if($POSTJ['action_type'] == "check_default_integration")
+		checkDefaultIntegration($conn);	
+		if($POSTJ['action_type'] == "get_sender_list_admin")
+			getSenderListAdmin($conn);	
 		if($POSTJ['action_type'] == "get_sender_from_sender_list_id")
 			getSenderFromSenderListId($conn,$POSTJ['sender_list_id']);	
 		if($POSTJ['action_type'] == "delete_mail_sender_list_from_list_id")
@@ -610,23 +622,99 @@ function saveSenderList($conn, &$POSTJ,$userid){
 		echo json_encode(['result' => 'success']);
 	else 
 		echo json_encode(['result' => 'failed']);
+    }
+function saveSenderListByAdmin($conn, &$POSTJ){
+
+	$adminid = $_SESSION['admincontact_mail'];
+	if(isset($adminid)){
+		$user_id = 1;
+	$status = $POSTJ['status_val'];
+	$sender_list_id = $POSTJ['sender_list_id'];
+	$sender_list_mail_sender_name = $POSTJ['sender_list_mail_sender_name'];
+	$sender_list_mail_sender_SMTP_server = $POSTJ['sender_list_mail_sender_SMTP_server'];
+	$sender_list_mail_sender_from = $POSTJ['sender_list_mail_sender_from'];
+	$sender_list_mail_sender_acc_username = $POSTJ['sender_list_mail_sender_acc_username'];
+	$sender_list_mail_sender_acc_pwd = $POSTJ['sender_list_mail_sender_acc_pwd'];
+	$auto_mailbox = $POSTJ['cb_auto_mailbox'];
+	$mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	$sender_list_cust_headers = json_encode($POSTJ['sender_list_cust_headers']); 
+		$dsn_type = $POSTJ['dsn_type'];
+
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list(sender_list_id,userid,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,auto_mailbox,sender_mailbox,cust_headers,dsn_type,date,status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param('sssssssssssss', $sender_list_id,$user_id,$sender_list_mail_sender_name,$sender_list_mail_sender_SMTP_server,$sender_list_mail_sender_from,$sender_list_mail_sender_acc_username,$sender_list_mail_sender_acc_pwd,$auto_mailbox,$mail_sender_mailbox,$sender_list_cust_headers,$dsn_type,$GLOBALS['entry_time'],$status);
+
+		if ($stmt->execute() === TRUE)
+		echo json_encode(['result' => 'success']);
+	else 
+		echo 'false';die();
+		echo json_encode(['result' => 'failed']);
+	}
 }
 
+function getEmployeeReport($conn){
+    $response = [];
+	echo json_encode(['status'=>1]);
+} 
+
 function getSenderList($conn,$userid){
+	
+	$resp = [];
+	$resp1 = [];
+	$DTime_info = getTimeInfo($conn);
+	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date,status FROM tb_core_mailcamp_sender_list where userid=$userid");
+	$result1 = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date,status FROM tb_core_mailcamp_sender_list where status = 0");
+	
+	if(mysqli_num_rows($result) > 0 || mysqli_num_rows($result1) > 0){
+		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
+			$row["cust_headers"] = json_decode($row["cust_headers"]);	//avoid double json encoding
+			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
+        	array_push($resp,$row);
+		}
+		foreach (mysqli_fetch_all($result1, MYSQLI_ASSOC) as $row){
+			
+			$row["cust_headers"] = json_decode($row["cust_headers"]);	//avoid double json encoding
+			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
+        	array_push($resp1,$row);
+		}
+		$main_resp = array_merge($resp,$resp1);
+		// print_r($main_resp);
+		// die();
+
+		echo json_encode($main_resp, JSON_INVALID_UTF8_IGNORE);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+	$result->close();
+}
+function getSenderListAdmin($conn){
+
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date FROM tb_core_mailcamp_sender_list where userid=$userid");
+	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date,status FROM tb_core_mailcamp_sender_list where userid=1");
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["cust_headers"] = json_decode($row["cust_headers"]);	//avoid double json encoding
 			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
         	array_push($resp,$row);
 		}
+    
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
 	}
 	else
 		echo json_encode(['error' => 'No data']);	
 	$result->close();
+}
+function checkDefaultIntegration($conn){
+	$myarr = [];
+	$sql ="SELECT * FROM tb_core_mailcamp_sender_list where status = 0";
+	$result = mysqli_query($conn, $sql);
+	foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
+		array_push($myarr,$row);
+	}
+     $arr_cnt = count($myarr);
+	  if($arr_cnt >= 1){
+		  echo json_encode(true, JSON_INVALID_UTF8_IGNORE);
+	  }
 }
 
 function getSenderFromSenderListId($conn, $sender_list_id){

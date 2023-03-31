@@ -801,6 +801,7 @@ function loadTableCampaignResult1(){
             action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1",
          }),
     }).done(function (data) {
+        console.log(data);
         $(function() {
             if(!data.error){
                 $("#succ_camp").append(data.total);
@@ -977,6 +978,7 @@ function loadTableCampaignResult1(){
             });
 
             mailchart(months);
+          
             var sent_mail_percent = ((data.year_count)/data.total)*100;
             var open_mail_percent = ((data.opend_mail)/data.total)*100;
             updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
@@ -988,7 +990,7 @@ function loadTableCampaignResult1(){
 }
 
 function mailchart(months) {
-
+  
     var data1 = [];
     var data2 = [];
     var data3 = [];
@@ -1067,6 +1069,89 @@ function mailchart(months) {
       chart.render();
 
 }
+
+function loadTableCampaignResult2(){
+    var options = {
+        series: [{
+          name: "Desktops",
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+      }],
+        chart: {
+        height: 350,
+        type: 'line',
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'straight'
+      },
+      title: {
+        text: '',
+        align: 'left'
+      },
+      grid: {
+        row: {
+          colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+          opacity: 0.5
+        },
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+      }
+      };
+
+      var chart = new ApexCharts(document.querySelector("#dashboardchartmail"), options);
+      chart.render();
+}
+    function loadTableCampaignResult3(){
+        var options = {
+            series: [44, 55, 41, 17, 15],
+            chart: {
+            width: 400,
+            type: 'donut',
+          },
+          plotOptions: {
+            pie: {
+              startAngle: -90,
+              endAngle: 270
+            }
+          },
+          dataLabels: {
+            enabled: false
+          },
+          fill: {
+            type: 'gradient',
+          },
+          legend: {
+            formatter: function(val, opts) {
+              return val + " - " + opts.w.globals.series[opts.seriesIndex]
+            }
+          },
+          title: {
+            text: '',
+          
+          },
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }]
+          };
+  
+          var chart = new ApexCharts(document.querySelector("#roundchartmail"), options);
+          chart.render();
+        
+    }
 
 function exportReportAction(e) {
     if(dt_mail_campaign_result.rows().count() > 0){
@@ -1194,4 +1279,53 @@ function hideMeFromPublic(){
     $(".page-wrapper").css('margin-left',0);
     $(".item_private").hide();
 }
+
+function loadEmpReportData(){
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_employee_report"
+         })
+    }).done(function (data) {
+      if(data.status == 1){
+        var action_items_sender_table = '-';
+        $("#table_mail_report_list tbody").append("<tr><td>" +1+ "</td><td>" + 1 + "</td><td>" +1 + "</td><td>" + 1 + "</td></tr>");
+      }
+
+        dt_mail_sender_list = $('#table_mail_report_list').DataTable({
+            "aaSorting": [6, 'asc'],
+            'pageLength': 20,
+            'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
+            'columnDefs': [{
+                "targets": 7,
+                "className": "dt-center"
+            }],
+            "preDrawCallback": function(settings) {
+                $('#table_mail_report_list tbody').hide();
+            },
+
+            "drawCallback": function() {
+                $('#table_mail_report_list tbody').fadeIn(500);
+                $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+            },
+
+            "initComplete": function() {
+                $("label>select").select2({minimumResultsForSearch: -1, });
+            }
+        }, {
+            "order": [[1, 'asc']]
+        }); 
+
+        dt_mail_sender_list.on('order.dt_mail_sender_list search.dt_mail_sender_list', function() {
+            dt_mail_sender_list.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });   
+}
+   
 

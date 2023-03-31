@@ -112,7 +112,7 @@ require_once (dirname(__FILE__).'/includes/config.php');
 
                                 <div class="col-12">
                                     <div class="text-center">
-                                        <p class="mb-0">Already have an account ? <a href=".signin.php" class="text-warning">Sign in</a></p>
+                                        <p class="mb-0">Already have an account ? <a href="signin.php" class="text-warning">Sign in</a></p>
                                     </div>
                                 </div>
                                 

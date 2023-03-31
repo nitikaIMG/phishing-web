@@ -66,6 +66,8 @@ function addMailHeaderToTable() {
     $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
 }
 
+
+
 function promptMailHeaderDeletion(id) {
     globalModalValue = id;
     $('#modal_mail_header_delete').modal('toggle');
@@ -105,10 +107,168 @@ function editRowHeaderTableAction() {
 
     $('#modal_mail_header_edit').modal('toggle');
 }
+function saveMailIntegrationbyadmin(e,val){
+    newRandomId = Math.random().toString(36).substring(2, 8);
+    var cust_header_name = dt_mail_headers_list.rows().data().pluck(0).toArray();
+    var cust_header_val = dt_mail_headers_list.rows().data().pluck(1).toArray();
+     if(val == 1){
+    var mail_sender_name = $('#mail_sender_name_admin').val().trim();
+    var mail_sender_SMTP_server = $('#mail_sender_SMTP_server_admin').val().trim();
+    var mail_sender_from = $('#mail_sender_from_admin').val().trim();
+    var mail_sender_acc_username = $('#mail_sender_acc_username_admin').val().trim();
+    var mail_sender_acc_pwd = $('#mail_sender_acc_pwd_admin').val().trim();
+     }
+     else{
+    var mail_sender_name = $('#mail_sender_name_admin_default').val().trim();
+    var mail_sender_SMTP_server = $('#mail_sender_SMTP_server_admin_default').val().trim();
+    var mail_sender_from = $('#mail_sender_from_admin_default').val().trim();
+    var mail_sender_acc_username = $('#mail_sender_acc_username_admin_default').val().trim();
+    var mail_sender_acc_pwd = $('#mail_sender_acc_pwd_admin_default').val().trim();
+     }
+
+    if (RegTest(mail_sender_name, "COMMON") == false) {
+        // $("#mail_sender_name1").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } else
+        // $("#mail_sender_name1").removeClass("is-invalid");
+
+    if (mail_sender_SMTP_server == '') {
+        // $("#mail_sender_SMTP_server").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } else
+        // $("#mail_sender_SMTP_server").removeClass("is-invalid");
+
+    if (mail_sender_acc_username == '') {
+        // $("#mail_sender_acc_username").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } else
+        $("#mail_sender_acc_username").removeClass("is-invalid");
+
+    if (mail_sender_from == '') {
+        // $("#mail_sender_from").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } 
+    var cust_headers = [];
+        $.each(cust_header_name, function(index, value) {
+            cust_headers[cust_header_name[index]] = cust_header_val[index];
+        });
+        enableDisableMe(e);
+        $.post({
+            url: "manager/userlist_campaignlist_mailtemplate_manager",
+            data: JSON.stringify({ 
+                status_val:val,
+                action_type: "save_sender_list_by_admin",
+                sender_list_id: newRandomId,
+                sender_list_mail_sender_name: mail_sender_name,
+                sender_list_mail_sender_SMTP_server: mail_sender_SMTP_server,
+                sender_list_mail_sender_from: mail_sender_from,
+                sender_list_mail_sender_acc_username: mail_sender_acc_username,
+                sender_list_mail_sender_acc_pwd: mail_sender_acc_pwd,
+                // mail_sender_mailbox: mail_sender_mailbox,
+                // cb_auto_mailbox: cb_auto_mailbox,
+                mail_sender_mailbox: '',
+                cb_auto_mailbox: 0,
+                sender_list_cust_headers: Object.assign({}, cust_headers),
+                dsn_type: g_dsn_type
+             }),
+            contentType: 'application/json; charset=utf-8'
+        }).done(function (response) {
+            console.log(response);
+            if(response.result == "success"){
+                toastr.success('', 'Saved successfully!');
+                $('#mailIntemodal').modal('hide');
+                window.history.replaceState(null,null, location.pathname + '?action=edit&sender=' + nextRandomId);
+                g_deny_navigation = null;
+            }
+            else
+                toastr.error('', 'Error saving data!');
+            enableDisableMe(e);
+        });
+}
+function saveMailIntegration(e){
+    var cust_header_name = dt_mail_headers_list.rows().data().pluck(0).toArray();
+    var cust_header_val = dt_mail_headers_list.rows().data().pluck(1).toArray();
+
+    var mail_sender_name = $('#mail_sender_name1').val().trim();
+    var mail_sender_SMTP_server = $('#mail_sender_SMTP_server1').val().trim();
+    var mail_sender_from = $('#mail_sender_from1').val().trim();
+    var mail_sender_acc_username = $('#mail_sender_acc_username1').val().trim();
+    var mail_sender_acc_pwd = $('#mail_sender_acc_pwd1').val().trim();
+     
+    if (RegTest(mail_sender_name, "COMMON") == false) {
+        // $("#mail_sender_name1").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } else
+        // $("#mail_sender_name1").removeClass("is-invalid");
+
+    if (mail_sender_SMTP_server == '') {
+        // $("#mail_sender_SMTP_server").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } else
+        // $("#mail_sender_SMTP_server").removeClass("is-invalid");
+
+    if (mail_sender_acc_username == '') {
+        // $("#mail_sender_acc_username").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } else
+        $("#mail_sender_acc_username").removeClass("is-invalid");
+
+    if (mail_sender_from == '') {
+        // $("#mail_sender_from").addClass("is-invalid");
+        toastr.error('', 'Empty/unsupported character!');
+        return;
+    } 
+    // else
+        // $("#mail_sender_from").removeClass("is-invalid");
+
+        var cust_headers = [];
+        $.each(cust_header_name, function(index, value) {
+            cust_headers[cust_header_name[index]] = cust_header_val[index];
+        });
+        enableDisableMe(e);
+        $.post({
+            url: "manager/userlist_campaignlist_mailtemplate_manager",
+            data: JSON.stringify({ 
+                action_type: "save_sender_list",
+                sender_list_id: nextRandomId,
+                sender_list_mail_sender_name: mail_sender_name,
+                sender_list_mail_sender_SMTP_server: mail_sender_SMTP_server,
+                sender_list_mail_sender_from: mail_sender_from,
+                sender_list_mail_sender_acc_username: mail_sender_acc_username,
+                sender_list_mail_sender_acc_pwd: mail_sender_acc_pwd,
+                // mail_sender_mailbox: mail_sender_mailbox,
+                // cb_auto_mailbox: cb_auto_mailbox,
+                mail_sender_mailbox: '',
+                cb_auto_mailbox: 0,
+                sender_list_cust_headers: Object.assign({}, cust_headers),
+                dsn_type: g_dsn_type
+             }),
+            contentType: 'application/json; charset=utf-8'
+        }).done(function (response) {
+            console.log(response);
+            if(response.result == "success"){
+                // toastr.success('', 'Saved successfully!');
+                location.reload();
+                window.history.replaceState(null,null, location.pathname + '?action=edit&sender=' + nextRandomId);
+                g_deny_navigation = null;
+            }
+            else
+                toastr.error('', 'Error saving data!');
+            enableDisableMe(e);
+        });
+   }
 
 function saveMailSenderGroup(e) {
     var cust_header_name = dt_mail_headers_list.rows().data().pluck(0).toArray();
     var cust_header_val = dt_mail_headers_list.rows().data().pluck(1).toArray();
+    // console.log(cust_header_val);
 
     var mail_sender_name = $('#mail_sender_name').val().trim();
     var mail_sender_SMTP_server = $('#mail_sender_SMTP_server').val().trim();
@@ -326,19 +486,24 @@ function loadTableSenderList() {
             action_type: "get_sender_list"
          })
     }).done(function (data) {
+        
         if(!data.error){  // no data
             $.each(data, function(key, value) {
                 var cust_header = "";
                 if(!$.isEmptyObject(value.cust_headers)) 
-                    $.each(value.cust_headers, function(header_name, header_value) {
+                    $.each(value.cust_headers, function(header_name, header_value){
                         cust_header += header_name + ": " + header_value + "</br>";
                     });
                 else
                     cust_header = "-";
+                  if(value.status == 1){
+                      var action_items_sender_table = '<div class="d-flex no-block align-items-center"><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="" onclick="document.location=\'mailsender?action=edit&sender=' + value['sender_list_id'] + '\'" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailSenderCopy(\'' + value['sender_list_id'] + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><a class="" style="margin: 0px;" data-toggle="tooltip" data-placement="top" title="" onclick="promptSenderListDeletion(\'' + value['sender_list_id'] + '\')" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></div>';
+                  }
+                  else{
+                    var action_items_sender_table = '-';
+                  }
 
-                var action_items_sender_table = '<div class="d-flex no-block align-items-center"><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="" onclick="document.location=\'mailsender?action=edit&sender=' + value['sender_list_id'] + '\'" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailSenderCopy(\'' + value['sender_list_id'] + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><a class="" style="margin: 0px;" data-toggle="tooltip" data-placement="top" title="" onclick="promptSenderListDeletion(\'' + value['sender_list_id'] + '\')" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></div>';
-
-                $("#table_mail_sender_list tbody").append("<tr><td></td><td>" + value.sender_name + "</td><td>" + value.sender_SMTP_server + "</td><td>" + value.sender_from + "</td><td>" + value.sender_acc_username + "</td><td>" + cust_header +  "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null?'-':value.date) + "</td><td>" + action_items_sender_table + "</td></tr>");
+                $("#table_mail_sender_list tbody").append("<tr><td></td><td>" + value.sender_name + "</td><td>" + value.sender_SMTP_server + "</td><td>" + value.sender_from + "</td><td>" + value.sender_acc_username + "</td><td>" + cust_header +  "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null ||value.status == 0 ?'-':value.date) + "</td><td>" + action_items_sender_table + "</td></tr>");
             });
         }
 
@@ -377,6 +542,83 @@ function loadTableSenderList() {
     });   
 }
 
+
+function loadTableSenderListAdmin() {
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_sender_list_admin"
+         })
+    }).done(function (data) {
+          
+        if(!data.error){  // no data
+            $.each(data, function(key, value) {
+                
+                var cust_header = "";
+                if(!$.isEmptyObject(value.cust_headers)) 
+                    $.each(value.cust_headers, function(header_name, header_value) {
+                        cust_header += header_name + ": " + header_value + "</br>";
+                    });
+                else
+                    cust_header = "-";
+                   
+            
+                var action_items_sender_table = '<div class="d-flex no-block align-items-center"><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="" onclick="document.location=\'mailsenderadmin?action=edit&sender=' + value['sender_list_id'] + '\'" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a><a class="" style="margin: 6px;" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailSenderCopy(\'' + value['sender_list_id'] + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></a><a class="" style="margin: 0px;" data-toggle="tooltip" data-placement="top" title="" onclick="promptSenderListDeletion(\'' + value['sender_list_id'] + '\')" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></div>';
+                 
+
+                $("#table_mail_sender_list tbody").append("<tr><td></td><td>" + value.sender_name + "</td><td>" + value.sender_SMTP_server + "</td><td>" + value.sender_from + "</td><td>" + value.sender_acc_username + "</td><td>" + cust_header +  "</td><td data-order=\"" + getTimestamp(value.date) + "\">" + (value.date==null || value.status == 0?'-':value.date) + "</td><td>" + action_items_sender_table + "</td><td>" + (value.status == 1?'Third Party':'Default') + "</td></tr>");
+            });
+        }
+        dt_mail_sender_list = $('#table_mail_sender_list').DataTable({
+            "aaSorting": [6, 'asc'],
+            'pageLength': 20,
+            'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
+            'columnDefs': [{
+                "targets": 7,
+                "className": "dt-center"
+            }],
+            "preDrawCallback": function(settings) {
+                $('#table_mail_sender_list tbody').hide();
+            },
+
+            "drawCallback": function() {
+                $('#table_mail_sender_list tbody').fadeIn(500);
+                $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+            },
+
+            "initComplete": function() {
+                $("label>select").select2({minimumResultsForSearch: -1, });
+            }
+        }, {
+            "order": [[1, 'asc']]
+        }); 
+
+        dt_mail_sender_list.on('order.dt_mail_sender_list search.dt_mail_sender_list', function() {
+            dt_mail_sender_list.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });   
+}
+
+function CheckDefaultIntegration(){
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "check_default_integration"
+         })
+    }).done(function (data) {
+            if(data == true){
+                // $('#adminIntegration').ad
+                $('#adminIntegration').prop('disabled', true);
+            }
+    });
+}
 //----------------------------------------------------
 function modalTestDeliveryAction(e){
     var cust_header_name = dt_mail_headers_list.rows().data().pluck(0).toArray();
