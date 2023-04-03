@@ -1330,7 +1330,7 @@ function loadDashChart(day1,day2){
           data: day2
               }],
         chart: {
-        height: 350,
+        height: 250,
         type: 'line',
         zoom: {
           enabled: false
