@@ -73,9 +73,9 @@
                     <li class="menu <?php echo basename($_SERVER['PHP_SELF']) == 'mailtemplate.php' ? 'active' : ''; ?>">
                         <a href="<?=base_url?>mailtemplate"> Email Template </a>
                     </li>
-                    <li class="menu <?php echo basename($_SERVER['PHP_SELF']) == 'mailsender.php' ? 'active' : ''; ?>">
-                        <a href="<?=base_url?>mailsender"> Sender List </a>
-                    </li>         
+                    <!-- <li class="menu <!?php echo basename($_SERVER['PHP_SELF']) == 'mailsender.php' ? 'active' : ''; ?>">
+                        <a href="<!?=base_url?>mailsender"> Sender List </a>
+                    </li>          -->
                 </ul>
         </li>
 
