@@ -44,7 +44,6 @@ if (isset($_POST)) {
 			pullMailCampaignFieldData($conn);
 		if($POSTJ['action_type'] == "start_stop_mailCampaign")
 			startStopMailCampaign($conn,$POSTJ['campaign_id'],$POSTJ['action_value']);		
-			
 		if($POSTJ['action_type'] == "get_user_group_data")
 			getUserGroupData($conn,$POSTJ['campaign_id']);
 		if($POSTJ['action_type'] == "get_mail_replied")
@@ -53,6 +52,10 @@ if (isset($_POST)) {
 			multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn,$POSTJ);
 		if($POSTJ['action_type'] == "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1")
 			multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn,$POSTJ);
+		if($POSTJ['action_type'] == "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_acc_to_week")
+		   multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week($conn,$POSTJ);
+		if($POSTJ['action_type'] == "get_employee_report")
+		   getEmployeeReport($conn);
 		if($POSTJ['action_type'] == "download_report")
 			downloadReport($conn, $POSTJ['campaign_id'],$POSTJ['selected_col'],$POSTJ['dic_all_col'],$POSTJ['file_name'],$POSTJ['file_format'],$POSTJ['tb_data_single']);
 	}
@@ -423,6 +426,7 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 }
 
 function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POSTJ){
+	
     $resp = [];
 	$userid=$_SESSION['user'][0];
 
@@ -461,7 +465,7 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POS
 	$stmtyear->execute();
 	$resultyear = $stmtyear->get_result();
 	$rowsyear = $resultyear->fetch_all(MYSQLI_ASSOC);
-
+    
 	if(mysqli_num_rows($result) > 0){
 		foreach ($rows as $row){
 			$row['scheduled_datetime'] = chnageutcformate($row['scheduled_date']);
@@ -474,10 +478,8 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POS
 		$opend_mail = count($rows3);
 		$sent_failed_count = count($rows4);
 
-
+        //  print_r($resp);die();
 		echo json_encode(['resp'=>$resp,'total'=>$total,'year_count'=>$year_count,'opend_mail'=>$opend_mail,'sent_failed_count'=>$sent_failed_count,'past_camp'=>$past_camp,'phishingmail'=>$rowsyear], JSON_INVALID_UTF8_IGNORE);
-
-
 }
 
 function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name,$file_format,$tb_data_single){
@@ -678,5 +680,116 @@ function chnagelocalformate($conn,$date){
 		return false;
 	}
 }
+
+function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week($conn, $POSTJ){
+
+	$resp = [];
+	$userid=$_SESSION['user'][0];
+
+	$today = date('d-m-Y '); // get today's date
+	$start_of_week = date('d-m-Y ', strtotime('this week')); 
+	$end_of_week = date('d-m-Y ', strtotime('this week -6 days')); 
+	$end_of_week1 = date('d-m-Y ', strtotime('this week -12 days')); 
+
+    $stmt = $conn->prepare("SELECT  DAYNAME(STR_TO_DATE(date, '%d-%m-%Y')) as dayname,tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers
+	FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid' AND STR_TO_DATE(date, '%d-%m-%Y') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)");
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$rows = $result->fetch_all(MYSQLI_ASSOC);
+
+
+	$stmt1 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid' AND tb_core_mailcamp_list.camp_status = '4' AND STR_TO_DATE(date, '%d-%m-%Y') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND tb_data_mailcamp_live.sending_status = '2'");
+	$stmt1->execute();
+	$result1 = $stmt1->get_result();
+	$rows1 = $result1->fetch_all(MYSQLI_ASSOC);
+
+
+	$stmt2 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE userid = '$userid' AND stop_time != 'NULL'  AND STR_TO_DATE(date, '%d-%m-%Y') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) ");
+	$stmt2->execute();
+	$result2 = $stmt2->get_result();
+	$rows2 = $result2->fetch_all(MYSQLI_ASSOC);
+
+
+	$stmt3 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE userid = '$userid' AND tb_core_mailcamp_list.date<= '$end_of_week' AND tb_core_mailcamp_list.date>= '$end_of_week1' ");
+
+	$stmt3->execute();
+	$result3 = $stmt3->get_result();
+	$rows3 = $result3->fetch_all(MYSQLI_ASSOC);
+
+	$days = [];
+	$mail_open=0;
+	$i= 0;
+	foreach($rows as $row){
+		if($row['mail_open_times']!=''){
+           $mail_open = +1;
+		}
+		$day=[];
+		$day['day'] = $row['dayname'];
+		$day['count'] = 1;
+
+		if(array_search($day['day'],array_column($days,'day')) !=""){
+				$day['count'] = $days[array_search($day['day'],array_column($days,'day'))]['count']+1;
+			    $days[array_search($day['day'],array_column($days,'day'))]['count'] = $day['count'];
+		}else{
+			array_push($days,$day);
+
+		}
+	}
+		$daynames = ['Saturday','Sunday','Monday','tuesday','Wednesday','Thursday','Friday'];
+		foreach($daynames as $d){
+			$day=[];
+			if(array_search($d,array_column($days,'day')) ==""){
+				$day['day'] =$d;
+				$day['count'] = 0;
+				array_push($days,$day);
+			}
+		}
+	
+		$day1 = [];
+		$day2 = [];
+		foreach($days as $dname){
+          array_push($day1,$dname['day']);
+		  array_push($day2,$dname['count']);
+		}
+
+		// $day1 = implode(',',$day1);
+		// $day2 = implode(',',$day2);
+
+	$total = count($rows);
+	$del_mail = count($rows1);
+	$past_camp  = count($rows2);
+	$past_camp_last_week  = count($rows3);
+
+	echo json_encode(['total'=>$total,'deliver_mail'=>$del_mail,'past_campaigns'=>$past_camp,'past_camp_last_week'=>$past_camp_last_week,'mail_open'=>$mail_open,'day1'=>$day1,'day2'=>$day2], JSON_INVALID_UTF8_IGNORE);
+	
+}
+
+function getEmployeeReport($conn){
+
+	$resp = [];
+	$DTime_info = getTimeInfo($conn);
+	$userid=$_SESSION['user'][0];
+	$today = date('Y-m-d'); // get today's date
+	$start_of_week = date('Y-m-d', strtotime('this week')); 
+	$end_of_week = date('Y-m-d', strtotime('this week +6 days')); 
+	$result = mysqli_query($conn,"SELECT * FROM tb_core_mailcamp_list WHERE tb_core_mailcamp_list.date >= '$start_of_week' AND tb_core_mailcamp_list.date <= '$end_of_week'");
+
+	if(mysqli_num_rows($result) > 0){
+		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
+			$row["campaign_data"] = json_decode($row["campaign_data"]);	//avoid double json encoding
+			$row['date'] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
+			$row['scheduled_time'] = $row['scheduled_time'];
+			$row['employees'] = $row['employees'];
+			$row['scheduled_date'] = $row['scheduled_date'];
+			$row['scheduled_datetime'] = chnageutcformate($row['scheduled_date']);
+        	array_push($resp,$row);
+		}
+		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+} 
 
 ?>

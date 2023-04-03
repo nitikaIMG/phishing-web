@@ -66,7 +66,7 @@ isSessionValid(true);
                                         <div class="row">
                                             <h5 class="card-title">User Dashboard</h5>
                                             <div class="col-sm-12 col-lg-4">
-                                                <h1 class="font-bold mb-1">9</h1>
+                                                <h1 class="font-bold mb-1" id="past_camp_last_week">9</h1>
                                                 <h6 class="mb-3">Emails Delivered (Past Week)</h6>
                                                 <p>A weekly aggregation of all phishing emails delivered across all
                                                     active campaigns. Metrics are updated nightly.</p>
@@ -90,7 +90,7 @@ isSessionValid(true);
                                                             </div>
                                                             <div>
                                                                 <span>Active Campaigns</span>
-                                                                <h3 class="font-medium mb-0">8</h3>
+                                                                <h3 class="font-medium mb-0" id="act_camp">0</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -101,8 +101,8 @@ isSessionValid(true);
                                                             <div class="mr-2"><span class="text-info display-5"><i
                                                                         class="mdi mdi-email"></i></span></div>
                                                             <div>
-                                                                <span>Phishing Emails</span>
-                                                                <h3 class="font-medium mb-0">64</h3>
+                                                                <span>Emails Delivered</span>
+                                                                <h3 class="font-medium mb-0" id='userDelMail'></h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -113,8 +113,8 @@ isSessionValid(true);
                                                             <div class="mr-2"><span class="text-primary display-5"><i
                                                                         class="mdi mdi-web"></i></span></div>
                                                             <div>
-                                                                <span>Phishing Websites</span>
-                                                                <h3 class="font-medium mb-0">43</h3>
+                                                                <span>Past Campaigns</span>
+                                                                <h3 class="font-medium mb-0" id="past_comp">0</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -126,7 +126,7 @@ isSessionValid(true);
                                                                         class="mdi mdi-school"></i></span></div>
                                                             <div>
                                                                 <span>Training Modules</span>
-                                                                <h3 class="font-medium mb-0">16</h3>
+                                                                <h3 class="font-medium mb-0">0</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -147,15 +147,19 @@ isSessionValid(true);
                                         <div class="row">
                                             <h5 class="card-title">Phishing Campaign Success</h5>
                                             <h6>Overview of Phishing Campaign Interactions (Past Week)</h6>
-                                            <div class="col-sm-12 col-lg-8 m-t-15 d-none d-md-block">
+                                            <div class="col-sm-12 col-lg-12 m-t-15 d-none d-md-block">
+                                                <div style="text-align:center;">
+                                                    <h1 class="font-bold mb-1" id="mail_open"></h1>
+                                                    <h6 class="mb-3">Phishing Email Interactions</h6>
+                                                </div>
+                                
                                                 <div id="roundchartmail">
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12 col-lg-4">
-                                                <h1 class="font-bold mb-1">35</h1>
+                                            <!-- <div class="col-sm-12 col-lg-4">
+                                                <h1 class="font-bold mb-1" id="mail_open"></h1>
                                                 <h6 class="mb-3">Phishing Email Interactions</h6>
-
-                                            </div>
+                                            </div> -->
 
                                         </div>
                                     </div>
@@ -934,11 +938,6 @@ isSessionValid(true);
 
     <script src="<?php echo url ?>/js/mail_campaign_dashboard.js"></script>
     <script src="<?php echo url ?>/js/libs/apexcharts.js"></script>
-    <!-- <script src="<?php echo url ?>/js/libs/jquery/datatables.js"></script> -->
-    <!-- <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script>
-    <script src="<?php echo url ?>/js/libs/custom.min.js"></script>
-    <script src="<?php echo url ?>/js/libs/jquery/jquery-3.6.0.min.js"></script> -->
-
 
 
     <script src="<?php echo url ?>/js/libs/js.cookie.min.js"></script>
@@ -946,22 +945,14 @@ isSessionValid(true);
       <script src="<?php echo url ?>/js/libs/popper.min.js"></script>
       <script src="<?php echo url ?>/js/libs/bootstrap.min.js"></script>
       <!--Menu sidebar -->
-      <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script>
+      <!-- <script src="<?php echo url ?>/js/libs/perfect-scrollbar.jquery.min.js"></script> -->
       <!--Custom JavaScript -->
       <script src="<?php echo url ?>/js/libs/custom.min.js"></script>
       <!-- this page js -->   
       <script src="<?php echo url ?>/js/common_scripts.js"></script>
       <!-- Employee List libraries -->
       <script src="https://www.virtuosoft.eu/code/bootstrap-duallistbox/bootstrap-duallistbox/v3.0.2/jquery.bootstrap-duallistbox.js"></script>
-      <!-- Employee List libraries -->/
-
-
-      <script>
-        loadTableCampaignResult2();
-        loadTableCampaignResult3();
-        loadEmpReportData();
-    </script>
-
+      <!-- Employee List libraries -->
 
       <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>
       <script defer src="<?php echo url ?>/js/libs/jquery/datatables.js"></script> 
@@ -970,6 +961,12 @@ isSessionValid(true);
       <script defer src="<?php echo url ?>/js/libs/bootstrap-datetimepicker.min.js"></script>
       <script defer src="<?php echo url ?>/js/libs/moment.min.js"></script>
       <script defer src="<?php echo url ?>/js/libs/moment-timezone-with-data.min.js"></script>
+
+      
+      <script>
+        loadEmpReportData();
+        loadTableCampaignResultAccToWeek();
+    </script>
 
 </body>
 

@@ -785,6 +785,7 @@ function loadTableCampaignResult() {
 }
 
 function loadTableCampaignResult1(){
+
     try {
         dt_mail_campaign_result.destroy();
     } catch (err) {}
@@ -1070,89 +1071,6 @@ function mailchart(months) {
 
 }
 
-function loadTableCampaignResult2(){
-    var options = {
-        series: [{
-          name: "Desktops",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-      }],
-        chart: {
-        height: 350,
-        type: 'line',
-        zoom: {
-          enabled: false
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'straight'
-      },
-      title: {
-        text: '',
-        align: 'left'
-      },
-      grid: {
-        row: {
-          colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-          opacity: 0.5
-        },
-      },
-      xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-      }
-      };
-
-      var chart = new ApexCharts(document.querySelector("#dashboardchartmail"), options);
-      chart.render();
-}
-    function loadTableCampaignResult3(){
-        var options = {
-            series: [44, 55, 41, 17, 15],
-            chart: {
-            width: 400,
-            type: 'donut',
-          },
-          plotOptions: {
-            pie: {
-              startAngle: -90,
-              endAngle: 270
-            }
-          },
-          dataLabels: {
-            enabled: false
-          },
-          fill: {
-            type: 'gradient',
-          },
-          legend: {
-            formatter: function(val, opts) {
-              return val + " - " + opts.w.globals.series[opts.seriesIndex]
-            }
-          },
-          title: {
-            text: '',
-          
-          },
-          responsive: [{
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              },
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }]
-          };
-  
-          var chart = new ApexCharts(document.querySelector("#roundchartmail"), options);
-          chart.render();
-        
-    }
-
 function exportReportAction(e) {
     if(dt_mail_campaign_result.rows().count() > 0){
         var file_name = $('#Modal_export_file_name').val().trim();
@@ -1282,50 +1200,231 @@ function hideMeFromPublic(){
 
 function loadEmpReportData(){
     $.post({
-        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        url: "manager/mail_campaign_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
             action_type: "get_employee_report"
          })
     }).done(function (data) {
-      if(data.status == 1){
-        var action_items_sender_table = '-';
-        $("#table_mail_report_list tbody").append("<tr><td>" +1+ "</td><td>" + 1 + "</td><td>" +1 + "</td><td>" + 1 + "</td></tr>");
-      }
 
-        dt_mail_sender_list = $('#table_mail_report_list').DataTable({
-            "aaSorting": [6, 'asc'],
-            'pageLength': 20,
-            'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
-            'columnDefs': [{
-                "targets": 7,
-                "className": "dt-center"
-            }],
-            "preDrawCallback": function(settings) {
-                $('#table_mail_report_list tbody').hide();
-            },
-
-            "drawCallback": function() {
-                $('#table_mail_report_list tbody').fadeIn(500);
-                $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
-            },
-
-            "initComplete": function() {
-                $("label>select").select2({minimumResultsForSearch: -1, });
+        $(function() {
+            console.log(data)
+            
+            if(!data.error){
+                $.each(data, function(key, value) {
+                        $("#table_mail_report_list tbody").append("<tr><td>" +0+ "</td><td>" + 0+ "</td><td>" +0+ "</td><td>" + 0 + "</td></tr>");
+                });
+            }else{
+                $("#table_mail_report_list tbody").append('<tr class="odd"><td valign="top" colspan="4" class="dataTables_empty">No data available in table</td></tr>');
             }
-        }, {
-            "order": [[1, 'asc']]
-        }); 
+            
+            loadEmpReportData1(data);
 
-        dt_mail_sender_list.on('order.dt_mail_sender_list search.dt_mail_sender_list', function() {
-            dt_mail_sender_list.column(0, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function(cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
+            dt_mail_campaign_list = $('#table_mail_report_list').DataTable({
+                "aaSorting": [6, 'desc'],
+                'pageLength': 20,
+                'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
+                'columnDefs': [{
+                    // "targets": [9,10],
+                    "className": "dt-center"
+                }],
+                "preDrawCallback": function(settings) {
+                    $('#table_mail_report_list tbody').hide();
+                },
+    
+                "drawCallback": function() {
+                    $('#table_mail_report_list tbody').fadeIn(500);
+                    $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                },
+
+                "initComplete": function() {
+                    $("label>select").select2({minimumResultsForSearch: -1, });
+                }
+            }); //initialize table
+    
+            dt_mail_campaign_list.on('order.dt_mail_campaign_list search.dt_mail_campaign_list', function() {
+                dt_mail_campaign_list.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();     
+            
+        });
     });   
 }
-   
 
+function loadEmpReportData1(data){
+
+            if(!data.error){
+                $.each(data, function(key, value) {
+                        $("#table_mail_search_history_list tbody").append("<tr><td>" +0+ "</td><td>" + 0+ "</td><td>" +0+ "</td><td>" + 0 + "</td><td>" + 0+ "</td><td>" +0+ "</td><td>" + 0 + "</td></tr>");
+                });
+            }else{
+                $("#table_mail_search_history_list tbody").append('<tr class="odd"><td valign="top" colspan="7" class="dataTables_empty">No data available in table</td></tr>');
+            }
+            
+            dt_mail_campaign_list = $('#table_mail_search_history_list').DataTable({
+                "aaSorting": [6, 'desc'],
+                'pageLength': 20,
+                'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
+                'columnDefs': [{
+                    // "targets": [9,10],
+                    "className": "dt-center"
+                }],
+                "preDrawCallback": function(settings) {
+                    $('#table_mail_search_history_list tbody').hide();
+                },
+    
+                "drawCallback": function() {
+                    $('#table_mail_search_history_list tbody').fadeIn(500);
+                    $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                },
+
+                "initComplete": function() {
+                    $("label>select").select2({minimumResultsForSearch: -1, });
+                }
+            }); //initialize table
+    
+            dt_mail_campaign_list.on('order.dt_mail_campaign_list search.dt_mail_campaign_list', function() {
+                dt_mail_campaign_list.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();     
+              
+}
+   
+function loadTableCampaignResultAccToWeek(){
+    $('#act_camp').html("");
+    $('#userDelMail').html("");
+    $('#past_comp').html("");
+    $('#mail_open').html("");
+    $('#past_camp_last_week').html("");
+
+    $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_acc_to_week",
+         }),
+    }).done(function (data){
+        $('#act_camp').append(data.total);
+        $('#userDelMail').append(data.deliver_mail);
+        $('#past_comp').append(data.past_campaigns);
+        $('#mail_open').append(data.mail_open);
+        $('#past_camp_last_week').append(data.past_camp_last_week);
+        
+        loadDashChart(data.day1,data.day2);
+        loadSuccessChart(data.mail_open,0,0);
+    });
+}
+
+function loadDashChart(day1,day2){
+    var options = {
+        series: [{
+          name: "Desktops",
+          data: day2
+              }],
+        chart: {
+        height: 350,
+        type: 'line',
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth',
+        width:4,
+      },markers: {
+        size:4,
+      },
+      title: {
+        text: '',
+        align: 'left'
+      },
+      grid: {
+        xaxis: {
+            lines: {
+                show: true
+            }
+        },  
+        strokeDashArray: 4, 
+        yaxis: {
+            lines: {
+                show: true
+            }
+        },  
+        row: {
+        //   colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+          opacity: 0.5
+        },
+      },
+      xaxis: {
+        // categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        categories : day1,
+      }
+      };
+
+      var chart = new ApexCharts(document.querySelector("#dashboardchartmail"), options);
+      chart.render();
+}
+
+function loadSuccessChart(mail_open,payload,comp){
+    var options = {
+        series: [mail_open, payload, comp],
+        // series: [{
+        //     name: ["Desktops","sf","sdgsd"],
+        //     data: [mail_open, payload, comp],
+        // }],
+        chart: {
+        width: 700,
+        type: 'donut',
+        },
+        plotOptions: {
+        pie: {
+            startAngle: -90,
+            endAngle: 270
+        }
+        },
+        dataLabels: {
+        enabled: false
+        },
+        fill: {
+        type: 'gradient',
+        },
+        legend: {
+        formatter: function(val, opts) {
+            return val + " - " + opts.w.globals.series[opts.seriesIndex]
+        }
+        },
+        title: {
+        text: '',
+        
+        },
+        // labels: ['Sent', 'Opened', 'Replied'],
+        labels: ['Email Viewed', 'Email Viewed + Payload Clicked', 'Email Viewed + Payload Clicked + Employee Compromised'],
+        colors: ['#6c757e', '#ffb749', '#da552e'],
+        responsive: [{
+        breakpoint: 480,
+        options: {
+            chart: {
+            width: 800
+            },
+            legend: {
+            position: 'bottom'
+            }
+        }
+        }]
+        };
+
+        var chart = new ApexCharts(document.querySelector("#roundchartmail"), options);
+        chart.render();
+    
+}

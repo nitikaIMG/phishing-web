@@ -79,9 +79,7 @@ if (isset($_POST)){
 		if($POSTJ['action_type'] == "save_sender_list_by_admin")
 			saveSenderListByAdmin($conn, $POSTJ);
 		if($POSTJ['action_type'] == "get_sender_list")
-			getSenderList($conn,$userid);
-		if($POSTJ['action_type'] == "get_employee_report")
-		    getEmployeeReport($conn);	
+			getSenderList($conn,$userid);	
 		if($POSTJ['action_type'] == "check_default_integration")
 		checkDefaultIntegration($conn);	
 		if($POSTJ['action_type'] == "get_sender_list_admin")
@@ -592,13 +590,9 @@ function uploadMailBodyFiles($conn,&$POSTJ){
 
 //---------------------------------------Sender List Section --------------------------------
 function saveSenderList($conn, &$POSTJ,$userid){
-	$adminid = $_SESSION['admincontact_mail'];
-	if(isset($adminid)){
-		$user_id = 1;
-	}else{
-		$user_id = $_SESSION['user'][0];
-	}
+ 
 	$sender_list_id = $POSTJ['sender_list_id'];
+
 	$sender_list_mail_sender_name = $POSTJ['sender_list_mail_sender_name'];
 	$sender_list_mail_sender_SMTP_server = $POSTJ['sender_list_mail_sender_SMTP_server'];
 	$sender_list_mail_sender_from = $POSTJ['sender_list_mail_sender_from'];
@@ -608,6 +602,7 @@ function saveSenderList($conn, &$POSTJ,$userid){
 	$mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
 	$sender_list_cust_headers = json_encode($POSTJ['sender_list_cust_headers']); 
 	$dsn_type = $POSTJ['dsn_type'];
+
 
 	if(checkAnIDExist($conn,$sender_list_id,'sender_list_id','tb_core_mailcamp_sender_list')){
 		if($sender_list_mail_sender_acc_pwd != ''){	//new sender acc pwd
@@ -664,11 +659,6 @@ function saveSenderListByAdmin($conn, &$POSTJ){
 		echo json_encode(['result' => 'failed']);
 	}
 }
-
-function getEmployeeReport($conn){
-    $response = [];
-	echo json_encode(['status'=>1]);
-} 
 
 function getSenderList($conn,$userid){
 	
