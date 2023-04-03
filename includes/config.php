@@ -1,5 +1,4 @@
 <?php
-
 define('DATE_FORMAT','DD-MM-YYYY');
 define('url','http://localhost/phishing/assets');
 define('App','http://localhost/phishing/');
