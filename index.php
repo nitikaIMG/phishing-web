@@ -77,7 +77,7 @@ isSessionValid(true);
                                                             </div>
                                                             <div>
                                                                 <span>Active Campaigns</span>
-                                                                <h3 class="font-medium mb-0">8</h3>
+                                                                <h3 class="font-medium mb-0" id="act_camp">8</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -88,8 +88,8 @@ isSessionValid(true);
                                                             <div class="mr-2"><span class="text-info display-5"><i
                                                                         class="mdi mdi-email"></i></span></div>
                                                             <div>
-                                                                <span>Phishing Emails</span>
-                                                                <h3 class="font-medium mb-0">64</h3>
+                                                                <span>Emails Delivered</span>
+                                                                <h3 class="font-medium mb-0" id='userDelMail'>64</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -100,8 +100,8 @@ isSessionValid(true);
                                                             <div class="mr-2"><span class="text-primary display-5"><i
                                                                         class="mdi mdi-web"></i></span></div>
                                                             <div>
-                                                                <span>Phishing Websites</span>
-                                                                <h3 class="font-medium mb-0">43</h3>
+                                                                <span>Past Campaigns</span>
+                                                                <h3 class="font-medium mb-0" id="past_comp">43</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -935,6 +935,7 @@ isSessionValid(true);
     <script>
         loadTableCampaignResult2();
         loadTableCampaignResult3();
+        loadTableCampaignResultAccToWeek();
         loadEmpReportData();
     </script>
 

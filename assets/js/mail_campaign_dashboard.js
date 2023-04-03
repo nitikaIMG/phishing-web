@@ -785,6 +785,7 @@ function loadTableCampaignResult() {
 }
 
 function loadTableCampaignResult1(){
+
     try {
         dt_mail_campaign_result.destroy();
     } catch (err) {}
@@ -987,6 +988,24 @@ function loadTableCampaignResult1(){
             updatePieTotalMailReplied(data.total)
         });
     })
+}
+function loadTableCampaignResultAccToWeek(){
+    $('#act_camp').html("");
+    $('#userDelMail').html("");
+    $('#past_comp').html("");
+
+    $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_acc_to_week",
+         }),
+    }).done(function (data){
+        console.log(data);
+        $('#act_camp').append(data.total);
+        $('#userDelMail').append(data.deliver_mail);
+        $('#past_comp').append(data.past_campaigns);
+    });
 }
 
 function mailchart(months) {

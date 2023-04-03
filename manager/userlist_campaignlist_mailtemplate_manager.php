@@ -592,7 +592,9 @@ function uploadMailBodyFiles($conn,&$POSTJ){
 
 //---------------------------------------Sender List Section --------------------------------
 function saveSenderList($conn, &$POSTJ,$userid){
+ 
 	$sender_list_id = $POSTJ['sender_list_id'];
+
 	$sender_list_mail_sender_name = $POSTJ['sender_list_mail_sender_name'];
 	$sender_list_mail_sender_SMTP_server = $POSTJ['sender_list_mail_sender_SMTP_server'];
 	$sender_list_mail_sender_from = $POSTJ['sender_list_mail_sender_from'];
@@ -602,6 +604,7 @@ function saveSenderList($conn, &$POSTJ,$userid){
 	$mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
 	$sender_list_cust_headers = json_encode($POSTJ['sender_list_cust_headers']); 
 	$dsn_type = $POSTJ['dsn_type'];
+
 
 	if(checkAnIDExist($conn,$sender_list_id,'sender_list_id','tb_core_mailcamp_sender_list')){
 		if($sender_list_mail_sender_acc_pwd != ''){	//new sender acc pwd
