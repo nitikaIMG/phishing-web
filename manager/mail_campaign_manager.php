@@ -733,11 +733,11 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 
 		}
 	}
-		$daynames = ['Saturday','Sunday','Monday','tuesday','Wednesday','Thursday','Friday'];
+		$daynames = ['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'];
 		foreach($daynames as $d){
 			$day=[];
 			if(array_search($d,array_column($days,'day')) ==""){
-				$day['day'] =$d;
+				$day['day'] = $d;
 				$day['count'] = 0;
 				array_push($days,$day);
 			}
@@ -745,10 +745,14 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 	
 		$day1 = [];
 		$day2 = [];
+		$currentDate = date('l');
 		foreach($days as $dname){
           array_push($day1,$dname['day']);
 		  array_push($day2,$dname['count']);
 		}
+		$key = array_search($currentDate,$day1);
+		$day1[$key] = 'Today';
+
 
 	$total = count($rows);
 	$del_mail = count($rows1);
