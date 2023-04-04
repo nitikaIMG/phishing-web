@@ -1198,6 +1198,35 @@ function hideMeFromPublic(){
     $(".item_private").hide();
 }
 
+function loadTableCampaignResultAccToWeek(){
+    $('#act_camp').html("");
+    $('#userDelMail').html("");
+    $('#past_comp').html("");
+    $('#mail_open').html("");
+    $('#past_camp_last_week').html("");
+
+    $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_acc_to_week",
+         }),
+    }).done(function (data){
+
+        $('#act_camp').append(data.total);
+        $('#userDelMail').append(data.deliver_mail);
+        $('#past_comp').append(data.past_campaigns);
+        $('#mail_open').append(data.mail_open_count);
+        $('#past_camp_last_week').append(data.past_camp_last_week);
+        
+        var payload = 0;
+        var comp = 0;
+        loadDashChart(data.day1,data.day2);
+        loadSuccessChart(data.mail_open,payload,comp);
+
+    });
+}
+
 function loadEmpReportData(){
     $.post({
         url: "manager/mail_campaign_manager",
@@ -1297,31 +1326,6 @@ function loadEmpReportData1(data){
             }).draw();     
               
 }
-   
-function loadTableCampaignResultAccToWeek(){
-    $('#act_camp').html("");
-    $('#userDelMail').html("");
-    $('#past_comp').html("");
-    $('#mail_open').html("");
-    $('#past_camp_last_week').html("");
-
-    $.post({
-        url: "manager/mail_campaign_manager",
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({ 
-            action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_acc_to_week",
-         }),
-    }).done(function (data){
-        $('#act_camp').append(data.total);
-        $('#userDelMail').append(data.deliver_mail);
-        $('#past_comp').append(data.past_campaigns);
-        $('#mail_open').append(data.mail_open);
-        $('#past_camp_last_week').append(data.past_camp_last_week);
-        
-        loadDashChart(data.day1,data.day2);
-        loadSuccessChart(data.mail_open,0,0);
-    });
-}
 
 function loadDashChart(day1,day2){
     var options = {
@@ -1377,14 +1381,11 @@ function loadDashChart(day1,day2){
 }
 
 function loadSuccessChart(mail_open,payload,comp){
+    // var hidden = 100-(data.mail_open)-payload-comp;   
     var options = {
         series: [mail_open, payload, comp],
-        // series: [{
-        //     name: ["Desktops","sf","sdgsd"],
-        //     data: [mail_open, payload, comp],
-        // }],
         chart: {
-        width: 700,
+        width: 600,
         type: 'donut',
         },
         plotOptions: {
@@ -1401,7 +1402,7 @@ function loadSuccessChart(mail_open,payload,comp){
         },
         legend: {
         formatter: function(val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex]
+            return val + " - " + opts.w.globals.series[opts.seriesIndex]+ "%"
         }
         },
         title: {

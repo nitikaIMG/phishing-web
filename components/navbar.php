@@ -1,8 +1,8 @@
 <?php
 require_once(dirname(__FILE__,2).'/manager/session_manager.php');
 if(isSessionValid() == true){
-   $email=$_SESSION['contact_mail'];
-   $username=$_SESSION['user'][1];
+   $email = $_SESSION['contact_mail'];
+   $username = getLoginLogoutInfo($conn, $email)['name'];
 }
 ?>
 <?php $img = (basename($_SERVER['PHP_SELF'])) == 'LandingPage.php' ? '../' : ''; ?> 

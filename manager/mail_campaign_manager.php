@@ -683,11 +683,7 @@ function chnagelocalformate($conn,$date){
 
 function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week($conn, $POSTJ){
 
-	$resp = [];
 	$userid=$_SESSION['user'][0];
-
-	$today = date('d-m-Y '); // get today's date
-	$start_of_week = date('d-m-Y ', strtotime('this week')); 
 	$end_of_week = date('d-m-Y ', strtotime('this week -6 days')); 
 	$end_of_week1 = date('d-m-Y ', strtotime('this week -12 days')); 
 
@@ -713,17 +709,17 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 
 
 	$stmt3 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE userid = '$userid' AND tb_core_mailcamp_list.date<= '$end_of_week' AND tb_core_mailcamp_list.date>= '$end_of_week1' ");
-
 	$stmt3->execute();
 	$result3 = $stmt3->get_result();
 	$rows3 = $result3->fetch_all(MYSQLI_ASSOC);
 
+	
 	$days = [];
-	$mail_open=0;
+	$mail_open_count=0;
 	$i= 0;
 	foreach($rows as $row){
 		if($row['mail_open_times']!=''){
-           $mail_open = +1;
+           $mail_open_count = +1;
 		}
 		$day=[];
 		$day['day'] = $row['dayname'];
@@ -754,15 +750,13 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 		  array_push($day2,$dname['count']);
 		}
 
-		// $day1 = implode(',',$day1);
-		// $day2 = implode(',',$day2);
-
 	$total = count($rows);
 	$del_mail = count($rows1);
 	$past_camp  = count($rows2);
 	$past_camp_last_week  = count($rows3);
+	$mail_open = ($mail_open_count/$total)*100;
 
-	echo json_encode(['total'=>$total,'deliver_mail'=>$del_mail,'past_campaigns'=>$past_camp,'past_camp_last_week'=>$past_camp_last_week,'mail_open'=>$mail_open,'day1'=>$day1,'day2'=>$day2], JSON_INVALID_UTF8_IGNORE);
+	echo json_encode(['total'=>$total,'deliver_mail'=>$del_mail,'past_campaigns'=>$past_camp,'past_camp_last_week'=>$past_camp_last_week,'mail_open'=>$mail_open,'mail_open_count'=>$mail_open_count,'day1'=>$day1,'day2'=>$day2], JSON_INVALID_UTF8_IGNORE);
 	
 }
 
@@ -771,10 +765,8 @@ function getEmployeeReport($conn){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
 	$userid=$_SESSION['user'][0];
-	$today = date('Y-m-d'); // get today's date
-	$start_of_week = date('Y-m-d', strtotime('this week')); 
-	$end_of_week = date('Y-m-d', strtotime('this week +6 days')); 
-	$result = mysqli_query($conn,"SELECT * FROM tb_core_mailcamp_list WHERE tb_core_mailcamp_list.date >= '$start_of_week' AND tb_core_mailcamp_list.date <= '$end_of_week'");
+
+	$result = mysqli_query($conn,"SELECT * FROM tb_core_mailcamp_list WHERE  STR_TO_DATE(date, '%d-%m-%Y') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND userid = '$userid'");
 
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
