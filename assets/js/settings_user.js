@@ -4,6 +4,7 @@ loadTableUserList();
 getCurrentUser();
 
 function getCurrentUser() {
+    $('#user_name1').html("");
     $.post({
         url: "manager/settings_manager",
         contentType: 'application/json; charset=utf-8',
@@ -19,6 +20,7 @@ function getCurrentUser() {
             $('#user_dp').attr('src','images/users/' + data.dp_name + '.png');
             $('.pro-pic').attr('src','images/users/' + data.dp_name + '.png');
             $('.avatar_profile').attr('src','images/users/' + data.dp_name + '.png');
+            $('#user_name1').append(data.name);
             $('#bt_edit_current_user').click(function(){
                 prompModifyUser(data.id, data.name, data.username, data.contact_mail, data.dp_name);
             });

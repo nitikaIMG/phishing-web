@@ -38,7 +38,7 @@ if(isSessionValid() == true){
                                     &#x1F44B;
                                 </div>
                                 <div class="media-body">
-                                    <h5><?=$username?></h5>
+                                    <h5 id="user_name1"><?=$username?></h5>
                                   <p><?= $email?></p>
                                 </div>
                             </div>

@@ -990,6 +990,212 @@ function loadTableCampaignResult1(){
     })
 }
 
+function loadTableCampaignResultadmin(){
+
+    try {
+        dt_mail_campaign_result.destroy();
+    } catch (err) {}
+
+    $("#table_mail_campaign_result1 tbody > tr").remove();
+    $("#succ_camp").html("");
+    $("#del_camp").html("");
+    $("#past_camp").html("");
+
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_admin",
+         }),
+    }).done(function (data) {
+        console.log(data);
+        $(function() {
+            if(!data.error){
+                $("#succ_camp").append(data.total);
+                $("#del_camp").append(data.year_count);
+                $("#past_camp").append(data.past_camp);
+
+                $.each(data.resp, function(key, value) {
+                    var count = JSON.parse(value.campaign_data);
+                    var emp_count = (count.user_group.id).split(",");
+                    var date = value.scheduled_datetime;
+                    var start_date = new Date(date[0]['start_date']);
+                    var end_date = new Date(date[0]['end_date']);
+                    var newDate = moment(start_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                    var newDate1 = moment(end_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+
+                    switch (value.sending_status) {
+                        case 1:     //In progress
+                            var status = '<span class="label label-table label-warning" style="color:black"><b>In Progress</b></span>';
+                            var delivered = (emp_count.length);
+                            break;
+                        case 2:     //Sent success
+                            var status = '<span class="label label-table label-success"><b>Finished</b></span>';
+                            var delivered = (emp_count.length);
+                            break;
+                        case 3:     //Send error
+                            var status = '<span class="label label-table label-danger"><b>Error</b></span>';
+                            var delivered = (emp_count.length);
+                            break;
+                        case null:
+                            var status = '<span class="label label-table label-danger"><b>Error</b></span>';
+                            var delivered = (emp_count.length);
+                            break;
+
+                    }
+
+                    if(emp_count.length != 0){
+                        if(value.sending_status==2){
+                        var perc = (emp_count.length/delivered)*100;
+                        }else{
+                            var perc = 0; 
+                        }
+                    }else{
+                        var perc = 0;
+                    }
+
+                    if(perc  == 100){
+                        var newper = '✓';
+                        var signper = '';
+                    }else{
+                        var newper = perc;
+                        var signper = '%';
+                    }
+                    
+                    var html = `<div class="card2">
+                                    <div class="percent2">
+                                    <svg>
+                                        <circle cx="25" cy="25" r="22"></circle>
+                                        <circle cx="25" cy="25" r="22" style="--percent: ${perc};"></circle>
+                                    </svg>
+                                    <div class="number2">
+                                        <h6>${newper}<span>${signper}</span></h6>
+                                    </div>
+                                    </div>
+                                </div>`;
+
+                    if (value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null) {
+                        var mail_open = '0';
+                        var mailnewper = mail_open;
+                        var mailsignper = '%';
+                        var mailpercentage = 0;
+                    }else{
+                        var mail_open = '1';
+                        var mailnewper = '✓';
+                        var mailsignper = '';
+                        var mailpercentage = 100;
+                    }
+                  
+                    var mailhtml = `<div class="card2">
+                                <div class="percent2">
+                                <svg>
+                                    <circle cx="25" cy="25" r="22"></circle>
+                                    <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentage};"></circle>
+                                </svg>
+                                <div class="number2">
+                                    <h6>${mailnewper}<span>${mailsignper}</span></h6>
+                                </div>
+                                </div>
+                            </div>`;
+
+                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td></tr>");
+                });
+            }
+
+            dt_mail_campaign_list = $('#table_mail_campaign_result1').DataTable({
+                "aaSorting": [6, 'desc'],
+                'pageLength': 20,
+                'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
+                'columnDefs': [{
+                    // "targets": [9,10],
+                    "className": "dt-center"
+                }],
+                "dom": 'Bfrtip',
+                "buttons": [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ],
+                "preDrawCallback": function(settings) {
+                    $('#table_mail_campaign_result1 tbody').hide();
+                },
+    
+                "drawCallback": function() {
+                    $('#table_mail_campaign_result1 tbody').fadeIn(500);
+                    $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                },
+
+                "initComplete": function() {
+                    $("label>select").select2({minimumResultsForSearch: -1, });
+                }
+            }); //initialize table
+    
+            dt_mail_campaign_list.on('order.dt_mail_campaign_list search.dt_mail_campaign_list', function() {
+                dt_mail_campaign_list.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();  
+
+            var months = { 01:0, 02:0, 03:0 ,04:0,05:0,06:0,07:0,08:0,09:0,10:0,11:0,12:0};
+            $.each(data.phishingmail, function(key, value) {
+             var date = value.scheduled_time;
+             var newDate = moment(date, 'YYYY-MM-DD').format('MM');
+             if(months[parseInt(newDate)] == '0'){
+                var arr = [];
+                var sent = 0;
+                if(value.sending_status=='2'){
+                 sent = sent+1;
+                }
+
+                var open = 0;
+                if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
+                }else{
+                    open = open+1;
+                }
+                var payload = 0;
+                var comp = 0;
+                var reported = 0;
+
+                arr['sent'] = sent;
+                arr['open'] = open;
+                arr['payload'] = payload;
+                arr['comp'] = comp;
+                arr['reported'] = reported;
+
+                months[parseInt(newDate)] = arr;
+            }else{
+                if(value.sending_status=='2'){
+                    months[parseInt(newDate)]['sent'] = months[parseInt(newDate)]['sent']+1;
+                }
+                if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
+                }else{
+                    months[parseInt(newDate)]['open'] = months[parseInt(newDate)]['open']+1;
+                }
+
+                  months[parseInt(newDate)]['payload'] = 0;
+                  months[parseInt(newDate)]['comp'] = 0;
+                  months[parseInt(newDate)]['reported'] = 0;
+
+            }
+   
+            });
+
+            mailchart(months);
+          
+            var sent_mail_percent = ((data.year_count)/data.total)*100;
+            var open_mail_percent = ((data.opend_mail)/data.total)*100;
+            updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
+            updatePieTotalSent(data.total, data.year_count, data.sent_failed_count)
+            updatePieTotalMailOpen(data.total, data.opend_mail, open_mail_percent)
+            updatePieTotalMailReplied(data.total)
+        });
+    })
+}
+
 function mailchart(months) {
   
     var data1 = [];
@@ -1381,17 +1587,21 @@ function loadDashChart(day1,day2){
 }
 
 function loadSuccessChart(mail_open,payload,comp){
-    // var hidden = 100-(data.mail_open)-payload-comp;   
+    // var hidden = 100-(data.mail_open)-payload-comp; 
+    
+    var total = 100 - (mail_open + payload + comp);
     var options = {
-        series: [mail_open, payload, comp],
+        series: [mail_open, payload, comp, total],
         chart: {
-        width: 600,
+        width: 900,
+        height: 200,
         type: 'donut',
         },
         plotOptions: {
         pie: {
             startAngle: -90,
-            endAngle: 270
+            endAngle: 270,
+            expandOnClick: false
         }
         },
         dataLabels: {
@@ -1407,11 +1617,10 @@ function loadSuccessChart(mail_open,payload,comp){
         },
         title: {
         text: '',
-        
         },
-        // labels: ['Sent', 'Opened', 'Replied'],
-        labels: ['Email Viewed', 'Email Viewed + Payload Clicked', 'Email Viewed + Payload Clicked + Employee Compromised'],
-        colors: ['#6c757e', '#ffb749', '#da552e'],
+        labels: ['Email Viewed', 'Email Viewed + Payload Clicked', 'Email Viewed + Payload Clicked + Employee Compromised',''],
+        colors: ['#6c757e', '#ffb749', '#da552e', '#858aa9'],
+        // colors: ['#6c757e', '#ffb749', '#da552e', '#ffff'],
         responsive: [{
         breakpoint: 480,
         options: {
