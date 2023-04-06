@@ -1380,18 +1380,20 @@ function loadDashChart(day1,day2){
       chart.render();
 }
 
-function loadSuccessChart(mail_open,payload,comp){
-    // var hidden = 100-(data.mail_open)-payload-comp;   
+function loadSuccessChart(mail_open,payload,comp){ 
+    var hidden = 100-(mail_open)-payload-comp; 
     var options = {
-        series: [mail_open, payload, comp],
+        series: [mail_open, payload, comp, hidden],
         chart: {
         width: 600,
+        height: 200,
         type: 'donut',
         },
         plotOptions: {
         pie: {
             startAngle: -90,
-            endAngle: 270
+            endAngle: 270,
+            expandOnClick: false
         }
         },
         dataLabels: {
@@ -1407,11 +1409,9 @@ function loadSuccessChart(mail_open,payload,comp){
         },
         title: {
         text: '',
-        
         },
-        // labels: ['Sent', 'Opened', 'Replied'],
         labels: ['Email Viewed', 'Email Viewed + Payload Clicked', 'Email Viewed + Payload Clicked + Employee Compromised'],
-        colors: ['#6c757e', '#ffb749', '#da552e'],
+        colors: ['#6c757e', '#ffb749', '#da552e','#ffff'],
         responsive: [{
         breakpoint: 480,
         options: {

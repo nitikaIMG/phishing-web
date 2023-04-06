@@ -687,6 +687,7 @@ function getSenderList($conn,$userid){
 		echo json_encode(['error' => 'No data']);	
 	$result->close();
 }
+
 function getSenderListAdmin($conn){
 
 	$resp = [];
@@ -705,6 +706,7 @@ function getSenderListAdmin($conn){
 		echo json_encode(['error' => 'No data']);	
 	$result->close();
 }
+
 function checkDefaultIntegration($conn){
 	$myarr = [];
 	$sql ="SELECT * FROM tb_core_mailcamp_sender_list where status = 0";
