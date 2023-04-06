@@ -1,4 +1,5 @@
 <?php 
+
 require_once(dirname(__FILE__).'/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
@@ -14,6 +15,9 @@ isSessionValid(true);
    <style>
     .table-bordered{
         border: 1px solid #dee2e6 !important;
+    }
+    .apexcharts-legend .apexcharts-legend-series:last-child {
+        display: none !important;
     }
    </style>
 </head>
