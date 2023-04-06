@@ -1,6 +1,8 @@
 <?php
+
 require_once(dirname(__FILE__) . '/session_manager.php');
 require_once(dirname(__FILE__,2) . '/libs/tcpdf_min/tcpdf.php');
+
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -62,6 +64,7 @@ if (isset($_POST)) {
 }
 else
 	die();
+	
 
 //----------------------------------------------------------------------
 function saveCampaignList($conn, &$POSTJ){
@@ -205,9 +208,12 @@ function pullMailCampaignFieldData($conn){
 		$resp['mail_template'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
 
-	$result = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `userid` = '$userid'");
-	if(mysqli_num_rows($result) > 0){
-		$resp['mail_sender'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	$result = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `userid` = '$userid' ");
+	$result1 = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `status` = 0 ");
+
+	if(mysqli_num_rows($result) > 0 || mysqli_num_rows($result1) > 0){
+		$result = array_merge(mysqli_fetch_all($result1, MYSQLI_ASSOC),mysqli_fetch_all($result, MYSQLI_ASSOC));
+		$resp['mail_sender'] = $result;
 	}
 
 	$result = mysqli_query($conn, "SELECT mconfig_id,mconfig_name FROM tb_core_mailcamp_config");

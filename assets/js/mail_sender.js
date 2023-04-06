@@ -66,8 +66,6 @@ function addMailHeaderToTable() {
     $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
 }
 
-
-
 function promptMailHeaderDeletion(id) {
     globalModalValue = id;
     $('#modal_mail_header_delete').modal('toggle');
@@ -107,6 +105,7 @@ function editRowHeaderTableAction() {
 
     $('#modal_mail_header_edit').modal('toggle');
 }
+
 function saveMailIntegrationbyadmin(e,val){
     if(nextRandomId==""){
         nextRandomId  = Math.random().toString(36).substring(2, 8);
@@ -192,6 +191,7 @@ function saveMailIntegrationbyadmin(e,val){
             enableDisableMe(e);
         });
 }
+
 function saveMailIntegration(e){
     if(nextRandomId==""){
         nextRandomId  = Math.random().toString(36).substring(2, 8);
@@ -267,7 +267,7 @@ function saveMailIntegration(e){
                 toastr.error('', response.msg);
             enableDisableMe(e);
         });
-   }
+}
 
 function saveMailSenderGroup(e) {
     var cust_header_name = dt_mail_headers_list.rows().data().pluck(0).toArray();
