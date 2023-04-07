@@ -18,6 +18,7 @@ $(function() {
     $('.profile-name').text('('+cookie_c_data.name+')');
     $('.pro-pic').attr('src','/images/users/' + cookie_c_data.dp_name + '.png');
 });
+
 function displayLoader(dis_val,type="normal"){
     if(type == "small")
         return `<div class="loader">
@@ -42,6 +43,7 @@ function displayLoader(dis_val,type="normal"){
                     </div>
                 </div></div>`;
 }
+
 function getRandomId() {
     nextRandomId = Math.random().toString(36).substring(2, 8);
     return nextRandomId;
