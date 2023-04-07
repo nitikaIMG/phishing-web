@@ -4,6 +4,7 @@ $entry_time = (new DateTime())->format('d-m-Y h:i A');
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
+
 //-------------------------------------------------------
 function checkInstallation(){
     $db_file = dirname(__FILE__,2) . '/includes/db.php';
@@ -75,6 +76,7 @@ function isProcessRunning($conn, $os){ //Single instance manager (check if 'our'
     }
     return false;
 }
+
 function startProcess($os){
     if($os == "windows"){
         pclose(popen('start /b '.getPHPBinaryLocation($os).' '.dirname(__FILE__,2).'\core\sniperphish_manager.php quite','r'));    //background execution
@@ -97,6 +99,7 @@ function isCommandExist($cmd) {
     pclose($handle);
     return !empty($output);
 }
+
 //--------------------------------------
 function isTokenValid($conn,$token){
     $stmt = $conn->prepare("SELECT v_hash_time FROM tb_main WHERE v_hash = ?");
@@ -110,6 +113,7 @@ function isTokenValid($conn,$token){
     }
     return false;
 }
+
 //-----------------------------------------
 function shootMail(&$message,$smtp_server,$sender_username,$sender_pwd,$sender_from,$test_to_address,$cust_headers,$mail_subject,$mail_body,$mail_content_type,$dsn_type='custom'){
     try {
@@ -158,7 +162,6 @@ function getMailerDSN($dsn_type, $sender_username, $sender_pwd, $smtp_server, $v
     }
 }
 
-
 //----------------------------------------------------
 function getQueryValsFromURL($url){
     $parts =parse_url(html_entity_decode($url), PHP_URL_QUERY);
@@ -179,7 +182,6 @@ function setServerVariables($conn){
     $baseurl = $server_protocol.'://'.$_SERVER['HTTP_HOST'];
     $stmt = $conn->prepare("UPDATE tb_main_variables SET server_protocol=?, domain =?, baseurl=?");
     $stmt->bind_param('sss', $server_protocol, $_SERVER['HTTP_HOST'], $baseurl);
-    
     $stmt->execute();
     $stmt->close();
 }
@@ -253,6 +255,7 @@ function checkAnIDExist($conn,$id_value,$id_name,$table_name){
     else
         return false;
 }
+
 //-----------------Tracker Specific----------------------------
 function getIPInfo($conn, $public_ip) {
     $stmt = $conn->prepare("SELECT ip_info FROM tb_data_mailcamp_live WHERE public_ip = ?");
@@ -285,13 +288,11 @@ function craftIPInfoArr($output){
     $ip_info['isp'] = empty($output['org'])?null:$output['org'];
     $ip_info['timezone'] = (empty($output['timezone'])||empty($output['utc_offset']))?null:$output['timezone'].' ('.$output['utc_offset'].')';
     $ip_info['coordinates'] = (empty($output['latitude'])||empty($output['longitude']))?null:$output['latitude'].'(lat)/'.$output['longitude'].'(long)';
-
     return $ip_info;
 }
 
 function getMailClient($user_agent) {
     $browser        = "unknown";
-
     $browser_array = array(
             '/msie|trident/i'      => 'Internet Explorer',
             '/firefox/i'   => 'Firefox',
@@ -343,10 +344,10 @@ function getCampaignDataFromCampaignID($conn, $campaign_id){
     else
         return [];
 }
+
 function getTimelineDataMail($conn, $campaign_id, $DTime_info){
     $scatter_data_mail = $timestamp_conv = [];
     $mail_open_count = 0;
-
     $stmt = $conn->prepare("SELECT sending_status,send_time,user_name,user_email,mail_open_times FROM tb_data_mailcamp_live WHERE campaign_id=?");
     $stmt->bind_param("s", $campaign_id);
     $stmt->execute();
@@ -369,11 +370,9 @@ function getMailReplied($conn, $campaign_id, $quite=false){
     session_write_close(); //Required to avoid hanging by executing this fun
     $arr_replied_mails = [];
     $arr_err = [];
-
     $campaign_data = getCampaignDataFromCampaignID($conn, $campaign_id);
     $sender_list_id = $campaign_data['mail_sender']['id'];
     $user_group_id = $campaign_data['user_group']['id'];
-
     $stmt = $conn->prepare("SELECT sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_acc_pwd,sender_mailbox,cust_headers FROM tb_core_mailcamp_sender_list WHERE sender_list_id = ?");
     $stmt->bind_param("s", $sender_list_id);
     $stmt->execute();
@@ -443,6 +442,7 @@ function getMailReplied($conn, $campaign_id, $quite=false){
     }           
     $stmt->close();
 }
+
 //--------------------------------------------------------------------
 function doFilter($string, $type){
     if($type == 'ALPHA_NUM')
@@ -465,6 +465,7 @@ function isValidEmail($email){ //supports  RFC 5322
     else
         return false;
 }
+
 function getTimeInfo($conn){    //get client-set date-time formats
     $result = mysqli_query($conn, "SELECT time_zone,time_format FROM tb_main_variables")->fetch_assoc();
     $result['time_zone'] = json_decode($result['time_zone'],true);
@@ -569,6 +570,7 @@ function getHTMLData(&$arr_odata,&$file_name,&$selected_col,&$dic_all_col){
     $html_data .='</table>';
     return $html_data;
 }
+
 //--------------Logger--------
 function logIt($log,$username=null){
     global $conn;
@@ -585,6 +587,7 @@ function logIt($log,$username=null){
 function getRandomStr($length=10){
     return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyz', ceil(10/strlen($x)) )),1,intval($length));
 }
+
 function getSniperPhishVersion(){   //update this when new version releases
     echo "2.0";
 }

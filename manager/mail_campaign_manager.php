@@ -91,6 +91,7 @@ function saveCampaignList($conn, &$POSTJ){
 	}
 
 	if ($stmt->execute() === TRUE){	$scheduled_time = strtotime($sch_date);
+
 		deleteLiveMailcampData($conn,$campaign_id); /// Clear live data before starting or when campaign deletes
 		kickStartCampaign($conn,$campaign_id);
 		echo json_encode(['result' => 'success']);	
@@ -197,8 +198,8 @@ function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $ne
 function pullMailCampaignFieldData($conn){
 	$resp;
 	$userid=$_SESSION['user'][0];
-	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%') AND `userid` = '$userid'");
-	// $result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE `userid` = '$userid' ");
+	// $result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%') AND `userid` = '$userid'");
+	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE `userid` = '$userid' ");
 	if(mysqli_num_rows($result) > 0){
 		$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
@@ -208,8 +209,8 @@ function pullMailCampaignFieldData($conn){
 		$resp['mail_template'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
 
-	$result = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `userid` = '$userid' ");
-	$result1 = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name` FROM `tb_core_mailcamp_sender_list` WHERE `status` = 0 ");
+	$result = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name`,`status` FROM `tb_core_mailcamp_sender_list` WHERE `userid` = '$userid' ");
+	$result1 = mysqli_query($conn, "SELECT `sender_list_id`,`sender_name`,`status` FROM `tb_core_mailcamp_sender_list` WHERE `status` = 0 ");
 
 	if(mysqli_num_rows($result) > 0 || mysqli_num_rows($result1) > 0){
 		$result = array_merge(mysqli_fetch_all($result1, MYSQLI_ASSOC),mysqli_fetch_all($result, MYSQLI_ASSOC));

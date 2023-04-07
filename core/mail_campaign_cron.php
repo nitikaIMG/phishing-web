@@ -166,7 +166,6 @@ function InitMailCampaign($conn, $campaign_id){
 		$config_mail_enc_cert_name = $MCONFIG_DATA['mconfig_data']['mail_enc']['cert']['name'];
 		$config_mail_enc_cert_fb64 = $MCONFIG_DATA['mconfig_data']['mail_enc']['cert']['fb64'];
 	}
-
 	$serv_variables = getServerVariable($conn);
 	//----------------------------------------------------------------------------------------
 	
@@ -185,8 +184,8 @@ function InitMailCampaign($conn, $campaign_id){
         else
             $message->getHeaders()->addTextHeader($header_name, $header_val);
 	}
-
 	foreach ($arr_user_data as $arr_user) {
+		
 		$send_time = round(microtime(true) * 1000); //milli-seconds
     	$msg_fail_retry_counter = 0;
 	    $RID = generateRID($conn, $campaign_id); 
@@ -220,7 +219,7 @@ function InitMailCampaign($conn, $campaign_id){
             $message->html($msg_body);
         else
             $message->text($msg_body);
-
+		
 	  	statusEntryCreate($conn,$RID,$campaign_id,$MC_name,$send_time,$keyword_vals['{{NAME}}'],$keyword_vals['{{EMAIL}}']); 
 	  	try{
 		  	if($config_recipient_type == "to")

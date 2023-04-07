@@ -45,6 +45,7 @@ function pullMailCampaignFieldData() {
             action_type: "pull_mail_campaign_field_data"
          })
     }).done(function (data) {
+        console.log(data);
         if(!data['error']){  // no data error
             $.each(data.user_group, function() {
                 $('#employees').append('<option value="' + this.user_group_id +'/'+this.user_group_name +'">' + this.user_group_name + '</option>');
@@ -55,6 +56,9 @@ function pullMailCampaignFieldData() {
             });
 
             $.each(data.mail_sender, function() {
+                if(this.status == 0){
+                    $('#mailSenderSelector').append('<option value="' + this.sender_list_id + '">' + this.sender_name + ' (DEFAULT)</option>');
+                }
                 $('#mailSenderSelector').append('<option value="' + this.sender_list_id + '">' + this.sender_name + '</option>');
             });
 
