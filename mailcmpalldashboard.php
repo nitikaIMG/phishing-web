@@ -56,6 +56,19 @@ isSessionValid(true);
          content: "";
          display: table;
          }
+
+         /* .card {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-direction: column;
+         background-color: #ffffff;
+         margin: 0 20px;
+         width: 280px;
+         height: 350px;
+         border-radius: 5px;
+         box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2);
+         } */
          .card2 {
             display: inline-flex;
             justify-content: center;
@@ -160,7 +173,6 @@ isSessionValid(true);
                <div class="row">
                   <div class="col-12 d-flex no-block align-items-center">
                      <h4 class="page-title">Email Campaign Dashboard</h4>
-                     <button type="button" class="btn btn-info btn-sm item_private" data-toggle="modal" data-target="#ModalCampaignList"><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> Select Campaign</button>
                   </div>
                </div>
             </div>
@@ -174,7 +186,7 @@ isSessionValid(true);
                                     <div class="d-flex no-block align-items-center">
                                        <div>
                                           <h2 id="succ_camp">
-                                              NA
+                                                50
                                           </h2>
                                           <h6 class="text-success">Active &amp; Recurring Campaigns</h6>
                                        </div>
@@ -190,7 +202,7 @@ isSessionValid(true);
                               <div class="card-body">
                                     <div class="d-flex no-block align-items-center">
                                        <div>
-                                          <h2 id="del_camp">NA</h2>
+                                          <h2 id="del_camp">12</h2>
                                           <h6 class="text-primary">Yearly Emails Delivered</h6>
                                        </div>
                                        <div class="ml-auto">
@@ -205,7 +217,7 @@ isSessionValid(true);
                               <div class="card-body">
                                     <div class="d-flex no-block align-items-center">
                                        <div>
-                                          <h2 id="past_camp">NA</h2>
+                                          <h2 id="past_camp">0</h2>
                                           <h6 class="text-info">Past Campaigns</h6>
                                        </div>
                                        <div class="ml-auto">
@@ -229,19 +241,19 @@ isSessionValid(true);
                            <div class="align-items-left col-12 d-flex no-block">             
                               <div class="col-md-3">                             
                                  <h5 class="card-title text-center"><span>Email Overview</span></h5> 
-                                 <div id="radialchart_overview_mailcamp" ><p class="text-center">NA</p></div>
+                                 <div id="radialchart_overview_mailcamp" ></div>
                               </div>
                               <div class="col-md-3">    
                                  <h5 class="card-title text-center"><span>Email Sent</span></h5>
-                                 <div id="piechart_mail_total_sent" ><p class="text-center">NA</p></div>
+                                 <div id="piechart_mail_total_sent" ></div>
                               </div>
                               <div class="col-md-3">
                                  <h5 class="card-title text-center"><span>Email Opened</span></h5>
-                                 <div id="piechart_mail_total_mail_open" ><p class="text-center">NA</p></div>
+                                 <div id="piechart_mail_total_mail_open" ></div>
                               </div>
                               <div class="col-md-3">                           
                                  <h5 class="card-title text-center"><span>Email Replied</span></h5>
-                                 <div id="piechart_mail_total_replied" class="center"><p class="text-center">NA</p></div>
+                                 <div id="piechart_mail_total_replied" class="center"></div>
                               </div>
                            </div>
                         </div>
@@ -285,8 +297,20 @@ isSessionValid(true);
                               <div class="col-md-12 m-t-20">    
                                  <div class="row">                    
                                     <div class="table-responsive">
-                                       <table id="table_mail_campaign_result" class="table table-striped table-bordered">
+                                       <table id="table_mail_campaign_result1" class="table table-striped table-bordered">
                                           <thead>
+                                             <tr>
+                                                <th>#</th>
+                                                <th>Campaign Name</th>
+                                                <th>Status</th>
+                                                <th>Scheduled Date</th>
+                                                <th>Employees</th>
+                                                <th>Email Delivered</th>
+                                                <th>Email Viewed</th>
+                                                <th>Payloads Clicked</th>
+                                                <th>Employees Compromised</th>
+                                                <th>Emails Reported</th>
+                                             </tr>
                                           </thead>
                                           <tbody>
                                           </tbody>
@@ -433,36 +457,6 @@ isSessionValid(true);
             </div>
             <!-- Modal -->
             
-             <!-- Modal -->
-             <div class="modal fade" id="ModalCampaignList" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true ">
-               <div class="modal-dialog modal-large" role="document ">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Select Email Campaign</h5>
-                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
-                     </div>
-                     <div class="modal-body">
-                        <div class="form-group row">
-                           <div class="table-responsive">
-                              <table id="table_mail_campaign_list" class="table table-striped table-bordered">
-                                 <thead>
-                                    <tr>
-                                       <th>#</th>
-                                       <th>Tracker Name</th>
-                                       <th>Date Created</th>
-                                       <th>Status</th>
-                                       <th>Action</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
             <?php include(dirname(__FILE__).'/components/foot.php'); ?>
 
            </div>
@@ -514,15 +508,10 @@ isSessionValid(true);
              echo '<script>var g_tk_id = getRandomId();</script>';            
             isSessionValid(true);
          }
+
          //------------------------------------------
          echo '<script>';
-         echo'$(".btn-close").click(function() {
-            $("#ModalCampaignList").modal("hide");
-            $("#modal_dashboard_link").modal("hide");
-            $("#modal_settings").modal("hide");
-            $("#modal_reply_mails").modal("hide");
-            $("#ModalExport").modal("hide");
-          });';
+         
          if(isset($_GET['mcamp']))
             echo 'var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
                   campaignSelected("' . doFilter($_GET['mcamp'],'ALPHA_NUM') . '");';
@@ -530,8 +519,7 @@ isSessionValid(true);
             echo 'var g_campaign_id ="", g_tracker_id="";
                   $(function() {$("#ModalCampaignList").modal("toggle");});';
          
-                  // echo'loadTableCampaignResult1()';
-                  echo'loadTableCampaignResult()';
+                  echo'loadTableCampaignResult1()';
          echo '</script>';
       ?>
 

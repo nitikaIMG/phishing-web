@@ -164,8 +164,17 @@ function getMailerDSN($dsn_type, $sender_username, $sender_pwd, $smtp_server, $v
 
 //----------------------------------------------------
 function getQueryValsFromURL($url){
-    $parts =parse_url(html_entity_decode($url), PHP_URL_QUERY);
-    parse_str($parts, $query);
+    $query = array();
+
+    // Parse the URL and retrieve the query string
+    $parts = parse_url(html_entity_decode($url), PHP_URL_QUERY);
+
+    // Check if a query string exists
+    if ($parts) {
+        // Parse the query string and populate the $query array
+        parse_str($parts, $query);
+    }
+
     return $query;
 }
 

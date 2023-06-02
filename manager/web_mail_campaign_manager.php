@@ -35,7 +35,7 @@ if (isset($_POST)) {
 		if($POSTJ['action_type'] == "get_campaign_list_web_mail")
 			getCampaignListWebMail($conn);
 		if($POSTJ['action_type'] == "get_timeline_data_web")
-			getTimelineDataWeb($conn, $POSTJ['campaign_id'], $POSTJ['tracker_id'], $POSTJ['user_group_id']);
+		get_timeline_data_web($conn, $POSTJ['campaign_id'], $POSTJ['tracker_id'], $POSTJ['user_group_id']);
 		if($POSTJ['action_type'] == "get_webcamp_graph_data")
 			getWebcampGraphData($conn,  $POSTJ['campaign_id'], $POSTJ['tracker_id'], $POSTJ['user_group_id'], $POSTJ['page_count']);
 		if($POSTJ['action_type'] == "multi_get_live_campaign_data_web_mail")
@@ -122,7 +122,6 @@ function getTimelineDataWeb($conn, $campaign_id, $tracker_id, $user_group_id){
 	$result = $stmt->get_result();
 	if($result->num_rows > 0)
 		$user_data = json_decode($result->fetch_assoc()['user_data']);
-
 
 	$stmt = $conn->prepare("SELECT rid,time FROM tb_data_webpage_visit WHERE tracker_id = ?");
 	$stmt->bind_param("s", $tracker_id);

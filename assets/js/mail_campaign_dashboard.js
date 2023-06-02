@@ -40,7 +40,7 @@ ele.sortable({
 
 function getAllReportColListSelected(){
     allReportColListSelected=[];
-
+    var allReportColListSelected =["rid", "user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","public_ip","mail_client","platform","device_type","mail_reply","country"];
     $.each($("#tb_camp_result_colums_list_mcamp").find("option"), function () {
         allReportColList[$(this).text()] = $(this).val();
     });
@@ -183,7 +183,10 @@ function campaignSelected(campaign_id) {
     $("#table_mail_campaign_result tbody > tr").remove();
     loadTableCampaignResult();
     //------------------------
-    
+    $("#succ_camp").html("");
+    $("#del_camp").html("");
+    $("#past_camp").html("");
+
     $.post({
         url: "manager/mail_campaign_manager",
         contentType: 'application/json; charset=utf-8',
@@ -193,6 +196,7 @@ function campaignSelected(campaign_id) {
             campaign_id: g_campaign_id,
         })
     }).done(function (data) {
+
         if(!data.error){
             $('#disp_camp_name').text(data.campaign_name);
             $('#disp_camp_start').text(data.scheduled_time);
@@ -207,6 +211,56 @@ function campaignSelected(campaign_id) {
 
             updateProgressbar(data.camp_status, data.campaign_data.mail_sender.id, data.campaign_data.user_group.id, data.campaign_data.mail_template.id, sent_mail_count, sent_success_count, sent_failed_count, mail_open_count);
             updateLiveMailCampData(data.live_mcamp_data.scatter_data, data.live_mcamp_data.timestamp_conv, data.timezone);
+
+            $("#succ_camp").append(data.total);
+            $("#del_camp").append(data.year_count);
+            $("#past_camp").append(data.past_camp);
+        
+            var months = { 01:0, 02:0, 03:0 ,04:0,05:0,06:0,07:0,08:0,09:0,10:0,11:0,12:0};
+            $.each(data.phishingmail, function(key, value) {
+             var date = value.scheduled_time;
+             var newDate = moment(date, 'YYYY-MM-DD').format('MM');
+             if(months[parseInt(newDate)] == '0'){
+                var arr = [];
+                var sent = 0;
+                if(value.sending_status=='2'){
+                 sent = sent+1;
+                }
+
+                var open = 0;
+                if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
+                }else{
+                    open = open+1;
+                }
+                var payload = 0;
+                var comp = 0;
+                var reported = 0;
+
+                arr['sent'] = sent;
+                arr['open'] = open;
+                arr['payload'] = payload;
+                arr['comp'] = comp;
+                arr['reported'] = reported;
+
+                months[parseInt(newDate)] = arr;
+            }else{
+                if(value.sending_status=='2'){
+                    months[parseInt(newDate)]['sent'] = months[parseInt(newDate)]['sent']+1;
+                }
+                if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
+                }else{
+                    months[parseInt(newDate)]['open'] = months[parseInt(newDate)]['open']+1;
+                }
+
+                  months[parseInt(newDate)]['payload'] = 0;
+                  months[parseInt(newDate)]['comp'] = 0;
+                  months[parseInt(newDate)]['reported'] = 0;
+
+            }
+   
+            });
+            mailchart(months);
+
         }
         else
             toastr.warning('', data.live_mcamp_data.error);            
@@ -223,6 +277,7 @@ function updateProgressbar(mailcamp_status, sender_list_id, user_group_id, mail_
             campaign_id: g_campaign_id,
         })
     }).done(function (data) {
+        console.log(data);
         if(!data.error){
             $('#user_group_name').val(data.user_group_name);
 
@@ -238,10 +293,10 @@ function updateProgressbar(mailcamp_status, sender_list_id, user_group_id, mail_
                 $("#progressbar_status").children().removeClass("bg-success");
 
             updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed_count);
-
             var mail_open_percent = +(mail_open_count / total_user_email_count * 100).toFixed(2);;
             updatePieTotalMailOpen(total_user_email_count, mail_open_count, mail_open_percent);
             updatePieOverViewEmail(sent_mail_success_percent, mail_open_percent);
+
             if (mailcamp_status != 0 && $('input[name="radio_mail_reply_check"]:checked').val() == "reply_yes")
                 updatePieTotalMailReplied(total_user_email_count);
             else{
@@ -713,10 +768,12 @@ function updatePieTotalMailReplied(total_user_email_count) {
     }); 
 }
 
+
 function loadTableCampaignResult() {
     try {
         dt_mail_campaign_result.destroy();
     } catch (err) {}
+
 
     $("#table_mail_campaign_result").attr("hidden", false);
     $("#table_mail_campaign_result").parent().children().remove('.loadercust');
@@ -730,12 +787,15 @@ function loadTableCampaignResult() {
     var arr_tb_heading=[];  
     arr_tb_heading.push({ data: 'sn', title: "SN" });
 
+    var allReportColListSelected =["user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","public_ip","mail_client","platform","device_type","mail_reply","country"];
+ 
     $.each(allReportColListSelected, function(index, item) {
         if (item.startsWith("Field"))
             arr_tb_heading.push({ data: item, title : 'Field-' + item});
         else
             arr_tb_heading.push({ data: item, title : dic_all_col[item]});
     });
+ 
 
     dt_mail_campaign_result = $('#table_mail_campaign_result').DataTable({
         'processing': true,
@@ -753,14 +813,16 @@ function loadTableCampaignResult() {
                     return JSON.stringify(d);
                 },
             dataSrc: function ( resp ){
+             console.log(resp);
+
                 for (var i=0; i<resp.data.length; i++){
                     resp.data[i]['sn'] = i+1;
                     if(resp.data[i].mail_open==true)
                         resp.data[i].mail_open = "<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>";
                     else
                         resp.data[i].mail_open = "<center><i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i></center>";
-                    resp.data[i].sending_status= camp_table_status_def[resp.data[i].sending_status];
-                    if(Object.keys(reply_emails).length >= 0 &&  reply_emails.hasOwnProperty('msg_info') && reply_emails.msg_info.hasOwnProperty(resp.data[i].user_email) ){
+                        resp.data[i].sending_status= camp_table_status_def[resp.data[i].sending_status];
+                        if(Object.keys(reply_emails).length >= 0 &&  reply_emails.hasOwnProperty('msg_info') && reply_emails.msg_info.hasOwnProperty(resp.data[i].user_email) ){
                         resp.data[i].mail_reply = `<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>`;
                         resp.data[i].mail_reply_count = reply_emails.msg_info[resp.data[i].user_email].msg_time.length;
                         resp.data[i].mail_reply_content = `<center><i class="fas fa-eye fa-lg cursor-pointer" data-toggle="tooltip" title="View" onclick="viewReplyMails('` + resp.data[i].user_email + `')"></i></center>`;
