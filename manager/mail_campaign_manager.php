@@ -358,15 +358,15 @@ function getUserGroupData($conn, $campaign_id){
 	$campaign_data = getCampaignDataFromCampaignID($conn, $campaign_id);
 	$user_group_id = $campaign_data['user_group']['id'];
 	if(!empty($campaign_data)){
-
-		if (strpos($user_group_id, ',') !== false) {
-
+		
+		if (explode(',', $user_group_id) != 0) {
+             $user_group_id = explode(',', $user_group_id);
+			 $row = array(); 
 			foreach($user_group_id as $user){
 				$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_user_group WHERE user_group_id = ?");
 				$stmt->bind_param("s", $user);
 				$stmt->execute();
 				$result = $stmt->get_result();
-			
 				if($result->num_rows != 0){
 					$row = $result->fetch_assoc();
 					$row['user_data'] = json_decode($row["user_data"]);    //avoid double json encoding
@@ -379,7 +379,7 @@ function getUserGroupData($conn, $campaign_id){
 				
 				$stmt->close(); // Close the statement inside the loop
 			}
-				
+			echo json_encode($row);
 		} else {
 
 			$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_user_group WHERE user_group_id = ?");
@@ -575,6 +575,7 @@ function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name
 	$stmt->execute();
 	$result = $stmt->get_result();
 	$rows = $result->fetch_all(MYSQLI_ASSOC);
+	
 	foreach($rows as $i => $row){
 		$tmp = [];
 		$ip_info = json_decode($row['ip_info'],true);

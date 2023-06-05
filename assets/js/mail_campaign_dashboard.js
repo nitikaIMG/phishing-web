@@ -196,7 +196,7 @@ function campaignSelected(campaign_id) {
             campaign_id: g_campaign_id,
         })
     }).done(function (data) {
-
+        $("#ModalCampaignList").modal("toggle");
         if(!data.error){
             $('#disp_camp_name').text(data.campaign_name);
             $('#disp_camp_start').text(data.scheduled_time);
@@ -871,7 +871,9 @@ function loadTableCampaignResult1(){
                 $("#del_camp").append(data.year_count);
                 $("#past_camp").append(data.past_camp);
 
+                var dataforcamp = [];
                 $.each(data.resp, function(key, value) {
+                    dataforcamp.push(value.campaign_id);
                     var count = JSON.parse(value.campaign_data);
                     var emp_count = (count.user_group.id).split(",");
                     var date = value.scheduled_datetime;
@@ -1047,9 +1049,116 @@ function loadTableCampaignResult1(){
             updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
             updatePieTotalSent(data.total, data.year_count, data.sent_failed_count)
             updatePieTotalMailOpen(data.total, data.opend_mail, open_mail_percent)
-            updatePieTotalMailReplied(data.total)
+            updatePieTotalMailReplied1(data.total,dataforcamp)
         });
     })
+}
+
+function updatePieTotalMailReplied1(total_user_email_count,data) {
+    $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_mail_replied",
+            tk_id : g_tk_id,
+            campaign_id: data,
+        }),
+    }).done(function (data) {
+        loadTableCampaignResult();
+        $("#piechart_mail_total_replied").attr("hidden", false);
+        $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
+        if (!data.error) {
+            window.reply_emails = data;
+
+            var reply_count_unique = Object.keys(data.msg_info).length;
+            var reply_percent = +(reply_count_unique / total_user_email_count * 100).toFixed(2);
+            var non_reply_percent = +(100 - reply_percent).toFixed(2);
+            var options = {
+                series: [reply_percent, non_reply_percent],
+                chart: {
+                    type: 'donut',
+                },
+                plotOptions: {
+                    pie: {
+                        offsetY: 0,
+                        customScale: 1,
+                        donut: {
+                            size: '80%',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: false,
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '14px',
+                                    formatter: function(val) {
+                                        return val + "%";
+                                    }
+                                },
+                                total: {
+                                    show: true,
+                                    label: 'Total',
+                                    formatter: function(w) {
+                                        return w.globals.series[0] + "% (" + reply_count_unique + "/" + total_user_email_count + ")";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: true,
+                    custom: function({
+                        series,
+                        seriesIndex,
+                        dataPointIndex,
+                        w
+                    }) {
+                        if (seriesIndex == 0)
+                            return `<div class="chart-tooltip">Replied: ` + series[seriesIndex] + `%</div>`;
+                        else
+                            return `<div class="chart-tooltip">Not Replied: ` + series[seriesIndex] + `%</div>`;
+                    },
+                },
+                colors: ['#F86624', '#d9d9d9'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            piechart_mail_total_replied = new ApexCharts(
+                document.querySelector("#piechart_mail_total_replied"),
+                options
+            );
+            piechart_mail_total_replied.render();
+
+            var arr_chart_data = radialchart_overview_mailcamp.w.globals.series.slice();
+            arr_chart_data[2] = reply_percent;
+            radialchart_overview_mailcamp.updateSeries(arr_chart_data)
+        }
+        else{
+            toastr.error('', data.error);
+            $("#piechart_mail_total_replied").text('Loading error!');
+        }
+    }).fail(function(response) {
+        toastr.error('',  response.statusText);
+        $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
+    }); 
 }
 
 function loadTableCampaignResultadmin(){
