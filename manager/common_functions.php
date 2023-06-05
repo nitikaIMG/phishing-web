@@ -5,21 +5,6 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
-//-------------------------------------------------------
-function checkInstallation(){
-    $db_file = dirname(__FILE__,2) . '/includes/db.php';
-    
-    if (file_exists($db_file)) {
-        require_once(dirname(__FILE__,2) . '/includes/db.php');
-        
-        $result = mysqli_query($conn, "SHOW TABLES FROM $curr_db");
-        if (mysqli_num_rows($result) > 0)
-            die("Already installed! Click <a href='/spear'>here</a> to login");
-        else
-            return false;
-    }
-}
-
 //------------------------------------------------------
 function getOSType(){
     if (stripos(PHP_OS, 'WIN') === 0)
@@ -386,6 +371,7 @@ function getMailReplied($conn, $campaign_id, $quite=false){
     $stmt->bind_param("s", $sender_list_id);
     $stmt->execute();
     $result = $stmt->get_result();
+    
     if($result->num_rows > 0){
         $row = $result->fetch_assoc() ;
         $sender_username = $row['sender_acc_username'];

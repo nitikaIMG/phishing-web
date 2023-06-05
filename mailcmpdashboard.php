@@ -504,6 +504,7 @@ isSessionValid(true);
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
 
+      
       <?php
          if(isset($_GET['tk']) && isset($_GET['mcamp']) && amIPublic($_GET['tk'],$_GET['mcamp']) == true)
             echo '<script>
@@ -515,23 +516,24 @@ isSessionValid(true);
             isSessionValid(true);
          }
          //------------------------------------------
-         echo '<script>';
-         echo'$(".btn-close").click(function() {
+         echo '<script>
+         loadTableCampaignResult();
+         
+         $(".btn-close").click(function() {
             $("#ModalCampaignList").modal("hide");
             $("#modal_dashboard_link").modal("hide");
             $("#modal_settings").modal("hide");
             $("#modal_reply_mails").modal("hide");
             $("#ModalExport").modal("hide");
           });';
+
          if(isset($_GET['mcamp']))
             echo 'var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
                   campaignSelected("' . doFilter($_GET['mcamp'],'ALPHA_NUM') . '");';
          else
             echo 'var g_campaign_id ="", g_tracker_id="";
                   $(function() {$("#ModalCampaignList").modal("toggle");});';
-         
-                  // echo'loadTableCampaignResult1()';
-                  echo'loadTableCampaignResult()';
+                
          echo '</script>';
       ?>
 

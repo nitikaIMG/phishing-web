@@ -657,10 +657,10 @@ function saveSenderList($conn, &$POSTJ,$userid){
 	$sender_list_mail_sender_acc_username = $POSTJ['sender_list_mail_sender_acc_username'];
 	$sender_list_mail_sender_acc_pwd = $POSTJ['sender_list_mail_sender_acc_pwd'];
 	$auto_mailbox = $POSTJ['cb_auto_mailbox'];
-	$mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	// $mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	$mail_sender_mailbox =(explode(':',$POSTJ['sender_list_mail_sender_SMTP_server'])[0]).':993/imap/ssl}INBOX';
 	$sender_list_cust_headers = json_encode($POSTJ['sender_list_cust_headers']); 
 	$dsn_type = $POSTJ['dsn_type'];
-
 
 	if(checkAnIDExist($conn,$sender_list_id,'sender_list_id','tb_core_mailcamp_sender_list')){
 
@@ -711,7 +711,8 @@ function saveSenderListByAdmin($conn, &$POSTJ){
 	$sender_list_mail_sender_acc_username = $POSTJ['sender_list_mail_sender_acc_username'];
 	$sender_list_mail_sender_acc_pwd = $POSTJ['sender_list_mail_sender_acc_pwd'];
 	$auto_mailbox = $POSTJ['cb_auto_mailbox'];
-	$mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	// $mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	$mail_sender_mailbox =(explode(':',$POSTJ['sender_list_mail_sender_SMTP_server'])[0]).':993/imap/ssl}INBOX';
 	$sender_list_cust_headers = json_encode($POSTJ['sender_list_cust_headers']); 
 		$dsn_type = $POSTJ['dsn_type'];
 
