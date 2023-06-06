@@ -420,7 +420,14 @@ function getMailReplied($conn, $campaign_id, $quite=false){
                         }   
                     }
                 }
+                
+                $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_replies=? WHERE campaign_id=? AND rid=?");
+                $stmt->bind_param('ssssssssss', $arr_msg_info,$campaign_id,$row['rid']);
+                $stmt->execute();
+
             }
+            
+
         }catch(Exception $e) {
             array_push($arr_err,$e->getMessage());
         }
