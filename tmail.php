@@ -3,7 +3,7 @@ require_once(dirname(__FILE__) . '/config/db.php');
 require_once(dirname(__FILE__) . '/manager/common_functions.php');
 require_once(dirname(__FILE__) . '/libs/browser_detect/BrowserDetection.php');
 date_default_timezone_set('UTC');
-print_r($_GET);die;
+
 if(isset($_GET['rid']))
     $user_id = doFilter($_GET['rid'],'ALPHA_NUM');
 else

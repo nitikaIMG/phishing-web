@@ -190,7 +190,7 @@ isSessionValid(true);
                               <div class="card-body">
                                     <div class="d-flex no-block align-items-center">
                                        <div>
-                                          <h2 id="del_camp">NA</h2>
+                                          <h2 id="del_camp"></h2>
                                           <h6 class="text-primary">Yearly Emails Delivered</h6>
                                        </div>
                                        <div class="ml-auto">
@@ -205,7 +205,7 @@ isSessionValid(true);
                               <div class="card-body">
                                     <div class="d-flex no-block align-items-center">
                                        <div>
-                                          <h2 id="past_camp">NA</h2>
+                                          <h2 id="past_camp"></h2>
                                           <h6 class="text-info">Past Campaigns</h6>
                                        </div>
                                        <div class="ml-auto">
@@ -229,19 +229,19 @@ isSessionValid(true);
                            <div class="align-items-left col-12 d-flex no-block">             
                               <div class="col-md-3">                             
                                  <h5 class="card-title text-center"><span>Email Overview</span></h5> 
-                                 <div id="radialchart_overview_mailcamp" ><p class="text-center">NA</p></div>
+                                 <div id="radialchart_overview_mailcamp" ><p class="text-center"></p></div>
                               </div>
                               <div class="col-md-3">    
                                  <h5 class="card-title text-center"><span>Email Sent</span></h5>
-                                 <div id="piechart_mail_total_sent" ><p class="text-center">NA</p></div>
+                                 <div id="piechart_mail_total_sent" ><p class="text-center"></p></div>
                               </div>
                               <div class="col-md-3">
                                  <h5 class="card-title text-center"><span>Email Opened</span></h5>
-                                 <div id="piechart_mail_total_mail_open" ><p class="text-center">NA</p></div>
+                                 <div id="piechart_mail_total_mail_open" ><p class="text-center"></p></div>
                               </div>
                               <div class="col-md-3">                           
                                  <h5 class="card-title text-center"><span>Email Replied</span></h5>
-                                 <div id="piechart_mail_total_replied" class="center"><p class="text-center">NA</p></div>
+                                 <div id="piechart_mail_total_replied" class="center"><p class="text-center"></p></div>
                               </div>
                            </div>
                         </div>
@@ -505,13 +505,13 @@ isSessionValid(true);
       <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
 
       
-      <?php
-         if(isset($_GET['tk']) && isset($_GET['mcamp']) && amIPublic($_GET['tk'],$_GET['mcamp']) == true)
+      <?php 
+         if(isset($_GET['tk']) && isset($_GET['mcamp']) && amIPublic($_GET['tk'],$_GET['mcamp']) == true){
             echo '<script>
                      var g_tk_id = "'.$_GET['tk'].'"; 
                      hideMeFromPublic(); 
                   </script>';
-         else{
+         }else{
              echo '<script>var g_tk_id = getRandomId();</script>';            
             isSessionValid(true);
          }
@@ -527,14 +527,17 @@ isSessionValid(true);
             $("#ModalExport").modal("hide");
           });';
 
-         if(isset($_GET['mcamp']))
-            echo 'var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
-                  campaignSelected("' . doFilter($_GET['mcamp'],'ALPHA_NUM') . '");';
-         else
+         if(isset($_GET['mcamp'])){
+            echo '
+            var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
+            campaignSelected("' . doFilter($_GET['mcamp'],'ALPHA_NUM') . '");
+            ';
+         }else{
             echo 'var g_campaign_id ="", g_tracker_id="";
                   $(function() {$("#ModalCampaignList").modal("toggle");});';
-                
+         }
          echo '</script>';
+       
       ?>
 
       <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>

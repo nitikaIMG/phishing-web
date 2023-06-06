@@ -513,7 +513,8 @@ isAdminSessionValid(true);
          echo '<script>';
          
          if(isset($_GET['mcamp']))
-            echo 'var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
+            echo '
+                  var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
                   campaignSelected("' . doFilter($_GET['mcamp'],'ALPHA_NUM') . '");';
          else
             echo 'var g_campaign_id ="", g_tracker_id="";

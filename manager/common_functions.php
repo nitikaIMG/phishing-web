@@ -361,6 +361,8 @@ function getTimelineDataMail($conn, $campaign_id, $DTime_info){
 }
 
 function getMailReplied($conn, $campaign_id, $quite=false){
+
+
     session_write_close(); //Required to avoid hanging by executing this fun
     $arr_replied_mails = [];
     $arr_err = [];
@@ -422,6 +424,7 @@ function getMailReplied($conn, $campaign_id, $quite=false){
         }catch(Exception $e) {
             array_push($arr_err,$e->getMessage());
         }
+
         array_push($arr_err,imap_errors());     //required to capture imap errors
         
         if(empty($arr_err) || $arr_err[0] == false)

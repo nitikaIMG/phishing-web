@@ -232,6 +232,7 @@ function campaignSelected(campaign_id) {
                 }else{
                     open = open+1;
                 }
+
                 var payload = 0;
                 var comp = 0;
                 var reported = 0;
@@ -277,28 +278,28 @@ function updateProgressbar(mailcamp_status, sender_list_id, user_group_id, mail_
             campaign_id: g_campaign_id,
         })
     }).done(function (data) {
-        console.log(data);
         if(!data.error){
             $('#user_group_name').val(data.user_group_name);
 
-            var total_user_email_count = Object.keys(data.user_data).length;
-            var sent_mail_percent = +(sent_mail_count / total_user_email_count * 100).toFixed(2);
-            var sent_mail_success_percent = +(sent_success_count / total_user_email_count * 100).toFixed(2);
+            var sent_mail_percent = +(sent_success_count / sent_mail_count * 100).toFixed(2);
+            var sent_mail_success_percent = +(sent_success_count / sent_mail_count * 100).toFixed(2);
 
             $("#progressbar_status").children().width(sent_mail_percent + "%");
-            $("#progressbar_status").children().text(sent_mail_count + "/" + total_user_email_count + " (" + sent_mail_percent + "%)");
+            $("#progressbar_status").children().text(sent_success_count + "/" + sent_mail_count + " (" + sent_mail_percent + "%)");
+
             if (sent_mail_percent == 100)
                 $("#progressbar_status").children().addClass("bg-success");
             else
                 $("#progressbar_status").children().removeClass("bg-success");
 
-            updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed_count);
-            var mail_open_percent = +(mail_open_count / total_user_email_count * 100).toFixed(2);;
-            updatePieTotalMailOpen(total_user_email_count, mail_open_count, mail_open_percent);
+
+            updatePieTotalSent(sent_mail_count, sent_success_count, sent_failed_count);
+            var mail_open_percent = +(mail_open_count / sent_mail_count * 100).toFixed(2);;
+            updatePieTotalMailOpen(sent_mail_count, mail_open_count, mail_open_percent);
             updatePieOverViewEmail(sent_mail_success_percent, mail_open_percent);
 
             if (mailcamp_status != 0 && $('input[name="radio_mail_reply_check"]:checked').val() == "reply_yes")
-                updatePieTotalMailReplied(total_user_email_count);
+                updatePieTotalMailReplied(sent_mail_count);
             else{
                 $("#piechart_mail_total_replied").attr("hidden", false);
                 $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
@@ -502,10 +503,11 @@ function updatePieOverViewEmail(sent_mail_percent, open_mail_percent) {
 }
 
 function updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed_count) {
+ 
     $("#piechart_mail_total_sent").attr("hidden", false);
     $("#piechart_mail_total_sent").parent().children().remove('.loadercust');
 
-    var sent_percent = +((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
+    var sent_percent = ((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
     var non_sent_percent = +(100 - sent_percent).toFixed(2);
     var options = {
         series: [sent_percent, non_sent_percent],
@@ -871,9 +873,7 @@ function loadTableCampaignResult1(){
                 $("#del_camp").append(data.year_count);
                 $("#past_camp").append(data.past_camp);
 
-                var dataforcamp = [];
                 $.each(data.resp, function(key, value) {
-                    dataforcamp.push(value.campaign_id);
                     var count = JSON.parse(value.campaign_data);
                     var emp_count = (count.user_group.id).split(",");
                     var date = value.scheduled_datetime;
@@ -1046,120 +1046,95 @@ function loadTableCampaignResult1(){
           
             var sent_mail_percent = ((data.year_count)/data.total)*100;
             var open_mail_percent = ((data.opend_mail)/data.total)*100;
+            var mail_replies_percent = ((data.mail_replies)/data.total)*100;
             updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
             updatePieTotalSent(data.total, data.year_count, data.sent_failed_count)
             updatePieTotalMailOpen(data.total, data.opend_mail, open_mail_percent)
-            updatePieTotalMailReplied1(data.total,dataforcamp)
+            updatePieTotalMailReplied1(data.total,data.mail_replies,mail_replies_percent)
         });
     })
 }
 
-function updatePieTotalMailReplied1(total_user_email_count,data) {
-    $.post({
-        url: "manager/mail_campaign_manager",
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({ 
-            action_type: "get_mail_replied",
-            tk_id : g_tk_id,
-            campaign_id: data,
-        }),
-    }).done(function (data) {
-        loadTableCampaignResult();
-        $("#piechart_mail_total_replied").attr("hidden", false);
-        $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
-        if (!data.error) {
-            window.reply_emails = data;
 
-            var reply_count_unique = Object.keys(data.msg_info).length;
-            var reply_percent = +(reply_count_unique / total_user_email_count * 100).toFixed(2);
-            var non_reply_percent = +(100 - reply_percent).toFixed(2);
-            var options = {
-                series: [reply_percent, non_reply_percent],
-                chart: {
-                    type: 'donut',
-                },
-                plotOptions: {
-                    pie: {
-                        offsetY: 0,
-                        customScale: 1,
-                        donut: {
-                            size: '80%',
-                            labels: {
-                                show: true,
-                                name: {
-                                    show: false,
-                                },
-                                value: {
-                                    show: true,
-                                    fontSize: '14px',
-                                    formatter: function(val) {
-                                        return val + "%";
-                                    }
-                                },
-                                total: {
-                                    show: true,
-                                    label: 'Total',
-                                    formatter: function(w) {
-                                        return w.globals.series[0] + "% (" + reply_count_unique + "/" + total_user_email_count + ")";
-                                    }
-                                }
+function updatePieTotalMailReplied1(total_user_email_count, mail_replies, mail_replies_percent) {
+    $("#piechart_mail_total_replied1").attr("hidden", false);
+    $("#piechart_mail_total_replied1").parent().children().remove('.loadercust');
+    var non_open_percent = +(100 - mail_replies_percent).toFixed(2);
+    var options = {
+        series: [mail_replies_percent, non_open_percent],
+        chart: {
+            type: 'donut',
+        },
+        plotOptions: {
+            pie: {
+                offsetY: 0,
+                customScale: 1,
+                donut: {
+                    size: '80%',
+                    labels: {
+                        show: true,
+                        name: {
+                            show: false,
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '14px',
+                            formatter: function(val) {
+                                return val + "%";
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function(w) {
+                                return w.globals.series[0] + "% (" + mail_replies + "/" + total_user_email_count + ")";
                             }
                         }
                     }
-                },
-                dataLabels: {
-                    enabled: false,
+                }
+            }
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false
+        },
+        tooltip: {
+            enabled: true,
+            custom: function({
+                series,
+                seriesIndex,
+                dataPointIndex,
+                w
+            }) {
+                if (seriesIndex == 0)
+                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex] + `%</div>`;
+                else
+                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex] + `%</div>`;
+            },
+        },
+        colors: ['#e6b800', '#d9d9d9'],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
                 },
                 legend: {
-                    show: false
-                },
-                tooltip: {
-                    enabled: true,
-                    custom: function({
-                        series,
-                        seriesIndex,
-                        dataPointIndex,
-                        w
-                    }) {
-                        if (seriesIndex == 0)
-                            return `<div class="chart-tooltip">Replied: ` + series[seriesIndex] + `%</div>`;
-                        else
-                            return `<div class="chart-tooltip">Not Replied: ` + series[seriesIndex] + `%</div>`;
-                    },
-                },
-                colors: ['#F86624', '#d9d9d9'],
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: 200
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }]
-            };
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
 
-            piechart_mail_total_replied = new ApexCharts(
-                document.querySelector("#piechart_mail_total_replied"),
-                options
-            );
-            piechart_mail_total_replied.render();
-
-            var arr_chart_data = radialchart_overview_mailcamp.w.globals.series.slice();
-            arr_chart_data[2] = reply_percent;
-            radialchart_overview_mailcamp.updateSeries(arr_chart_data)
-        }
-        else{
-            toastr.error('', data.error);
-            $("#piechart_mail_total_replied").text('Loading error!');
-        }
-    }).fail(function(response) {
-        toastr.error('',  response.statusText);
-        $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
-    }); 
+    piechart_mail_total_replied1 = new ApexCharts(
+        document.querySelector("#piechart_mail_total_replied1"),
+        options
+    );
+    piechart_mail_total_replied1.render();
 }
+
 
 function loadTableCampaignResultadmin(){
 

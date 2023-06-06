@@ -253,7 +253,7 @@ isSessionValid(true);
                               </div>
                               <div class="col-md-3">                           
                                  <h5 class="card-title text-center"><span>Email Replied</span></h5>
-                                 <div id="piechart_mail_total_replied" class="center"></div>
+                                 <div id="piechart_mail_total_replied1" class="center"></div>
                               </div>
                            </div>
                         </div>
