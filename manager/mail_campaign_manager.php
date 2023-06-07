@@ -128,6 +128,43 @@ function getCampaignFromCampaignListId($conn, $campaign_id){
 	$DTime_info = getTimeInfo($conn);
 	$resp['timezone'] = $DTime_info['time_zone']['timezone'];
 
+
+	$stmtyear = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.campaign_id = '$campaign_id' AND tb_core_mailcamp_list.camp_status = '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) ");
+	$stmtyear->execute();
+	$resultyear = $stmtyear->get_result();
+	$rowsyear = $resultyear->fetch_all(MYSQLI_ASSOC);
+
+	$stmt1 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.campaign_id = '$campaign_id' AND tb_core_mailcamp_list.camp_status = '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) AND tb_data_mailcamp_live.sending_status = '2'");
+	$stmt1->execute();
+	$result1 = $stmt1->get_result();
+	$rows1 = $result1->fetch_all(MYSQLI_ASSOC);
+
+	$stmt2 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE campaign_id = '$campaign_id' AND stop_time != 'NULL' ");
+	$stmt2->execute();
+	$result2 = $stmt2->get_result();
+	$rows2 = $result2->fetch_all(MYSQLI_ASSOC);
+	
+	$stmt3 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.campaign_id = '$campaign_id' AND tb_core_mailcamp_list.camp_status = '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) AND tb_data_mailcamp_live.sending_status = '2' AND tb_data_mailcamp_live.mail_open_times != 'null'");
+	$stmt3->execute();
+	$result3 = $stmt3->get_result();
+	$rows3 = $result3->fetch_all(MYSQLI_ASSOC);
+
+	$stmt4 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.campaign_id = '$campaign_id' AND tb_core_mailcamp_list.camp_status != '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) AND tb_data_mailcamp_live.sending_status != '2'");
+	$stmt4->execute();
+	$result4 = $stmt4->get_result();
+	$rows4 = $result4->fetch_all(MYSQLI_ASSOC);
+
+	    $total = count($rowsyear);
+		$year_count = count($rows1);
+        $past_camp  = count($rows2);
+		$opend_mail = count($rows3);
+		$sent_failed_count = count($rows4);
+
+
 	$stmt = $conn->prepare("SELECT sending_status FROM tb_data_mailcamp_live WHERE campaign_id=?");
 	$stmt->bind_param("s", $campaign_id);
 	$stmt->execute();
@@ -162,6 +199,13 @@ function getCampaignFromCampaignListId($conn, $campaign_id){
 		$resp['camp_status'] = $row['camp_status'];
 		$resp['employees'] = json_decode($row['employees']);
 		$resp['scheduled_date'] = $row['scheduled_date'];
+		$resp['phishingmail'] = $rowsyear;
+		$resp['total'] =$total;
+		$resp['year_count'] = $year_count;
+		$resp['opend_mail'] = $opend_mail;
+		$resp['sent_failed_count'] = $sent_failed_count;
+		$resp['past_camp'] = $past_camp;
+
 		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
 	}
 	else
@@ -312,29 +356,55 @@ function getLiveCampaignData($conn, $campaign_id){
 function getUserGroupData($conn, $campaign_id){
 	$DTime_info = getTimeInfo($conn);
 	$campaign_data = getCampaignDataFromCampaignID($conn, $campaign_id);
+	$user_group_id = $campaign_data['user_group']['id'];
 	if(!empty($campaign_data)){
-		$user_group_id = $campaign_data['user_group']['id'];
-	
-		$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_user_group WHERE user_group_id = ?");
-		$stmt->bind_param("s", $user_group_id);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		if($result->num_rows != 0){
-			$row = $result->fetch_assoc();
-			$row['user_data'] = json_decode($row["user_data"]);	//avoid double json encoding
-			$row['date'] = getInClientTime_FD($DTime_info,$row['date']);
-			echo json_encode($row) ;
-		}		
-		else
-			echo json_encode(['error' => 'No data']);	
+		
+		if (explode(',', $user_group_id) != 0) {
+             $user_group_id = explode(',', $user_group_id);
+			 $row = array(); 
+			foreach($user_group_id as $user){
+				$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_user_group WHERE user_group_id = ?");
+				$stmt->bind_param("s", $user);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				if($result->num_rows != 0){
+					$row = $result->fetch_assoc();
+					$row['user_data'] = json_decode($row["user_data"]);    //avoid double json encoding
+					$row['date'] = getInClientTime_FD($DTime_info,$row['date']);
+					$row[] = $row; // Add the row to the response array
+				}       
+				else{
+					echo json_encode(['error' => 'No data']);
+				}
+				
+				$stmt->close(); // Close the statement inside the loop
+			}
+			echo json_encode($row);
+		} else {
+
+			$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_user_group WHERE user_group_id = ?");
+			$stmt->bind_param("s", $user_group_id);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if($result->num_rows != 0){
+				$row = $result->fetch_assoc();
+				$row['user_data'] = json_decode($row["user_data"]);	//avoid double json encoding
+				$row['date'] = getInClientTime_FD($DTime_info,$row['date']);
+				echo json_encode($row) ;
+			}else{
+				echo json_encode(['error' => 'No data']);	
+			}
+
+			$stmt->close(); // Close the statement inside the else block
+		}
+
+	}else{
+		echo json_encode(['error' => 'No data']);
 	}
-	else
-		echo json_encode(['error' => 'No data']);	
-	$stmt->close();
 }
 
 function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POSTJ){
-	$offset = htmlspecialchars($POSTJ['end']);
+	$offset = htmlspecialchars($POSTJ['start']);
 	$limit = htmlspecialchars($POSTJ['length']);
 	$draw = htmlspecialchars($POSTJ['draw']);
 	$search_value = htmlspecialchars($POSTJ['search']['value']);
@@ -368,11 +438,12 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 	$stmt->execute();
 	$result = $stmt->get_result();
 	$rows = $result->fetch_all(MYSQLI_ASSOC);
+
 	foreach($rows as $i => $row){
 		$tmp = [];
 		$ip_info = json_decode($row['ip_info'],true);
-
 		foreach ($selected_col as $col){ 
+		
 			if($col=='mail_open'||$col=='mail_open_times'||$col=='mail_open_count'||$col=='mail_first_open'||$col=='mail_last_open'){
 	    		if($col=='mail_open')
 	    			$tmp[$col] = count((array)$row['mail_open_times'])>0?true:false;
@@ -415,11 +486,11 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 		    		$f_found = true;
 		    }		    
 		}
+	
 		if(!empty($tmp))
 			if(empty($search_value) || (!empty($search_value) && $f_found == true))
 				array_push($arr_filtered,$tmp);	
 	}
-
 	$totalRecords_with_filter = sizeof($arr_filtered);
 	$stmt->close();
 	$resp = array(
@@ -432,12 +503,13 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 	echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
 }
 
+
 function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POSTJ){
 	
     $resp = [];
 	$userid=$_SESSION['user'][0];
 
-	$stmt = $conn->prepare("SELECT tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers
+	$stmt = $conn->prepare("SELECT tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers,tb_data_mailcamp_live.payloads_clicked,tb_data_mailcamp_live.employees_compromised,tb_data_mailcamp_live.emails_reported,tb_data_mailcamp_live.mail_replies
 	FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
 	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid'");
 	$stmt->execute();
@@ -467,6 +539,12 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POS
 	$result4 = $stmt4->get_result();
 	$rows4 = $result4->fetch_all(MYSQLI_ASSOC);
 
+	$stmt5 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid' AND tb_core_mailcamp_list.camp_status = '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) AND tb_data_mailcamp_live.sending_status = '2' AND tb_data_mailcamp_live.mail_replies != 'null'");
+	$stmt5->execute();
+	$result5 = $stmt5->get_result();
+	$rows5 = $result5->fetch_all(MYSQLI_ASSOC);
+
 	$stmtyear = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
 	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid' AND tb_core_mailcamp_list.camp_status = '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) ");
 	$stmtyear->execute();
@@ -484,9 +562,9 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1($conn, $POS
         $past_camp  = count($rows2);
 		$opend_mail = count($rows3);
 		$sent_failed_count = count($rows4);
+		$mail_replies = count($rows5);
 
-        //  print_r($resp);die();
-		echo json_encode(['resp'=>$resp,'total'=>$total,'year_count'=>$year_count,'opend_mail'=>$opend_mail,'sent_failed_count'=>$sent_failed_count,'past_camp'=>$past_camp,'phishingmail'=>$rowsyear], JSON_INVALID_UTF8_IGNORE);
+		echo json_encode(['resp'=>$resp,'total'=>$total,'year_count'=>$year_count,'opend_mail'=>$opend_mail,'mail_replies'=>$mail_replies,'sent_failed_count'=>$sent_failed_count,'past_camp'=>$past_camp,'phishingmail'=>$rowsyear], JSON_INVALID_UTF8_IGNORE);
 }
 
 function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name,$file_format,$tb_data_single){
@@ -504,6 +582,7 @@ function downloadReport($conn,$campaign_id,$selected_col,$dic_all_col,$file_name
 	$stmt->execute();
 	$result = $stmt->get_result();
 	$rows = $result->fetch_all(MYSQLI_ASSOC);
+	
 	foreach($rows as $i => $row){
 		$tmp = [];
 		$ip_info = json_decode($row['ip_info'],true);
@@ -694,7 +773,8 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 	$end_of_week = date('d-m-Y ', strtotime('this week -6 days')); 
 	$end_of_week1 = date('d-m-Y ', strtotime('this week -12 days')); 
 
-    $stmt = $conn->prepare("SELECT  DAYNAME(STR_TO_DATE(date, '%d-%m-%Y')) as dayname,tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers
+    $stmt = $conn->prepare("SELECT  DAYNAME(STR_TO_DATE(date, '%d-%m-%Y')) as dayname,tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers,
+	tb_data_mailcamp_live.payloads_clicked,tb_data_mailcamp_live.employees_compromised,tb_data_mailcamp_live.emails_reported,tb_data_mailcamp_live.mail_replies
 	FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
 	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.userid = '$userid' AND STR_TO_DATE(date, '%d-%m-%Y') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)");
 	$stmt->execute();
@@ -723,11 +803,19 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 	
 	$days = [];
 	$mail_open_count=0;
+	$payloads_clicked_count=0;
+	$employees_compromised_count=0;
 	$i= 0;
 	foreach($rows as $row){
 		if($row['mail_open_times']!=''){
            $mail_open_count = +1;
 		}
+		if($row['payloads_clicked']!=''){
+			$payloads_clicked_count = +1;
+		 }
+		 if($row['employees_compromised']!=''){
+			$employees_compromised_count = +1;
+		 }
 		$day=[];
 		$day['day'] = $row['dayname'];
 		$day['count'] = 1;
@@ -766,8 +854,11 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 	$past_camp  = count($rows2);
 	$past_camp_last_week  = count($rows3);
 	$mail_open = ($mail_open_count/$total)*100;
+	$payloads_clicked = ($payloads_clicked_count/$total)*100;
+	$employees_compromised = ($employees_compromised_count/$total)*100;
 
-	echo json_encode(['total'=>$total,'deliver_mail'=>$del_mail,'past_campaigns'=>$past_camp,'past_camp_last_week'=>$past_camp_last_week,'mail_open'=>$mail_open,'mail_open_count'=>$mail_open_count,'day1'=>$day1,'day2'=>$day2], JSON_INVALID_UTF8_IGNORE);
+	echo json_encode(['total'=>$total,'deliver_mail'=>$del_mail,'past_campaigns'=>$past_camp,'past_camp_last_week'=>$past_camp_last_week,'mail_open'=>$mail_open,'mail_open_count'=>$mail_open_count,
+	'payloads_clicked'=>$payloads_clicked,'employees_compromised'=>$employees_compromised,'day1'=>$day1,'day2'=>$day2], JSON_INVALID_UTF8_IGNORE);
 	
 }
 

@@ -5,21 +5,6 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
-//-------------------------------------------------------
-function checkInstallation(){
-    $db_file = dirname(__FILE__,2) . '/includes/db.php';
-    
-    if (file_exists($db_file)) {
-        require_once(dirname(__FILE__,2) . '/includes/db.php');
-        
-        $result = mysqli_query($conn, "SHOW TABLES FROM $curr_db");
-        if (mysqli_num_rows($result) > 0)
-            die("Already installed! Click <a href='/spear'>here</a> to login");
-        else
-            return false;
-    }
-}
-
 //------------------------------------------------------
 function getOSType(){
     if (stripos(PHP_OS, 'WIN') === 0)
@@ -164,8 +149,17 @@ function getMailerDSN($dsn_type, $sender_username, $sender_pwd, $smtp_server, $v
 
 //----------------------------------------------------
 function getQueryValsFromURL($url){
-    $parts =parse_url(html_entity_decode($url), PHP_URL_QUERY);
-    parse_str($parts, $query);
+    $query = array();
+
+    // Parse the URL and retrieve the query string
+    $parts = parse_url(html_entity_decode($url), PHP_URL_QUERY);
+
+    // Check if a query string exists
+    if ($parts) {
+        // Parse the query string and populate the $query array
+        parse_str($parts, $query);
+    }
+
     return $query;
 }
 
@@ -367,6 +361,8 @@ function getTimelineDataMail($conn, $campaign_id, $DTime_info){
 }
 
 function getMailReplied($conn, $campaign_id, $quite=false){
+
+
     session_write_close(); //Required to avoid hanging by executing this fun
     $arr_replied_mails = [];
     $arr_err = [];
@@ -377,6 +373,7 @@ function getMailReplied($conn, $campaign_id, $quite=false){
     $stmt->bind_param("s", $sender_list_id);
     $stmt->execute();
     $result = $stmt->get_result();
+    
     if($result->num_rows > 0){
         $row = $result->fetch_assoc() ;
         $sender_username = $row['sender_acc_username'];
@@ -423,10 +420,18 @@ function getMailReplied($conn, $campaign_id, $quite=false){
                         }   
                     }
                 }
+                
+                $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_replies=? WHERE campaign_id=? AND rid=?");
+                $stmt->bind_param('ssssssssss', $arr_msg_info,$campaign_id,$row['rid']);
+                $stmt->execute();
+
             }
+            
+
         }catch(Exception $e) {
             array_push($arr_err,$e->getMessage());
         }
+
         array_push($arr_err,imap_errors());     //required to capture imap errors
         
         if(empty($arr_err) || $arr_err[0] == false)

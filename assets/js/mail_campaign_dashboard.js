@@ -40,7 +40,7 @@ ele.sortable({
 
 function getAllReportColListSelected(){
     allReportColListSelected=[];
-
+    var allReportColListSelected =["rid", "user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","public_ip","mail_client","platform","device_type","mail_reply","country"];
     $.each($("#tb_camp_result_colums_list_mcamp").find("option"), function () {
         allReportColList[$(this).text()] = $(this).val();
     });
@@ -183,7 +183,10 @@ function campaignSelected(campaign_id) {
     $("#table_mail_campaign_result tbody > tr").remove();
     loadTableCampaignResult();
     //------------------------
-    
+    $("#succ_camp").html("");
+    $("#del_camp").html("");
+    $("#past_camp").html("");
+
     $.post({
         url: "manager/mail_campaign_manager",
         contentType: 'application/json; charset=utf-8',
@@ -193,6 +196,7 @@ function campaignSelected(campaign_id) {
             campaign_id: g_campaign_id,
         })
     }).done(function (data) {
+        $("#ModalCampaignList").modal("toggle");
         if(!data.error){
             $('#disp_camp_name').text(data.campaign_name);
             $('#disp_camp_start').text(data.scheduled_time);
@@ -207,6 +211,89 @@ function campaignSelected(campaign_id) {
 
             updateProgressbar(data.camp_status, data.campaign_data.mail_sender.id, data.campaign_data.user_group.id, data.campaign_data.mail_template.id, sent_mail_count, sent_success_count, sent_failed_count, mail_open_count);
             updateLiveMailCampData(data.live_mcamp_data.scatter_data, data.live_mcamp_data.timestamp_conv, data.timezone);
+
+            $("#succ_camp").append(data.total);
+            $("#del_camp").append(data.year_count);
+            $("#past_camp").append(data.past_camp);
+        
+            var months = { 01:0, 02:0, 03:0 ,04:0,05:0,06:0,07:0,08:0,09:0,10:0,11:0,12:0};
+            $.each(data.phishingmail, function(key, value) {
+             var date = value.scheduled_time;
+             var newDate = moment(date, 'YYYY-MM-DD').format('MM');
+            if(months[parseInt(newDate)] == '0'){
+                var arr = [];
+                var sent = 0;
+                if(value.sending_status=='2'){
+                 sent = sent+1;
+                }
+
+                var open = 0;
+                if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
+                }else{
+                    open = open+1;
+                }
+
+                
+                var payload = 0;
+                if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
+                }else{
+                    payload = payload+1;
+                }
+
+                
+                var comp = 0;
+                if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
+                }else{
+                    comp = comp+1;
+                }
+
+                
+                var reported = 0;
+                if(value.emails_reported == '' || value.emails_reported == 'NULL' ||value.emails_reported == null){
+                }else{
+                    reported = reported+1;
+                }
+                
+
+                arr['sent'] = sent;
+                arr['open'] = open;
+                arr['payload'] = payload;
+                arr['comp'] = comp;
+                arr['reported'] = reported;
+
+                months[parseInt(newDate)] = arr;
+            }else{
+                if(value.sending_status=='2'){
+                    months[parseInt(newDate)]['sent'] = months[parseInt(newDate)]['sent']+1;
+                }
+
+                if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
+                }else{
+                    months[parseInt(newDate)]['open'] = months[parseInt(newDate)]['open']+1;
+                }
+
+                if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
+                }else{
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                }
+
+                if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
+                }else{
+                    months[parseInt(newDate)]['comp'] = months[parseInt(newDate)]['comp']+1;;
+                }
+
+                
+                if(value.emails_reported == '' || value.emails_reported == 'NULL' ||value.emails_reported == null){
+                }else{
+                    months[parseInt(newDate)]['reported'] = months[parseInt(newDate)]['reported']+1;;
+                }
+                
+
+            }
+   
+            });
+            mailchart(months);
+
         }
         else
             toastr.warning('', data.live_mcamp_data.error);            
@@ -226,24 +313,25 @@ function updateProgressbar(mailcamp_status, sender_list_id, user_group_id, mail_
         if(!data.error){
             $('#user_group_name').val(data.user_group_name);
 
-            var total_user_email_count = Object.keys(data.user_data).length;
-            var sent_mail_percent = +(sent_mail_count / total_user_email_count * 100).toFixed(2);
-            var sent_mail_success_percent = +(sent_success_count / total_user_email_count * 100).toFixed(2);
+            var sent_mail_percent = +(sent_success_count / sent_mail_count * 100).toFixed(2);
+            var sent_mail_success_percent = +(sent_success_count / sent_mail_count * 100).toFixed(2);
 
             $("#progressbar_status").children().width(sent_mail_percent + "%");
-            $("#progressbar_status").children().text(sent_mail_count + "/" + total_user_email_count + " (" + sent_mail_percent + "%)");
+            $("#progressbar_status").children().text(sent_success_count + "/" + sent_mail_count + " (" + sent_mail_percent + "%)");
+
             if (sent_mail_percent == 100)
                 $("#progressbar_status").children().addClass("bg-success");
             else
                 $("#progressbar_status").children().removeClass("bg-success");
 
-            updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed_count);
 
-            var mail_open_percent = +(mail_open_count / total_user_email_count * 100).toFixed(2);;
-            updatePieTotalMailOpen(total_user_email_count, mail_open_count, mail_open_percent);
+            updatePieTotalSent(sent_mail_count, sent_success_count, sent_failed_count);
+            var mail_open_percent = +(mail_open_count / sent_mail_count * 100).toFixed(2);;
+            updatePieTotalMailOpen(sent_mail_count, mail_open_count, mail_open_percent);
             updatePieOverViewEmail(sent_mail_success_percent, mail_open_percent);
+
             if (mailcamp_status != 0 && $('input[name="radio_mail_reply_check"]:checked').val() == "reply_yes")
-                updatePieTotalMailReplied(total_user_email_count);
+                updatePieTotalMailReplied(sent_mail_count);
             else{
                 $("#piechart_mail_total_replied").attr("hidden", false);
                 $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
@@ -447,10 +535,11 @@ function updatePieOverViewEmail(sent_mail_percent, open_mail_percent) {
 }
 
 function updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed_count) {
+ 
     $("#piechart_mail_total_sent").attr("hidden", false);
     $("#piechart_mail_total_sent").parent().children().remove('.loadercust');
 
-    var sent_percent = +((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
+    var sent_percent = ((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
     var non_sent_percent = +(100 - sent_percent).toFixed(2);
     var options = {
         series: [sent_percent, non_sent_percent],
@@ -713,10 +802,12 @@ function updatePieTotalMailReplied(total_user_email_count) {
     }); 
 }
 
+
 function loadTableCampaignResult() {
     try {
         dt_mail_campaign_result.destroy();
     } catch (err) {}
+
 
     $("#table_mail_campaign_result").attr("hidden", false);
     $("#table_mail_campaign_result").parent().children().remove('.loadercust');
@@ -730,12 +821,15 @@ function loadTableCampaignResult() {
     var arr_tb_heading=[];  
     arr_tb_heading.push({ data: 'sn', title: "SN" });
 
+    var allReportColListSelected =["user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","public_ip","mail_client","platform","device_type","mail_reply","country"];
+ 
     $.each(allReportColListSelected, function(index, item) {
         if (item.startsWith("Field"))
             arr_tb_heading.push({ data: item, title : 'Field-' + item});
         else
             arr_tb_heading.push({ data: item, title : dic_all_col[item]});
     });
+ 
 
     dt_mail_campaign_result = $('#table_mail_campaign_result').DataTable({
         'processing': true,
@@ -753,14 +847,16 @@ function loadTableCampaignResult() {
                     return JSON.stringify(d);
                 },
             dataSrc: function ( resp ){
+             console.log(resp);
+
                 for (var i=0; i<resp.data.length; i++){
                     resp.data[i]['sn'] = i+1;
                     if(resp.data[i].mail_open==true)
                         resp.data[i].mail_open = "<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>";
                     else
                         resp.data[i].mail_open = "<center><i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i></center>";
-                    resp.data[i].sending_status= camp_table_status_def[resp.data[i].sending_status];
-                    if(Object.keys(reply_emails).length >= 0 &&  reply_emails.hasOwnProperty('msg_info') && reply_emails.msg_info.hasOwnProperty(resp.data[i].user_email) ){
+                        resp.data[i].sending_status= camp_table_status_def[resp.data[i].sending_status];
+                        if(Object.keys(reply_emails).length >= 0 &&  reply_emails.hasOwnProperty('msg_info') && reply_emails.msg_info.hasOwnProperty(resp.data[i].user_email) ){
                         resp.data[i].mail_reply = `<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>`;
                         resp.data[i].mail_reply_count = reply_emails.msg_info[resp.data[i].user_email].msg_time.length;
                         resp.data[i].mail_reply_content = `<center><i class="fas fa-eye fa-lg cursor-pointer" data-toggle="tooltip" title="View" onclick="viewReplyMails('` + resp.data[i].user_email + `')"></i></center>`;
@@ -802,7 +898,6 @@ function loadTableCampaignResult1(){
             action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1",
          }),
     }).done(function (data) {
-        console.log(data);
         $(function() {
             if(!data.error){
                 $("#succ_camp").append(data.total);
@@ -879,6 +974,42 @@ function loadTableCampaignResult1(){
                         var mailsignper = '';
                         var mailpercentage = 100;
                     }
+
+                    if (value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null) {
+                        var payloads_clicked_open = '0';
+                        var mailnewperpay = payloads_clicked_open;
+                        var mailsignperpay = '%';
+                        var mailpercentagepay = 0;
+                    }else{
+                        var payloads_clicked_open = '1';
+                        var mailnewperpay = '✓';
+                        var mailsignperpay = '';
+                        var mailpercentagepay = 100;
+                    }
+
+                    if (value.employees_compromised	 == '' || value.	employees_compromised	 == 'NULL' ||value.	employees_compromised	 == null) {
+                        var employees_compromised = '0';
+                        var mailnewperexp = employees_compromised;
+                        var mailsignperexp = '%';
+                        var mailpercentageexp = 0;
+                    }else{
+                        var employees_compromised = '1';
+                        var mailnewperexp = '✓';
+                        var mailsignperexp = '';
+                        var mailpercentageexp = 100;
+                    }
+
+                    if (value.emails_reported	 == '' || value.	emails_reported	 == 'NULL' ||value.	emails_reported	 == null) {
+                        var emails_reported = '0';
+                        var mailnewperexprep = emails_reported;
+                        var mailsignperexprep = '%';
+                        var mailpercentageexprep = 0;
+                    }else{
+                        var emails_reported = '1';
+                        var mailnewperexprep = '✓';
+                        var mailsignperexprep = '';
+                        var mailpercentageexprep = 100;
+                    }
                   
                     var mailhtml = `<div class="card2">
                                 <div class="percent2">
@@ -892,7 +1023,43 @@ function loadTableCampaignResult1(){
                                 </div>
                             </div>`;
 
-                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td></tr>");
+                    var mailhtmlpay = `<div class="card2">
+                                <div class="percent2">
+                                <svg>
+                                    <circle cx="25" cy="25" r="22"></circle>
+                                    <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentagepay};"></circle>
+                                </svg>
+                                <div class="number2">
+                                    <h6>${mailnewperpay}<span>${mailsignperpay}</span></h6>
+                                </div>
+                                </div>
+                            </div>`;
+
+                    var mailhtmlexprep = `<div class="card2">
+                            <div class="percent2">
+                            <svg>
+                                <circle cx="25" cy="25" r="22"></circle>
+                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexprep};"></circle>
+                            </svg>
+                            <div class="number2">
+                                <h6>${mailnewperexp}<span>${mailsignperexprep}</span></h6>
+                            </div>
+                            </div>
+                        </div>`;
+
+                    var mailhtmlexp = `<div class="card2">
+                            <div class="percent2">
+                            <svg>
+                                <circle cx="25" cy="25" r="22"></circle>
+                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexp};"></circle>
+                            </svg>
+                            <div class="number2">
+                                <h6>${mailnewperexprep}<span>${mailsignperexp}</span></h6>
+                            </div>
+                            </div>
+                        </div>`;
+
+                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
                 });
             }
 
@@ -950,9 +1117,28 @@ function loadTableCampaignResult1(){
                 }else{
                     open = open+1;
                 }
+
+                
                 var payload = 0;
+                if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
+                }else{
+                    payload = payload+1;
+                }
+
+                
                 var comp = 0;
+                if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
+                }else{
+                    comp = comp+1;
+                }
+
+                
                 var reported = 0;
+                if(value.emails_reported == '' || value.emails_reported == 'NULL' ||value.emails_reported == null){
+                }else{
+                    reported = reported+1;
+                }
+                
 
                 arr['sent'] = sent;
                 arr['open'] = open;
@@ -965,14 +1151,28 @@ function loadTableCampaignResult1(){
                 if(value.sending_status=='2'){
                     months[parseInt(newDate)]['sent'] = months[parseInt(newDate)]['sent']+1;
                 }
+
                 if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
                 }else{
                     months[parseInt(newDate)]['open'] = months[parseInt(newDate)]['open']+1;
                 }
 
-                  months[parseInt(newDate)]['payload'] = 0;
-                  months[parseInt(newDate)]['comp'] = 0;
-                  months[parseInt(newDate)]['reported'] = 0;
+                if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
+                }else{
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                }
+
+                if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
+                }else{
+                    months[parseInt(newDate)]['comp'] = months[parseInt(newDate)]['comp']+1;;
+                }
+
+                
+                if(value.emails_reported == '' || value.emails_reported == 'NULL' ||value.emails_reported == null){
+                }else{
+                    months[parseInt(newDate)]['reported'] = months[parseInt(newDate)]['reported']+1;;
+                }
+                
 
             }
    
@@ -982,10 +1182,11 @@ function loadTableCampaignResult1(){
           
             var sent_mail_percent = ((data.year_count)/data.total)*100;
             var open_mail_percent = ((data.opend_mail)/data.total)*100;
+            var mail_replies_percent = ((data.mail_replies)/data.total)*100;
             updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
             updatePieTotalSent(data.total, data.year_count, data.sent_failed_count)
             updatePieTotalMailOpen(data.total, data.opend_mail, open_mail_percent)
-            updatePieTotalMailReplied(data.total)
+            updatePieTotalMailReplied1(data.total,data.mail_replies,mail_replies_percent)
         });
     })
 }
@@ -1074,31 +1275,104 @@ function loadTableCampaignResultadmin(){
                                     </div>
                                 </div>`;
 
-                    if (value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null) {
-                        var mail_open = '0';
-                        var mailnewper = mail_open;
-                        var mailsignper = '%';
-                        var mailpercentage = 0;
-                    }else{
-                        var mail_open = '1';
-                        var mailnewper = '✓';
-                        var mailsignper = '';
-                        var mailpercentage = 100;
-                    }
-                  
-                    var mailhtml = `<div class="card2">
-                                <div class="percent2">
-                                <svg>
-                                    <circle cx="25" cy="25" r="22"></circle>
-                                    <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentage};"></circle>
-                                </svg>
-                                <div class="number2">
-                                    <h6>${mailnewper}<span>${mailsignper}</span></h6>
-                                </div>
-                                </div>
-                            </div>`;
+                if (value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null) {
+                    var mail_open = '0';
+                    var mailnewper = mail_open;
+                    var mailsignper = '%';
+                    var mailpercentage = 0;
+                }else{
+                    var mail_open = '1';
+                    var mailnewper = '✓';
+                    var mailsignper = '';
+                    var mailpercentage = 100;
+                }
 
-                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td><td>" + mail_open + " "+mailhtml +"</td></tr>");
+                if (value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null) {
+                    var payloads_clicked_open = '0';
+                    var mailnewperpay = payloads_clicked_open;
+                    var mailsignperpay = '%';
+                    var mailpercentagepay = 0;
+                }else{
+                    var payloads_clicked_open = '1';
+                    var mailnewperpay = '✓';
+                    var mailsignperpay = '';
+                    var mailpercentagepay = 100;
+                }
+
+                if (value.employees_compromised	 == '' || value.	employees_compromised	 == 'NULL' ||value.	employees_compromised	 == null) {
+                    var employees_compromised = '0';
+                    var mailnewperexp = employees_compromised;
+                    var mailsignperexp = '%';
+                    var mailpercentageexp = 0;
+                }else{
+                    var employees_compromised = '1';
+                    var mailnewperexp = '✓';
+                    var mailsignperexp = '';
+                    var mailpercentageexp = 100;
+                }
+
+                if (value.emails_reported	 == '' || value.	emails_reported	 == 'NULL' ||value.	emails_reported	 == null) {
+                    var emails_reported = '0';
+                    var mailnewperexprep = emails_reported;
+                    var mailsignperexprep = '%';
+                    var mailpercentageexprep = 0;
+                }else{
+                    var emails_reported = '1';
+                    var mailnewperexprep = '✓';
+                    var mailsignperexprep = '';
+                    var mailpercentageexprep = 100;
+                }
+              
+                var mailhtml = `<div class="card2">
+                            <div class="percent2">
+                            <svg>
+                                <circle cx="25" cy="25" r="22"></circle>
+                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentage};"></circle>
+                            </svg>
+                            <div class="number2">
+                                <h6>${mailnewper}<span>${mailsignper}</span></h6>
+                            </div>
+                            </div>
+                        </div>`;
+
+                var mailhtmlpay = `<div class="card2">
+                            <div class="percent2">
+                            <svg>
+                                <circle cx="25" cy="25" r="22"></circle>
+                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentagepay};"></circle>
+                            </svg>
+                            <div class="number2">
+                                <h6>${mailnewperpay}<span>${mailsignperpay}</span></h6>
+                            </div>
+                            </div>
+                        </div>`;
+
+                var mailhtmlexprep = `<div class="card2">
+                        <div class="percent2">
+                        <svg>
+                            <circle cx="25" cy="25" r="22"></circle>
+                            <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexprep};"></circle>
+                        </svg>
+                        <div class="number2">
+                            <h6>${mailnewperexp}<span>${mailsignperexprep}</span></h6>
+                        </div>
+                        </div>
+                    </div>`;
+
+                var mailhtmlexp = `<div class="card2">
+                        <div class="percent2">
+                        <svg>
+                            <circle cx="25" cy="25" r="22"></circle>
+                            <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexp};"></circle>
+                        </svg>
+                        <div class="number2">
+                            <h6>${mailnewperexprep}<span>${mailsignperexp}</span></h6>
+                        </div>
+                        </div>
+                    </div>`;
+
+
+                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
                 });
             }
 
@@ -1156,9 +1430,28 @@ function loadTableCampaignResultadmin(){
                 }else{
                     open = open+1;
                 }
+
+                
                 var payload = 0;
+                if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
+                }else{
+                    payload = payload+1;
+                }
+
+                
                 var comp = 0;
+                if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
+                }else{
+                    comp = comp+1;
+                }
+
+                
                 var reported = 0;
+                if(value.emails_reported == '' || value.emails_reported == 'NULL' ||value.emails_reported == null){
+                }else{
+                    reported = reported+1;
+                }
+                
 
                 arr['sent'] = sent;
                 arr['open'] = open;
@@ -1171,14 +1464,28 @@ function loadTableCampaignResultadmin(){
                 if(value.sending_status=='2'){
                     months[parseInt(newDate)]['sent'] = months[parseInt(newDate)]['sent']+1;
                 }
+
                 if(value.mail_open_times == '' || value.mail_open_times == 'NULL' ||value.mail_open_times == null){
                 }else{
                     months[parseInt(newDate)]['open'] = months[parseInt(newDate)]['open']+1;
                 }
 
-                  months[parseInt(newDate)]['payload'] = 0;
-                  months[parseInt(newDate)]['comp'] = 0;
-                  months[parseInt(newDate)]['reported'] = 0;
+                if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
+                }else{
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                }
+
+                if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
+                }else{
+                    months[parseInt(newDate)]['comp'] = months[parseInt(newDate)]['comp']+1;;
+                }
+
+                
+                if(value.emails_reported == '' || value.emails_reported == 'NULL' ||value.emails_reported == null){
+                }else{
+                    months[parseInt(newDate)]['reported'] = months[parseInt(newDate)]['reported']+1;;
+                }
+                
 
             }
    
@@ -1188,12 +1495,92 @@ function loadTableCampaignResultadmin(){
           
             var sent_mail_percent = ((data.year_count)/data.total)*100;
             var open_mail_percent = ((data.opend_mail)/data.total)*100;
+            var mail_replies_percent = ((data.mail_replies)/data.total)*100;
             updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
             updatePieTotalSent(data.total, data.year_count, data.sent_failed_count)
             updatePieTotalMailOpen(data.total, data.opend_mail, open_mail_percent)
-            updatePieTotalMailReplied(data.total)
+            updatePieTotalMailReplied1(data.total,data.mail_replies,mail_replies_percent)
         });
     })
+}
+
+function updatePieTotalMailReplied1(total_user_email_count, mail_replies, mail_replies_percent) {
+    $("#piechart_mail_total_replied1").attr("hidden", false);
+    $("#piechart_mail_total_replied1").parent().children().remove('.loadercust');
+    var non_open_percent = +(100 - mail_replies_percent).toFixed(2);
+    var options = {
+        series: [mail_replies_percent, non_open_percent],
+        chart: {
+            type: 'donut',
+        },
+        plotOptions: {
+            pie: {
+                offsetY: 0,
+                customScale: 1,
+                donut: {
+                    size: '80%',
+                    labels: {
+                        show: true,
+                        name: {
+                            show: false,
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '14px',
+                            formatter: function(val) {
+                                return val + "%";
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function(w) {
+                                return w.globals.series[0] + "% (" + mail_replies + "/" + total_user_email_count + ")";
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false
+        },
+        tooltip: {
+            enabled: true,
+            custom: function({
+                series,
+                seriesIndex,
+                dataPointIndex,
+                w
+            }) {
+                if (seriesIndex == 0)
+                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex] + `%</div>`;
+                else
+                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex] + `%</div>`;
+            },
+        },
+        colors: ['#e6b800', '#d9d9d9'],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    piechart_mail_total_replied1 = new ApexCharts(
+        document.querySelector("#piechart_mail_total_replied1"),
+        options
+    );
+    piechart_mail_total_replied1.render();
 }
 
 function mailchart(months) {
@@ -1425,10 +1812,8 @@ function loadTableCampaignResultAccToWeek(){
         $('#mail_open').append(data.mail_open_count);
         $('#past_camp_last_week').append(data.past_camp_last_week);
         
-        var payload = 0;
-        var comp = 0;
         loadDashChart(data.day1,data.day2);
-        loadSuccessChart(data.mail_open,payload,comp);
+        loadSuccessChart(data.mail_open,data.payloads_clicked,data.employees_compromised);
 
     });
 }

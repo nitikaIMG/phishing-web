@@ -24,17 +24,6 @@ $(function() {
         }
     });
 
-
-    // $('#datetimepicker_launch').datetimepicker({
-    //     format: 'DD-MM-YYYY hh:mm A',
-    //     defaultDate: new Date(),
-    //     icons: {
-    //         time: "fa fa-clock",
-    //         date: "fa fa-calendar",
-    //         up: "fa fa-arrow-up",
-    //         down: "fa fa-arrow-down"
-    //     },
-    // });
 });
 
 function pullMailCampaignFieldData() {

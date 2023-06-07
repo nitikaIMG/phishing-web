@@ -296,7 +296,7 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_admin($conn,
     $resp = [];
 	// $userid=$_SESSION['user'][0];
 
-	$stmt = $conn->prepare("SELECT tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers
+	$stmt = $conn->prepare("SELECT tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers,tb_data_mailcamp_live.payloads_clicked,tb_data_mailcamp_live.employees_compromised,tb_data_mailcamp_live.emails_reported,tb_data_mailcamp_live.mail_replies
 	FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
 	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id ");
 	$stmt->execute();
@@ -326,6 +326,13 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_admin($conn,
 	$result4 = $stmt4->get_result();
 	$rows4 = $result4->fetch_all(MYSQLI_ASSOC);
 
+	$stmt5 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
+	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE  tb_core_mailcamp_list.camp_status = '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) AND tb_data_mailcamp_live.sending_status = '2' AND tb_data_mailcamp_live.mail_replies != 'null'");
+	$stmt5->execute();
+	$result5 = $stmt5->get_result();
+	$rows5 = $result5->fetch_all(MYSQLI_ASSOC);
+
+
 	$stmtyear = $conn->prepare("SELECT * FROM tb_core_mailcamp_list LEFT JOIN tb_data_mailcamp_live 
 	ON tb_core_mailcamp_list.campaign_id = tb_data_mailcamp_live.campaign_id WHERE tb_core_mailcamp_list.camp_status = '4' AND tb_core_mailcamp_list.date <= DATE_SUB(NOW(),INTERVAL 1 YEAR) ");
 	$stmtyear->execute();
@@ -343,9 +350,9 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_admin($conn,
         $past_camp  = count($rows2);
 		$opend_mail = count($rows3);
 		$sent_failed_count = count($rows4);
+		$mail_replies = count($rows5);
 
-        //  print_r($resp);die();
-		echo json_encode(['resp'=>$resp,'total'=>$total,'year_count'=>$year_count,'opend_mail'=>$opend_mail,'sent_failed_count'=>$sent_failed_count,'past_camp'=>$past_camp,'phishingmail'=>$rowsyear], JSON_INVALID_UTF8_IGNORE);
+		echo json_encode(['resp'=>$resp,'total'=>$total,'year_count'=>$year_count,'opend_mail'=>$opend_mail,'sent_failed_count'=>$sent_failed_count,'past_camp'=>$past_camp,'mail_replies'=>$mail_replies,'phishingmail'=>$rowsyear], JSON_INVALID_UTF8_IGNORE);
 }
 
 function uploadUserCVS($conn, &$POSTJ){
@@ -657,10 +664,10 @@ function saveSenderList($conn, &$POSTJ,$userid){
 	$sender_list_mail_sender_acc_username = $POSTJ['sender_list_mail_sender_acc_username'];
 	$sender_list_mail_sender_acc_pwd = $POSTJ['sender_list_mail_sender_acc_pwd'];
 	$auto_mailbox = $POSTJ['cb_auto_mailbox'];
-	$mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	// $mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	$mail_sender_mailbox =(explode(':',$POSTJ['sender_list_mail_sender_SMTP_server'])[0]).':993/imap/ssl}INBOX';
 	$sender_list_cust_headers = json_encode($POSTJ['sender_list_cust_headers']); 
 	$dsn_type = $POSTJ['dsn_type'];
-
 
 	if(checkAnIDExist($conn,$sender_list_id,'sender_list_id','tb_core_mailcamp_sender_list')){
 
@@ -711,7 +718,8 @@ function saveSenderListByAdmin($conn, &$POSTJ){
 	$sender_list_mail_sender_acc_username = $POSTJ['sender_list_mail_sender_acc_username'];
 	$sender_list_mail_sender_acc_pwd = $POSTJ['sender_list_mail_sender_acc_pwd'];
 	$auto_mailbox = $POSTJ['cb_auto_mailbox'];
-	$mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	// $mail_sender_mailbox = $POSTJ['mail_sender_mailbox'];
+	$mail_sender_mailbox =(explode(':',$POSTJ['sender_list_mail_sender_SMTP_server'])[0]).':993/imap/ssl}INBOX';
 	$sender_list_cust_headers = json_encode($POSTJ['sender_list_cust_headers']); 
 		$dsn_type = $POSTJ['dsn_type'];
 

@@ -2,7 +2,7 @@
 <?php
 require_once(dirname(__FILE__) . '/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
-isAdminSessionValid(true);
+isSessionValid(true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -148,7 +148,7 @@ isAdminSessionValid(true);
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
-    <?php include(dirname(__FILE__).'/components/adminnavbar.php'); ?>
+    <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
     <!--  END NAVBAR  -->
 
 
@@ -159,7 +159,7 @@ isAdminSessionValid(true);
          <div class="search-overlay"></div>
 
          <!--  BEGIN SIDEBAR  -->
-         <?php include(dirname(__FILE__).'/components/adminsidebar.php'); ?>
+         <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
          <!--  END SIDEBAR  -->
 
          <!--  BEGIN CONTENT AREA  -->
@@ -506,21 +506,20 @@ isAdminSessionValid(true);
                   </script>';
          else{
              echo '<script>var g_tk_id = getRandomId();</script>';            
-             isAdminSessionValid(true);
+            isSessionValid(true);
          }
 
          //------------------------------------------
          echo '<script>';
          
          if(isset($_GET['mcamp']))
-            echo '
-                  var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
+            echo 'var g_campaign_id ="'.doFilter($_GET['mcamp'],'ALPHA_NUM').'";
                   campaignSelected("' . doFilter($_GET['mcamp'],'ALPHA_NUM') . '");';
          else
             echo 'var g_campaign_id ="", g_tracker_id="";
                   $(function() {$("#ModalCampaignList").modal("toggle");});';
          
-                  echo'loadTableCampaignResultadmin()';
+                  echo'loadTableCampaignResult1()';
          echo '</script>';
       ?>
 

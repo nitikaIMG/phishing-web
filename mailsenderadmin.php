@@ -193,6 +193,7 @@ isAdminSessionValid(true);
                                  </div>
                               </div>
                               
+                              <input type="checkbox" id="cb_auto_mailbox" checked class="d-none">
                               <!-- <div class="form-group row">
                                  <label for="mail_sender_mailbox" class="col-sm-3 text-left control-label col-form-label">Mailbox:</label>
                                  <div class="col-sm-7">
