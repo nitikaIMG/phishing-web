@@ -1191,85 +1191,6 @@ function loadTableCampaignResult1(){
     })
 }
 
-function updatePieTotalMailReplied1(total_user_email_count, mail_replies, mail_replies_percent) {
-    $("#piechart_mail_total_replied1").attr("hidden", false);
-    $("#piechart_mail_total_replied1").parent().children().remove('.loadercust');
-    var non_open_percent = +(100 - mail_replies_percent).toFixed(2);
-    var options = {
-        series: [mail_replies_percent, non_open_percent],
-        chart: {
-            type: 'donut',
-        },
-        plotOptions: {
-            pie: {
-                offsetY: 0,
-                customScale: 1,
-                donut: {
-                    size: '80%',
-                    labels: {
-                        show: true,
-                        name: {
-                            show: false,
-                        },
-                        value: {
-                            show: true,
-                            fontSize: '14px',
-                            formatter: function(val) {
-                                return val + "%";
-                            }
-                        },
-                        total: {
-                            show: true,
-                            label: 'Total',
-                            formatter: function(w) {
-                                return w.globals.series[0] + "% (" + mail_replies + "/" + total_user_email_count + ")";
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        legend: {
-            show: false
-        },
-        tooltip: {
-            enabled: true,
-            custom: function({
-                series,
-                seriesIndex,
-                dataPointIndex,
-                w
-            }) {
-                if (seriesIndex == 0)
-                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex] + `%</div>`;
-                else
-                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex] + `%</div>`;
-            },
-        },
-        colors: ['#e6b800', '#d9d9d9'],
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }]
-    };
-
-    piechart_mail_total_replied1 = new ApexCharts(
-        document.querySelector("#piechart_mail_total_replied1"),
-        options
-    );
-    piechart_mail_total_replied1.render();
-}
-
 function loadTableCampaignResultadmin(){
 
     try {
@@ -1574,12 +1495,92 @@ function loadTableCampaignResultadmin(){
           
             var sent_mail_percent = ((data.year_count)/data.total)*100;
             var open_mail_percent = ((data.opend_mail)/data.total)*100;
+            var mail_replies_percent = ((data.mail_replies)/data.total)*100;
             updatePieOverViewEmail(sent_mail_percent, open_mail_percent);
             updatePieTotalSent(data.total, data.year_count, data.sent_failed_count)
             updatePieTotalMailOpen(data.total, data.opend_mail, open_mail_percent)
-            updatePieTotalMailReplied(data.total)
+            updatePieTotalMailReplied1(data.total,data.mail_replies,mail_replies_percent)
         });
     })
+}
+
+function updatePieTotalMailReplied1(total_user_email_count, mail_replies, mail_replies_percent) {
+    $("#piechart_mail_total_replied1").attr("hidden", false);
+    $("#piechart_mail_total_replied1").parent().children().remove('.loadercust');
+    var non_open_percent = +(100 - mail_replies_percent).toFixed(2);
+    var options = {
+        series: [mail_replies_percent, non_open_percent],
+        chart: {
+            type: 'donut',
+        },
+        plotOptions: {
+            pie: {
+                offsetY: 0,
+                customScale: 1,
+                donut: {
+                    size: '80%',
+                    labels: {
+                        show: true,
+                        name: {
+                            show: false,
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '14px',
+                            formatter: function(val) {
+                                return val + "%";
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function(w) {
+                                return w.globals.series[0] + "% (" + mail_replies + "/" + total_user_email_count + ")";
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false
+        },
+        tooltip: {
+            enabled: true,
+            custom: function({
+                series,
+                seriesIndex,
+                dataPointIndex,
+                w
+            }) {
+                if (seriesIndex == 0)
+                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex] + `%</div>`;
+                else
+                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex] + `%</div>`;
+            },
+        },
+        colors: ['#e6b800', '#d9d9d9'],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    piechart_mail_total_replied1 = new ApexCharts(
+        document.querySelector("#piechart_mail_total_replied1"),
+        options
+    );
+    piechart_mail_total_replied1.render();
 }
 
 function mailchart(months) {
