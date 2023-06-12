@@ -389,40 +389,43 @@ function getMailReplied($conn, $campaign_id, $quite=false){
             array_push($RIDs, $row['rid']);
             array_push($email, $row['user_email']);
         }
-
-        // Convert email array to string
-        $emailString = implode('", "', $email);
+        
+        
         //-----------
         $arr_msg_info = [];
 
         try {
             if ($read = imap_open($sender_mailbox, $sender_username, $sender_acc_pwd)) {
-                $array = imap_search($read, 'FROM "' . $emailString . '"');
-
-                foreach ($array as $result) {
-                    $overview = imap_fetch_overview($read, $result, 0);
-                    if ($overview[0]->references == NULL)
-                        $tmp = explode("@spmailer.generated", $overview[0]->in_reply_to)[0];
-                    else
-                        $tmp = explode("@spmailer.generated", $overview[0]->references)[0];
-                    $header_to_check = explode("<", $tmp)[1];
-
-                    if (filter_var($overview[0]->from, FILTER_VALIDATE_EMAIL))
-                        $msg_from = $overview[0]->from;
-                    else
-                        $msg_from = str_ireplace(">", "", explode("<", $overview[0]->from)[1]);
-
-                    if (in_array($header_to_check, $RIDs)) {
-                        $msg_time = $overview[0]->date;
-                        $msg_body = imap_fetchbody($read, $result, 1);
-                        if (!array_key_exists($msg_from, $arr_msg_info))
-                            $arr_msg_info[$msg_from] = ['msg_time' => [$msg_time], 'msg_body' => [$msg_body]];
-                        else {
-                            array_push($arr_msg_info[$msg_from]['msg_time'], $msg_time);
-                            array_push($arr_msg_info[$msg_from]['msg_body'], $msg_body);
+                
+                foreach ($email as $emailAddress) {
+                    $array = imap_search($read, 'FROM "' . $emailAddress . '"');
+                
+                    foreach ($array as $result) {
+                        $overview = imap_fetch_overview($read, $result, 0);
+                        if ($overview[0]->references == null)
+                            $tmp = explode("@spmailer.generated", $overview[0]->in_reply_to)[0];
+                        else
+                            $tmp = explode("@spmailer.generated", $overview[0]->references)[0];
+                        $header_to_check = explode("<", $tmp)[1];
+                
+                        if (filter_var($overview[0]->from, FILTER_VALIDATE_EMAIL))
+                            $msg_from = $overview[0]->from;
+                        else
+                            $msg_from = str_ireplace(">", "", explode("<", $overview[0]->from)[1]);
+                
+                        if (in_array($header_to_check, $RIDs)) {
+                            $msg_time = $overview[0]->date;
+                            $msg_body = imap_fetchbody($read, $result, 1);
+                            if (!array_key_exists($msg_from, $arr_msg_info))
+                                $arr_msg_info[$msg_from] = ['msg_time' => [$msg_time], 'msg_body' => [$msg_body]];
+                            else {
+                                array_push($arr_msg_info[$msg_from]['msg_time'], $msg_time);
+                                array_push($arr_msg_info[$msg_from]['msg_body'], $msg_body);
+                            }
                         }
                     }
                 }
+
             }
         } catch (Exception $e) {
             array_push($arr_err, $e->getMessage());
@@ -453,7 +456,6 @@ function getMailReplied($conn, $campaign_id, $quite=false){
     }
     $stmt->close();
 }
-
 //--------------------------------------------------------------------
 function doFilter($string, $type){
     if($type == 'ALPHA_NUM')
