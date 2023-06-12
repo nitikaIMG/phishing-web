@@ -274,7 +274,7 @@ function campaignSelected(campaign_id) {
 
                 if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
                 }else{
-                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['payload']+1;
                 }
 
                 if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
@@ -1159,7 +1159,7 @@ function loadTableCampaignResult1(){
 
                 if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
                 }else{
-                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['payload']+1;
                 }
 
                 if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
@@ -1472,7 +1472,7 @@ function loadTableCampaignResultadmin(){
 
                 if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
                 }else{
-                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['payload']+1;
                 }
 
                 if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){

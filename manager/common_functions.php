@@ -286,6 +286,7 @@ function craftIPInfoArr($output){
 }
 
 function getMailClient($user_agent) {
+
     $browser        = "unknown";
     $browser_array = array(
             '/msie|trident/i'      => 'Internet Explorer',
@@ -305,13 +306,12 @@ function getMailClient($user_agent) {
             '/YahooMobile/i'   => 'Yahoo Mobile Mail',
             '/Lotus-Notes/i'   => 'IBM Lotus Notes',
             '/Roundcube/i'   => 'Roundcube',
-            '/Horde/i'   => 'Horde'
+            '/Horde/i'   => 'Horde',
         );
 
     foreach ($browser_array as $regex => $value)
         if (preg_match($regex, $user_agent))
             $browser = $value;
-
     return $browser;
 }
 
@@ -362,7 +362,6 @@ function getTimelineDataMail($conn, $campaign_id, $DTime_info){
 
 function getMailReplied($conn, $campaign_id, $quite=false){
 
-
     session_write_close(); //Required to avoid hanging by executing this fun
     $arr_replied_mails = [];
     $arr_err = [];
@@ -381,27 +380,35 @@ function getMailReplied($conn, $campaign_id, $quite=false){
         $sender_mailbox = $row['sender_mailbox'];
 
         //------------------Get mail subject---------
-        $stmt = $conn->prepare("SELECT rid FROM tb_data_mailcamp_live WHERE campaign_id = ?");
+        $stmt = $conn->prepare("SELECT rid,user_email FROM tb_data_mailcamp_live WHERE campaign_id = ?");
         $stmt->bind_param("s", $campaign_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $RIDs = [];
-        while($row = $result->fetch_assoc())
-            array_push($RIDs,$row['rid']);
-        
+        $email = [];
+        while ($row = $result->fetch_assoc()) {
+            array_push($RIDs, $row['rid']);
+            array_push($email, $row['user_email']);
+        }
+
+        // Convert email array to string
+        $emailString = implode('", "', $email);
         //-----------
         $arr_msg_info =[];
-
+  
         try{
-            if($read = imap_open($sender_mailbox,$sender_username,$sender_acc_pwd)){             
-                $array = imap_search($read,'TEXT "@spmailer.generated"'); // match for Message-ID header {{RID}}@spmailer.generated
+            if($read = imap_open($sender_mailbox,$sender_username,$sender_acc_pwd)){    
+                $array = imap_search($read, 'FROM "' . $emailString . '"');
+                 
+                // $array = imap_search($read, 'FROM "sutharmamta630@gmail.com"');
+                // match for Message-ID header {{RID}}@gmail.com
                 foreach($array as $result) {
-                    $overview = imap_fetch_overview($read,$result,0); //var_dump($overview[0]->references);
+                    $overview = imap_fetch_overview($read,$result,0); 
                     if($overview[0]->references == NULL)    
                         $tmp = explode("@spmailer.generated",$overview[0]->in_reply_to)[0]; //check reply mail header in_reply_to
                     else
                         $tmp = explode("@spmailer.generated",$overview[0]->references)[0]; //check reply mail header references
-                    $header_to_check = explode("<",$tmp)[1];    //xxx {{RID}}@spmailer.generated> => {{RID}} 
+                    $header_to_check = explode("<",$tmp)[1];    //xxx {{RID}}@gmail.com> => {{RID}} 
 
                     //get email address part only
                     if (filter_var($overview[0]->from, FILTER_VALIDATE_EMAIL))
@@ -419,10 +426,11 @@ function getMailReplied($conn, $campaign_id, $quite=false){
                             array_push($arr_msg_info[$msg_from]['msg_body'],$msg_body);
                         }   
                     }
+                    
                 }
                 
                 $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_replies=? WHERE campaign_id=? AND rid=?");
-                $stmt->bind_param('ssssssssss', $arr_msg_info,$campaign_id,$row['rid']);
+                $stmt->bind_param('sss', $arr_msg_info,$campaign_id,$row['rid']);
                 $stmt->execute();
 
             }

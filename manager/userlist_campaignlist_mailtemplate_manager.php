@@ -1218,8 +1218,6 @@ function addverificationmail($conn,$POST,$userid){
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'tls';
 		$mail->Port = 587;
-		// $mail->Username = 'mamta01.img@gmail.com'; // YOUR email username
-		// $mail->Password = 'eqvmfchxczllmkpb'; // YOUR email password
 		$mail->Username = 'waseemakram.img@gmail.com'; // YOUR email username
 		$mail->Password = 'rigdfypfwijjzgut'; // YOUR email password
 		// Sender and recipient settings
