@@ -361,8 +361,7 @@ function getTimelineDataMail($conn, $campaign_id, $DTime_info){
 }
 
 function getMailReplied($conn, $campaign_id, $quite=false){
-
-    session_write_close(); //Required to avoid hanging by executing this fun
+    session_write_close(); //Required to avoid hanging by executing this function
     $arr_replied_mails = [];
     $arr_err = [];
     $campaign_data = getCampaignDataFromCampaignID($conn, $campaign_id);
@@ -372,9 +371,9 @@ function getMailReplied($conn, $campaign_id, $quite=false){
     $stmt->bind_param("s", $sender_list_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
-    if($result->num_rows > 0){
-        $row = $result->fetch_assoc() ;
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
         $sender_username = $row['sender_acc_username'];
         $sender_acc_pwd = $row['sender_acc_pwd'];
         $sender_mailbox = $row['sender_mailbox'];
@@ -394,65 +393,64 @@ function getMailReplied($conn, $campaign_id, $quite=false){
         // Convert email array to string
         $emailString = implode('", "', $email);
         //-----------
-        $arr_msg_info =[];
-  
-        try{
-            if($read = imap_open($sender_mailbox,$sender_username,$sender_acc_pwd)){    
-                $array = imap_search($read, 'FROM "' . $emailString . '"');
-                 
-                // $array = imap_search($read, 'FROM "sutharmamta630@gmail.com"');
-                // match for Message-ID header {{RID}}@gmail.com
-                foreach($array as $result) {
-                    $overview = imap_fetch_overview($read,$result,0); 
-                    if($overview[0]->references == NULL)    
-                        $tmp = explode("@spmailer.generated",$overview[0]->in_reply_to)[0]; //check reply mail header in_reply_to
-                    else
-                        $tmp = explode("@spmailer.generated",$overview[0]->references)[0]; //check reply mail header references
-                    $header_to_check = explode("<",$tmp)[1];    //xxx {{RID}}@gmail.com> => {{RID}} 
+        $arr_msg_info = [];
 
-                    //get email address part only
+        try {
+            if ($read = imap_open($sender_mailbox, $sender_username, $sender_acc_pwd)) {
+                $array = imap_search($read, 'FROM "' . $emailString . '"');
+
+                foreach ($array as $result) {
+                    $overview = imap_fetch_overview($read, $result, 0);
+                    if ($overview[0]->references == NULL)
+                        $tmp = explode("@spmailer.generated", $overview[0]->in_reply_to)[0];
+                    else
+                        $tmp = explode("@spmailer.generated", $overview[0]->references)[0];
+                    $header_to_check = explode("<", $tmp)[1];
+
                     if (filter_var($overview[0]->from, FILTER_VALIDATE_EMAIL))
                         $msg_from = $overview[0]->from;
                     else
-                        $msg_from = str_ireplace(">","",explode("<",$overview[0]->from)[1]);    //xxx <username@domain.com> => username@domain.com 
+                        $msg_from = str_ireplace(">", "", explode("<", $overview[0]->from)[1]);
 
-                    if(in_array($header_to_check, $RIDs)){
-                        $msg_time = $overview[0]->date;         
-                        $msg_body = imap_fetchbody ($read,$result,1);
+                    if (in_array($header_to_check, $RIDs)) {
+                        $msg_time = $overview[0]->date;
+                        $msg_body = imap_fetchbody($read, $result, 1);
                         if (!array_key_exists($msg_from, $arr_msg_info))
-                            $arr_msg_info[$msg_from] = ['msg_time'=>[$msg_time],'msg_body'=>[$msg_body]];
-                        else{
-                            array_push($arr_msg_info[$msg_from]['msg_time'],$msg_time);
-                            array_push($arr_msg_info[$msg_from]['msg_body'],$msg_body);
-                        }   
+                            $arr_msg_info[$msg_from] = ['msg_time' => [$msg_time], 'msg_body' => [$msg_body]];
+                        else {
+                            array_push($arr_msg_info[$msg_from]['msg_time'], $msg_time);
+                            array_push($arr_msg_info[$msg_from]['msg_body'], $msg_body);
+                        }
                     }
-                    
                 }
-                
-                $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_replies=? WHERE campaign_id=? AND rid=?");
-                $stmt->bind_param('sss', $arr_msg_info,$campaign_id,$row['rid']);
-                $stmt->execute();
-
             }
-            
-
-        }catch(Exception $e) {
-            array_push($arr_err,$e->getMessage());
+        } catch (Exception $e) {
+            array_push($arr_err, $e->getMessage());
         }
 
-        array_push($arr_err,imap_errors());     //required to capture imap errors
-        
-        if(empty($arr_err) || $arr_err[0] == false)
-            if($quite)
-                return ['reply_count_unique'=>count($arr_msg_info), 'msg_info'=>$arr_msg_info];
+        array_push($arr_err, imap_errors());
+
+        // Update the database outside the if block
+        $rids = implode('", "', $RIDs);
+        foreach ($RIDs as $rid) {
+            $stmt1 = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_replies=? WHERE campaign_id=? AND rid=?");
+             $count = count($arr_msg_info);
+             $stmt1->bind_param('iss', $count, $campaign_id, $rid);
+            $stmt1->execute();
+        }
+
+        if (empty($arr_err) || $arr_err[0] == false) {
+            if ($quite)
+                return ['reply_count_unique' => count($arr_msg_info), 'msg_info' => $arr_msg_info];
             else
-                echo json_encode(['reply_count_unique'=>count($arr_msg_info), 'msg_info'=>$arr_msg_info]);
-        else
-            if($quite)
-                return ['error'=>$arr_err, 'reply_count_unique'=>count($arr_msg_info), 'msg_info'=>$arr_msg_info];
+                echo json_encode(['reply_count_unique' => count($arr_msg_info), 'msg_info' => $arr_msg_info]);
+        } else {
+            if ($quite)
+                return ['error' => $arr_err, 'reply_count_unique' => count($arr_msg_info), 'msg_info' => $arr_msg_info];
             else
-                echo json_encode(['error'=>$arr_err, 'reply_count_unique'=>count($arr_msg_info), 'msg_info'=>$arr_msg_info]);
-    }           
+                echo json_encode(['error' => $arr_err, 'reply_count_unique' => count($arr_msg_info), 'msg_info' => $arr_msg_info]);
+        }
+    }
     $stmt->close();
 }
 
