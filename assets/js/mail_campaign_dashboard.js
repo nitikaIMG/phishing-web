@@ -326,7 +326,7 @@ function updateProgressbar(mailcamp_status, sender_list_id, user_group_id, mail_
 
 
             updatePieTotalSent(sent_mail_count, sent_success_count, sent_failed_count);
-            var mail_open_percent = +(mail_open_count / sent_mail_count * 100).toFixed(2);;
+            var mail_open_percent = +(mail_open_count / sent_mail_count * 100).toFixed(2);
             updatePieTotalMailOpen(sent_mail_count, mail_open_count, mail_open_percent);
             updatePieOverViewEmail(sent_mail_success_percent, mail_open_percent);
 
@@ -539,7 +539,7 @@ function updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed
     $("#piechart_mail_total_sent").attr("hidden", false);
     $("#piechart_mail_total_sent").parent().children().remove('.loadercust');
 
-    var sent_percent = ((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
+    var sent_percent = +((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
     var non_sent_percent = +(100 - sent_percent).toFixed(2);
     var options = {
         series: [sent_percent, non_sent_percent],
@@ -793,11 +793,11 @@ function updatePieTotalMailReplied(total_user_email_count) {
             radialchart_overview_mailcamp.updateSeries(arr_chart_data)
         }
         else{
-            toastr.error('', data.error);
+            toastr.error( data.error);
             $("#piechart_mail_total_replied").text('Loading error!');
         }
     }).fail(function(response) {
-        toastr.error('',  response.statusText);
+        toastr.error(  response.statusText);
         $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
     }); 
 }
@@ -1706,7 +1706,7 @@ function exportReportAction(e) {
         };
     }
     else
-        toastr.error('', 'Table is empty!');
+        toastr.error( 'Table is empty!');
 }
 
 //------------------------Public Access---------------
@@ -1732,7 +1732,7 @@ $("#cb_act_dashboard_link").change(function() {
 
 function enableDisablePublicAccess(new_tk_id=false){
     if(g_campaign_id == ""){
-        toastr.error('', 'Error: No campaign selected');
+        toastr.error( 'Error: No campaign selected');
         $('#cb_act_dashboard_link').prop('checked', false);
         return;
     }
@@ -1750,12 +1750,12 @@ function enableDisablePublicAccess(new_tk_id=false){
         if(response.result == "success"){
             g_tk_id = response.tk_id;
             if($("#cb_act_dashboard_link").prop('checked'))
-                toastr.success('', 'Public access link activated!');   
+                toastr.success( 'Public access link activated!');   
             else
                 toastr.warning('', 'Public access link deactivated!'); 
         }
         else
-            toastr.error('', 'Error changing public access');
+            toastr.error( 'Error changing public access');
 
         $('#dashboard_link_url').html(location.href.split('?')[0] + "?mcamp=" + g_campaign_id + "&tk=" + g_tk_id);
         $("#modal_dashboard_link").find('.loader').remove();

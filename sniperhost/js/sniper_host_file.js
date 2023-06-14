@@ -67,14 +67,14 @@ function saveFile(e) {
          }),
     }).done(function (response) {
         if(response.result == "success"){ 
-            toastr.success('', 'Saved successfully!');
+            toastr.success( 'Saved successfully!');
             window.history.replaceState(null,null, location.pathname + '?ht=' + nextRandomId);
             loadTableFilesList();
             viewFileDetailsFromId(nextRandomId,true);
             g_deny_navigation = null;
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -104,7 +104,7 @@ function viewFileDetailsFromId(hf_id,quite) {
             generateDownloadLink();
 
             if(!quite)
-                toastr.success('', 'Data loaded!');
+                toastr.success( 'Data loaded!');
 
             $("#upload_msg").text("Drop the binary here or click to upload");
             window.history.replaceState(null,null, location.pathname + '?hf=' + hf_id);
@@ -136,7 +136,7 @@ function fileDeletionAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_hf_delete').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             loadTableFilesList();
             if(nextRandomId == g_modalValue){
                 $("#upload_msg").text("Drop the file here or click to upload");

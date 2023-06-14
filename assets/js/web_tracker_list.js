@@ -18,9 +18,9 @@ function webTrackerActDeactAction(tracker_id, action_value){
             $('#modal_prompts').modal('toggle');
             loadTableWebTrackerList();
             if (new_action_value == 1)
-                toastr.success('', 'Success. Tracking started!');
+                toastr.success( 'Success. Tracking started!');
             else
-                toastr.success('', 'Success. Tracking stopped!');
+                toastr.success( 'Success. Tracking stopped!');
         }
         else
             toastr.error("", response.error);
@@ -56,11 +56,11 @@ function webTrackerDeletionAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_prompts').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             loadTableWebTrackerList();
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
     }); 
 }
 //---------------
@@ -75,7 +75,7 @@ function webTrackerCopyAction() {
 
     if (RegTest(modal_web_tracker_name, 'COMMON') == false) {
         $("#modal_mail_campaign_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#modal_web_tracker_name").removeClass("is-invalid");
@@ -91,7 +91,7 @@ function webTrackerCopyAction() {
         })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Copy success!');
+            toastr.success( 'Copy success!');
             $('#modal_copy_web_tracker').modal('toggle');
             loadTableWebTrackerList();
         }
@@ -118,7 +118,7 @@ function webTrackerDataDeletionAction() { // delete user data only
         })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Tracker data deletion success!');
+            toastr.success( 'Tracker data deletion success!');
             $('#modal_prompts').modal('toggle');
         }
         else
@@ -133,7 +133,7 @@ function trackerLinkCopy(tracker_id){
     document.execCommand("copy");
     $temp.remove();
 
-    toastr.success('', 'Copy success!');
+    toastr.success( 'Copy success!');
 }
 //---------------
 //---------------

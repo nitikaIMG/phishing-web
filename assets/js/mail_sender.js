@@ -129,28 +129,28 @@ function saveMailIntegrationbyadmin(e,val){
 
     if (RegTest(mail_sender_name, "COMMON") == false) {
         // $("#mail_sender_name1").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         // $("#mail_sender_name1").removeClass("is-invalid");
 
     if (mail_sender_SMTP_server == '') {
         // $("#mail_sender_SMTP_server").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         // $("#mail_sender_SMTP_server").removeClass("is-invalid");
 
     if (mail_sender_acc_username == '') {
         // $("#mail_sender_acc_username").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_acc_username").removeClass("is-invalid");
 
     if (mail_sender_from == '') {
         // $("#mail_sender_from").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } 
     var cust_headers = [];
@@ -181,13 +181,13 @@ function saveMailIntegrationbyadmin(e,val){
             console.log(response);
             if(response.result == "success"){
                 location.reload();
-                toastr.success('', 'Saved successfully!');
+                toastr.success( 'Saved successfully!');
                 $('#mailIntemodal').modal('hide');
                 window.history.replaceState(null,null, location.pathname + '?action=edit&sender=' + nextRandomId);
                 g_deny_navigation = null;
             }
             else
-                toastr.error('', 'Error saving data!');
+                toastr.error( 'Error saving data!');
             enableDisableMe(e);
         });
 }
@@ -207,28 +207,28 @@ function saveMailIntegration(e){
      
     if (RegTest(mail_sender_name, "COMMON") == false) {
         // $("#mail_sender_name1").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         // $("#mail_sender_name1").removeClass("is-invalid");
 
     if (mail_sender_SMTP_server == '') {
         // $("#mail_sender_SMTP_server").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         // $("#mail_sender_SMTP_server").removeClass("is-invalid");
 
     if (mail_sender_acc_username == '') {
         // $("#mail_sender_acc_username").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_acc_username").removeClass("is-invalid");
 
     if (mail_sender_from == '') {
         // $("#mail_sender_from").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } 
     // else
@@ -258,13 +258,13 @@ function saveMailIntegration(e){
             contentType: 'application/json; charset=utf-8'
         }).done(function (response) {
             if(response.result == "success"){
-                // toastr.success('', 'Saved successfully!');
+                // toastr.success( 'Saved successfully!');
                 location.reload();
                 window.history.replaceState(null,null, location.pathname + '?action=edit&sender=' + nextRandomId);
                 g_deny_navigation = null;
             }
             else
-                toastr.error('', response.msg);
+                toastr.error( response.msg);
             enableDisableMe(e);
         });
 }
@@ -283,28 +283,28 @@ function saveMailSenderGroup(e) {
 
     if (RegTest(mail_sender_name, "COMMON") == false) {
         $("#mail_sender_name").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_name").removeClass("is-invalid");
 
     if (mail_sender_SMTP_server == '') {
         $("#mail_sender_SMTP_server").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_SMTP_server").removeClass("is-invalid");
 
     if (mail_sender_acc_username == '') {
         $("#mail_sender_acc_username").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_acc_username").removeClass("is-invalid");
 
     if (mail_sender_from == '') {
         $("#mail_sender_from").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_from").removeClass("is-invalid");
@@ -317,7 +317,7 @@ function saveMailSenderGroup(e) {
     //     var cb_auto_mailbox = 0;
     //     if (mail_sender_mailbox == '') {
     //         $("#mail_sender_mailbox").addClass("is-invalid");
-    //         toastr.error('', 'Empty/unsupported character!');
+    //         toastr.error( 'Empty/unsupported character!');
     //         return;
     //     } else
     //         $("#mail_sender_mailbox").removeClass("is-invalid");
@@ -350,12 +350,12 @@ function saveMailSenderGroup(e) {
         contentType: 'application/json; charset=utf-8'
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Saved successfully!');
+            toastr.success( 'Saved successfully!');
             window.history.replaceState(null,null, location.pathname + '?action=edit&sender=' + nextRandomId);
             g_deny_navigation = null;
         }
         else
-            toastr.error('', 'Error saving data!');
+            toastr.error( 'Error saving data!');
         enableDisableMe(e);
     }); 
 }
@@ -406,7 +406,7 @@ function MailSenderCopyAction() {
 
     if (RegTest(modal_mail_sender_name, "COMMON") == false) {
         $("#mail_sender_name").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_name").removeClass("is-invalid");
@@ -422,7 +422,7 @@ function MailSenderCopyAction() {
          })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Copy success!');
+            toastr.success( 'Copy success!');
             $('#modal_sender_list_copy').modal('toggle');
             dt_mail_sender_list.destroy();
             $("#table_mail_sender_list tbody > tr").remove();
@@ -449,7 +449,7 @@ function senderListDeletionAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_sender_list_delete').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             dt_mail_sender_list.destroy();
             $("#table_mail_sender_list tbody > tr").remove();
             loadTableSenderList();
@@ -635,35 +635,35 @@ function modalTestDeliveryAction(e){
 
     if (RegTest(mail_sender_name, "COMMON") == false) {
         $("#mail_sender_name").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_name").removeClass("is-invalid");
 
     if (mail_sender_SMTP_server == '') {
         $("#mail_sender_SMTP_server").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_SMTP_server").removeClass("is-invalid");
 
     if (mail_sender_from == '') {
         $("#mail_sender_from").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_from").removeClass("is-invalid");
 
     if (mail_sender_acc_username == '') {
         $("#mail_sender_acc_username").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_acc_username").removeClass("is-invalid");
 
     if (RegTest(test_to_address, "EMAIL") == false) {
         $("#modal_mail_sender_test_mail_to").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#modal_mail_sender_test_mail_to").removeClass("is-invalid");
@@ -690,9 +690,9 @@ function modalTestDeliveryAction(e){
          })
     }).done(function (response) {
         if(response.result == "success")
-                toastr.success('', 'Success. Check your inbox!');
+                toastr.success( 'Success. Check your inbox!');
         else
-            toastr.error('', 'Error sending mail!<br/>' + response.error);
+            toastr.error( 'Error sending mail!<br/>' + response.error);
         $('#modal_sender_list_test_mail').modal('toggle');
         enableDisableMe(e);
     }); 
@@ -705,20 +705,20 @@ function verifyMailBoxAccess(){
     var mail_sender_mailbox = $('#mail_sender_mailbox').val().trim();
 
     if (mail_sender_mailbox == '' || mail_sender_mailbox == 'None') {
-        toastr.error('', 'Mailbox path incorrectly configured!');
+        toastr.error( 'Mailbox path incorrectly configured!');
         return;
     }
 
     if (mail_sender_SMTP_server == '') {
         $("#mail_sender_SMTP_server").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_SMTP_server").removeClass("is-invalid");
 
     if (mail_sender_acc_username == '') {
         $("#mail_sender_acc_username").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#mail_sender_acc_username").removeClass("is-invalid");
@@ -728,7 +728,7 @@ function verifyMailBoxAccess(){
     else {        
         if (mail_sender_mailbox == '') {
             $("#mail_sender_mailbox").addClass("is-invalid");
-            toastr.error('', 'Empty/unsupported character!');
+            toastr.error( 'Empty/unsupported character!');
             return;
         } else
             $("#mail_sender_mailbox").removeClass("is-invalid");

@@ -161,7 +161,7 @@ function generateResult(e,quite=true){
         if(!data.error){  // no data
             editor_output.getDoc().setValue(atob(data.output));
             if(!quite)
-                toastr.success('', 'Data loaded!');
+                toastr.success( 'Data loaded!');
         }
     }); 
 }
@@ -241,14 +241,14 @@ function savePlainText(e) {
          }),
     }).done(function (response) {
         if(response.result == "success"){ 
-            toastr.success('', 'Saved successfully!');
+            toastr.success( 'Saved successfully!');
             window.history.replaceState(null,null, location.pathname + '?ht=' + nextRandomId);
             loadTablePlainTextList();
             generateDownloadLink(file_extension);
             g_deny_navigation = null;
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -295,7 +295,7 @@ function viewPlainTextDetailsFromId(ht_id,quite) {
             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
         }
         else
-            toastr.error('', data.error);
+            toastr.error( data.error);
     }); 
 }
 
@@ -315,7 +315,7 @@ function plainTextDeletionAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_ht_delete').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             loadTablePlainTextList();
             if(nextRandomId == g_modalValue)
                 window.history.replaceState(null,null, location.pathname);

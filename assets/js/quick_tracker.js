@@ -38,12 +38,12 @@ function addQuickTracker(e) {
     }).done(function (response) {
         if(response.result == "success"){ 
             $('#modal_new_quick_tracker').modal('toggle');
-            toastr.success('', 'Saved successfully!');
+            toastr.success( 'Saved successfully!');
             loadTableQuickTrackerList();
             getRandomId();
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -66,11 +66,11 @@ function deleteQuickTrackerAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_prompts').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             loadTableQuickTrackerList();
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
     }); 
 }
 
@@ -92,7 +92,7 @@ function quickTrackerDataDeletion() { // delete user data only
         })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Tracker data deletion success!');
+            toastr.success( 'Tracker data deletion success!');
             $('#modal_prompts').modal('toggle');
         }
         else

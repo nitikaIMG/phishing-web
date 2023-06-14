@@ -83,7 +83,7 @@ function exportLogAction(e) {
         };
     }
     else
-        toastr.error('', 'Table is empty!');
+        toastr.error( 'Table is empty!');
 }
 
 function clearLogAction() {
@@ -96,10 +96,10 @@ function clearLogAction() {
     }).done(function (response) {
         if(response.result == 'success'){
             $('#modal_prompts').modal('toggle');
-            toastr.success('', 'Log cleared successfully!');
+            toastr.success( 'Log cleared successfully!');
             loadTableLog();
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
     }); 
 }

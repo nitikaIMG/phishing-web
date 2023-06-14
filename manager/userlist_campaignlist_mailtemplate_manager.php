@@ -910,7 +910,7 @@ function sendTestMailSample($conn,$POSTJ){
     $keyword_vals['{{NOTES}}'] = "Note_content";
     $keyword_vals['{{EMAIL}}'] = $test_to_address;
     $keyword_vals['{{FROM}}'] = $sender_from;
-    $keyword_vals['{{TRACKINGURL}}'] = $serv_variables['baseurl'].'/tmail?mid='."MailCampaign_id".'&rid='.$RID;
+    $keyword_vals['{{TRACKINGURL}}'] = $serv_variables['baseurl'].'/mid='."MailCampaign_id".'&rid='.$RID;
     $keyword_vals['{{TRACKER}}'] = '<img src="'.$keyword_vals['{{TRACKINGURL}}'].'"/>';
     $keyword_vals['{{BASEURL}}'] = $serv_variables['baseurl'];
 	$keyword_vals['{{MUSERNAME}}'] = explode('@', $test_to_address)[0];

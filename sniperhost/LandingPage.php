@@ -100,6 +100,15 @@ isAdminSessionValid(true);
                               <input type="text" class="form-control date-inputmask" id="tb_page_file_name" placeholder="mypage.html">
                            </div>
                         </div>
+
+                        <div class="col-md-4">
+                              <label>Domain:</label>
+                              <select class="select2 form-control date-inputmask" id="modal_export_report_selector" placeholder="Domain">
+                                 <option value="" selected disabled>Select Domain</option>
+                              </select>
+                        </div>
+
+
                         <div class="col-md-4 align-items-right text-right float-right">
                            <button type="button" class="btn btn-info" onclick="saveLandPage($(this))"><i class="fa fas fa-save"></i> Save</button>
                         </div>
@@ -308,11 +317,11 @@ isAdminSessionValid(true);
    <script src="<?php echo url ?>/js/common_scripts.js"></script>
    <script src="<?php echo url ?>/../sniperhost/js/sniper_landing_page.js"></script>
    <?php
-   echo '<script>';
+   echo '<script>
+   get_domains();';
    if (isset($_GET['lp']))
       echo '$("#section_view_list").hide();
                      viewLandPageDetailsFromId("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
-
    echo '</script>';
    ?>
    <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>

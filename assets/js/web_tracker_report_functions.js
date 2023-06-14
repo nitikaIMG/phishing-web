@@ -162,7 +162,7 @@ function exportReportAction(e) {
 	    };
 	}
 	else
-		toastr.error('', 'Table is empty!');
+		toastr.error('Table is empty!');
 }
 
 //--------Reports Area--------
@@ -221,7 +221,7 @@ function loadTableWebTrackerResult(g_tracker_id) {
 
 function webTrackerSelected(tracker_id) {
 	if(tracker_id == ''){
-        toastr.warning('', 'Tracker not selected');
+        toastr.warning( 'Tracker not selected');
         return;
     }
 	g_tracker_id = tracker_id;

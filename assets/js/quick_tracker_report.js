@@ -192,5 +192,5 @@ function exportReportAction(e) {
         };
     }
     else
-        toastr.error('', 'Table is empty!');
+        toastr.error( 'Table is empty!');
 }
