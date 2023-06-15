@@ -50,6 +50,12 @@ if (isset($_POST)) {
 		//Store data
 		if($POSTJ['action_type'] == "get_store_list")
 			getStoreList($conn, $POSTJ['type'], (isset($POSTJ['name'])?$POSTJ['name']:""));
+		if($POSTJ['action_type'] == "get_store_landing")
+			getStoreLanding($conn,$POSTJ['id']);
+		if($POSTJ['action_type'] == "get_store_landing_page")
+			getStoreLandingPage($conn,$POSTJ['id']);
+		if($POSTJ['action_type'] == "get_store_landing_page_edit")
+			getStoreLandingPageEdit($conn,$POSTJ['id']);
 	}
 }
 
@@ -374,6 +380,85 @@ function getStoreList($conn, $type, $name){
 	}
 }
 
+function getStoreLandingPage($conn,$id){
+    $resp = [];
+
+	$stmt = $conn->prepare("SELECT * FROM tb_hland_page_list WHERE domain = ?");
+	$stmt->bind_param("s", $id);
+	$stmt->execute();
+	$result1 = $stmt->get_result();
+	$result = $result1->fetch_all(MYSQLI_ASSOC);
+ 
+	if($result1->num_rows > 0){
+		foreach ($result as $row){
+			array_push($resp,$row);
+		}
+
+		echo json_encode($resp);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+}
+
+function getStoreLanding($conn,$id){
+
+    $resp = [];
+	$result = mysqli_query($conn, "SELECT * FROM tb_domains");
+
+	if(mysqli_num_rows($result) > 0){
+		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
+			array_push($resp,$row);
+		}
+
+		if($id!=null){
+
+			$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_template_list WHERE mail_template_id=?");
+			$stmt->bind_param("s", $id);
+			$stmt->execute();
+			$result1 = $stmt->get_result();
+			if($result1->num_rows != 0){
+				$row = $result1->fetch_assoc() ;
+				$mail_domain = $row['domain'];
+			}
+		}
+	
+		echo json_encode(['resp'=>$resp,'mail_domain'=>$mail_domain]);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+}
+
+function getStoreLandingPageEdit($conn,$id){
+    $resp = [];
+
+	if($id!=null){
+
+		$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_template_list WHERE mail_template_id=?");
+		$stmt->bind_param("s", $id);
+		$stmt->execute();
+		$result1 = $stmt->get_result();
+		if($result1->num_rows != 0){
+			$row = $result1->fetch_assoc() ;
+			$mail_landing_page = $row['landing_page'];
+		}
+	}
+
+
+	$stmt = $conn->prepare("SELECT * FROM tb_hland_page_list WHERE domain = ?");
+	$stmt->bind_param("s", $row['domain']);
+	$stmt->execute();
+	$result1 = $stmt->get_result();
+	$result = $result1->fetch_all(MYSQLI_ASSOC);
+ 
+	if($result1->num_rows > 0){
+		foreach ($result as $row){
+			array_push($resp,$row);
+		}
+		echo json_encode(['resp'=>$resp,'mail_landing_page'=>$mail_landing_page]);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+}
 //----------------Logs-----------
 function getLogs($conn, &$POSTJ){
 	$offset = htmlspecialchars($POSTJ['start']);

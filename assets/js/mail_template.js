@@ -196,6 +196,16 @@ function saveMailTemplate(e) {
     } else
         $("#mail_template_name").removeClass("is-invalid");
 
+        if($('#domain').val()==null){
+            toastr.error( 'Domain Required!');
+            return;
+        }
+
+        if($('#landing_page').val()==null){
+            toastr.error( 'Landing Page Required!');
+            return;
+        }
+
     mail_template_content = $('#summernote').summernote('code');
 
     enableDisableMe(e);
@@ -210,7 +220,11 @@ function saveMailTemplate(e) {
             mail_template_content: mail_template_content,
             timage_type: getTrackerImageType(),
             attachments: catchAttachments(),
-            mail_content_type: $('#mail_content_type_selector').val()
+            mail_content_type: $('#mail_content_type_selector').val(),
+            domain: $('#domain').val(),
+            landing_page: $('#landing_page').val(),
+            domain_name: $('#domain_name').val(),
+            landing_name: $('#landing_name').val(),
         })
     }).done(function (response) {
         if(response.result == "success"){
@@ -251,8 +265,6 @@ function getMailTemplateFromTemplateId(id) {
             //var att= {file_id: file.file_id, file_name: file.file_name, file.file_disp_name:, inline, file.inline, payload_info: file.payload_info};
             //if(file.payload_info == true){
               //  att.payload_info={custom: file.payload_info.custom, file_extn: file.payload_info.file_extn, file_type:file.payload_info.file_extn.file_type, }
-
-            
             addAttachmentLabel(att_info);
         });
 
@@ -687,6 +699,83 @@ function getStoreList(){
                 $("#selector_sample_mailtemplates").append("<option value='" + name + "'>" + name + "</option>");
             });
             $('#selector_sample_mailtemplates').trigger("change");    
+        }
+    }); 
+}
+
+function get_landings(id){
+    $("#landing_name").val("");
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing_page",
+            id:id
+         })
+    }).done(function (data) {
+        if(!data['error']){ 
+            
+             var mail_landing_page = data.mail_landing_page;
+
+            $.each(data, function(key,val) {
+                $("#landing_page").append("<option value='" + val.hlp_id + "'>" + val.page_file_name + "</option>");
+                $("#landing_name").val(val.page_file_name);
+            });
+        }
+    }); 
+}
+
+
+function get_domain_list(id){
+    $("#domain_name").val("");
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing",
+            id:id
+         })
+    }).done(function (data) {
+        if(!data['error']){  
+            var mail_domain = data.mail_domain;
+
+            $.each(data.resp, function(key, val) {
+                if (mail_domain == val.id) {
+                    $("#domain").append("<option value='" + val.id + "' selected>" + val.name + "</option>");
+                }else{
+                    $("#domain").append("<option value='" + val.id + "'>" + val.name + "</option>");
+                }
+                $("#domain_name").val(val.name);
+    
+                });
+        }
+    }); 
+}
+
+function get_landings_edit(id){
+    $("#landing_name").val("");
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing_page_edit",
+            id:id
+         })
+    }).done(function (data) {
+        if(!data['error']){ 
+            
+             var mail_landing_page = data.mail_landing_page;
+            
+            $.each(data.resp, function(key, val) {
+                if (mail_landing_page == val.hlp_id) {
+                    $("#landing_page").append("<option value='" + val.hlp_id + "' selected>" + val.page_file_name + "</option>");
+                }else{
+                    $("#landing_page").append("<option value='" + val.hlp_id + "'>" + val.page_file_name + "</option>");
+                }
+                $("#landing_name").val(val.name);
+    
+    
+                });
         }
     }); 
 }

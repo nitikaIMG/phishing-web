@@ -51,9 +51,11 @@ if (isset($_POST)) {
 		if($POSTJ['action_type'] == "delete_landpage")
 			deleteLandPage($conn, $POSTJ['hlp_id']);
 		if($POSTJ['action_type'] == "get_domain")
-			getDomain($conn);
+			getDomain($conn,$POSTJ['hlp_id']);
 		if($POSTJ['action_type'] == "get_domain_name")
 		   getDomainName($conn,$POSTJ['doamin']);
+		if($POSTJ['action_type'] == "get_store_landing_list")
+		   getStoreLandingList($conn, $POSTJ['type'], (isset($POSTJ['name'])?$POSTJ['name']:""));
 	}
 }
 
@@ -251,34 +253,30 @@ function deleteFile($conn, $hf_id){
 //---------------------------------------------LandingPage-----------------------------
 
 function saveLandPage($conn, $hlp_id, &$page_name, &$page_file_name, &$page_content , &$domain){
-    
-    // $file_path = '/home/techowlphish/cisco-webex.co.in/' . $page_file_name ;
-	// if (!is_dir('/home/techowlphish/cisco-webex.co.in/')) 
-	// 	die(json_encode(['result' => 'failed', 'error' => 'Directory sniperhost/home/techowlphish/cisco-webex.co.in/ does not exist']));
-	// if (!is_writable('/home/techowlphish/cisco-webex.co.in/')) 
-	// 	die(json_encode(['result' => 'failed', 'error' => 'Directory sniperhost/home/techowlphish/cisco-webex.co.in/ has no write permission']));
+    $domain = getDomainName($conn,$domain);
+    $path = $domain['path'];
 
-	$file_path = '../lp_pages/'.$page_file_name;
+    $file_path = $path . $page_file_name ;
 
-	if (!is_dir('../lp_pages/')) 
-		die(json_encode(['result' => 'failed', 'error' => 'Directory sniperhost/lp_pages/ does not exist']));
-	if (!is_writable('../lp_pages/')) 
-		die(json_encode(['result' => 'failed', 'error' => 'Directory sniperhost/lp_pages/ has no write permission']));
+	if (!is_dir($path)) 
+		die(json_encode(['result' => 'failed', 'error' => 'Directory sniperhost'.$path.'/ does not exist']));
+	if (!is_writable($path)) 
+		die(json_encode(['result' => 'failed', 'error' => 'Directory sniperhost '.$path.'/ has no write permission']));
 
-
-	file_put_contents($file_path, base64_decode($page_content));	
+		file_put_contents($file_path, base64_decode($page_content));	
 
 	if(checkAnIDExist($conn,$hlp_id,'hlp_id','tb_hland_page_list')){
 		$stmt = $conn->prepare("UPDATE tb_hland_page_list SET page_name=?, page_file_name=?,domain=? WHERE hlp_id=?");
-		$stmt->bind_param('ssss', $page_name,$page_file_name,$domain,$hlp_id);
+		$stmt->bind_param('ssss', $page_name,$page_file_name,$domain['id'],$hlp_id);
 	}
 	else{
+	  
 		$stmt = $conn->prepare("INSERT INTO tb_hland_page_list(hlp_id,page_name,page_file_name,date,domain) VALUES(?,?,?,?,?)");
-		$stmt->bind_param('sssss', $hlp_id,$page_name,$page_file_name,$GLOBALS['entry_time'],$domain);
+		$stmt->bind_param('sssss', $hlp_id,$page_name,$page_file_name,$GLOBALS['entry_time'],$domain['id']);
 	}
 	
 	if ($stmt->execute() === TRUE)
-		echo(json_encode(['result' => 'success','path'=>$file_path]));	
+		echo(json_encode(['result' => 'success','path'=>$file_path,'domain'=>$domain['name']]));	
 	else 
 		echo(json_encode(['result' => 'failed', 'error' => 'Error saving data!']));	
 }
@@ -290,9 +288,11 @@ function getLandPageDetailsFromId($conn, $hlp_id){
 	$stmt->execute();
 	$result = $stmt->get_result();
 	if($result->num_rows > 0){
-		$row = $result->fetch_assoc() ;
-		// $file_path = '/home/techowlphish/cisco-webex.co.in/' . $row['page_file_name'] ;
-		$file_path = '../lp_pages/'.$row['page_file_name'];
+		$row = $result->fetch_assoc();
+		$path = getDomainName($conn,$row['domain']);
+		$row['domain_path'] =  $path['name'];
+		$file_path = $path['path'] . $row['page_file_name'];
+	
 		if(file_exists($file_path))
 			$row['page_content'] = file_get_contents($file_path);
 		else
@@ -302,15 +302,23 @@ function getLandPageDetailsFromId($conn, $hlp_id){
 	$stmt->close();
 }
 
-function getDomain($conn){
+function getDomain($conn,$hlp_id){
 	$resp = [];
+	$stmt = $conn->prepare("SELECT * FROM tb_hland_page_list WHERE hlp_id=?");
+	$stmt->bind_param("s", $hlp_id);
+	$stmt->execute();
+	$result1 = $stmt->get_result();
+	if($result1->num_rows > 0){
+		$row = $result1->fetch_assoc();
+		$domain_path =  $row['domain'];
+	}	
 
 	$result = mysqli_query($conn, "SELECT * FROM tb_domains");
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
         	array_push($resp,$row);
 		}
-		echo json_encode($resp);
+		echo json_encode(['resp'=>$resp,'domain_path'=>$domain_path]);
 	}
 	else
 		echo json_encode(['error' => 'No data']);	
@@ -318,16 +326,16 @@ function getDomain($conn){
 }
 
 function getDomainName($conn,$domain){
+  
 	$stmt = $conn->prepare("SELECT*FROM tb_domains WHERE id = ?");
 	$stmt->bind_param("s", $domain);
 	$stmt->execute();
 	$result = $stmt->get_result();
 	if($result->num_rows > 0){
 		$row = $result->fetch_assoc();
-		echo json_encode($row) ;
+        return $row;
 	}			
 	$stmt->close();
-
 }
 
 function getLandPageList($conn){
@@ -355,5 +363,33 @@ function deleteLandPage($conn, $hlp_id){
 	else
 		echo json_encode(['result' => 'failed', 'error' => 'Error deleting data!']);	
 	$stmt->close();
+}
+
+function getStoreLandingList($conn, $type, $name){
+	$resp = [];
+		
+	if($type == "mail_landing"){
+		if(empty($name)){
+			$stmt = $conn->prepare("SELECT * FROM tb_store WHERE type = ?");
+			$stmt->bind_param("s", $type);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$result = $result->fetch_all(MYSQLI_ASSOC);
+			foreach($result as $row)
+				$resp[$row['name']] = json_decode($row['info']);
+			echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
+		}
+		else{
+			$stmt = $conn->prepare("SELECT * FROM tb_store WHERE type = ? AND name = ?");
+			$stmt->bind_param("ss", $type, $name);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if($result->num_rows != 0){
+				$row = $result->fetch_assoc();
+				// echo $row['content'];
+				echo json_encode($row, JSON_INVALID_UTF8_IGNORE);
+			}
+		}
+	}
 }
 ?>

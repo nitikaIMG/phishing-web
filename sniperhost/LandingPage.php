@@ -72,9 +72,14 @@ isAdminSessionValid(true);
          <div id="main-wrapper">
             <div class="page-breadcrumb">
                <div class="row">
-                  <div class="col-12 d-flex no-block align-items-center">
-                     <h4 class="page-title">SniperPhish Settings</h4>
-                  </div>
+                    <div class="col-12 d-flex no-block align-items-center">
+                      <h4 class="page-title">SniperPhish Settings</h4>
+                  
+                      <div class="ml-auto text-right" id="store-area">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#ModalStore"><i class="fa fas fa-warehouse"></i> Store</button>
+                      </div>
+                    </div>
+
                </div>
             </div>
             <!-- ============================================================== -->
@@ -88,30 +93,31 @@ isAdminSessionValid(true);
                <div class="card">
                   <div class="card-body">
                      <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                            <div class="form-group">
                               <label>Page Name:</label>
                               <input type="text" class="form-control date-inputmask" id="tb_page_name" placeholder="My page">
                            </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                            <div class="form-group">
                               <label>Page File Name:</label>
                               <input type="text" class="form-control date-inputmask" id="tb_page_file_name" placeholder="mypage.html">
                            </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                               <label>Domain:</label>
                               <select class="select2 form-control date-inputmask" id="modal_export_report_selector" placeholder="Domain">
                                  <option value="" selected disabled>Select Domain</option>
                               </select>
                         </div>
 
-
-                        <div class="col-md-4 align-items-right text-right float-right">
+                        <div class="col-md-3 align-items-right text-right float-right">
                            <button type="button" class="btn btn-info" onclick="saveLandPage($(this))"><i class="fa fas fa-save"></i> Save</button>
                         </div>
+
+                        
                      </div>
 
                      <div class="row m-t-10">
@@ -288,6 +294,31 @@ isAdminSessionValid(true);
                   </div>
                </div>
             </div>
+               <!-- Modal -->
+               <div class="modal fade" id="ModalStore" tabindex="-1" role="dialog" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <h5 class="modal-title">Sample Landing Pages</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
+                     </div>
+                     <div class="modal-body">
+                        <div class="form-group row m-t-20">
+                           <label for="selector_sample_mailtemplates" class="col-sm-4  control-label col-form-label">Select Landing Pages</label>
+                              <div class="col-md-8">
+                                 <select class="select2 form-control custom-select" id="selector_sample_mailtemplates" style="height: 36px;width: 100%;">
+                                 </select>
+                              </div>
+                        </div>
+                        <i id="lb_selector_common_mail_sender_note"></i>
+                     </div>
+                     <div class="modal-footer" >
+                        <button type="button" class="btn btn-success" onclick="insertMailLanding()"><i class="mdi mdi-arrow-bottom-left"></i> Insert</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- Modal -->
             <?php include(dirname(__FILE__) . '../../components/foot.php'); ?>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -316,9 +347,17 @@ isAdminSessionValid(true);
    <script src="<?php echo url ?>/js/libs/codemirror.min.js"></script>
    <script src="<?php echo url ?>/js/common_scripts.js"></script>
    <script src="<?php echo url ?>/../sniperhost/js/sniper_landing_page.js"></script>
+   <!-- <script src="<?php echo url ?>/js/mail_template.js"></script> -->
    <?php
-   echo '<script>
-   get_domains();';
+   echo '<script>';
+   if (isset($_GET['lp'])){
+      echo'get_domains("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
+   }else{
+      echo'get_domains(null);';
+   }
+   echo'
+   getStoreLandingList();';
+ 
    if (isset($_GET['lp']))
       echo '$("#section_view_list").hide();
                      viewLandPageDetailsFromId("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
