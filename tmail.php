@@ -22,8 +22,7 @@ else
     $mail_template_id = 'Failed';
 
 $ua_info = new Wolfcast\BrowserDetection();
-$public_ip = getPublicIP();
-//Verify campaign is active
+$public_ip = getPublicIP();//Verify campaign is active
 $user_details = verifyMailCmapaignUser($conn, $campaign_id, $user_id);
 if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
 
@@ -95,6 +94,7 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     foreach (apache_request_headers() as $headers => $value) { 
         $allHeaders .= htmlspecialchars("$headers: $value\r\n"); 
     } 
+    
     if(empty($user_details['all_headers']))
         $allHeaders = json_encode(array($allHeaders));
     else{

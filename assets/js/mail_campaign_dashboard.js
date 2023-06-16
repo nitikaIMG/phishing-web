@@ -274,7 +274,7 @@ function campaignSelected(campaign_id) {
 
                 if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
                 }else{
-                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['payload']+1;
                 }
 
                 if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
@@ -326,7 +326,7 @@ function updateProgressbar(mailcamp_status, sender_list_id, user_group_id, mail_
 
 
             updatePieTotalSent(sent_mail_count, sent_success_count, sent_failed_count);
-            var mail_open_percent = +(mail_open_count / sent_mail_count * 100).toFixed(2);;
+            var mail_open_percent = +(mail_open_count / sent_mail_count * 100).toFixed(2);
             updatePieTotalMailOpen(sent_mail_count, mail_open_count, mail_open_percent);
             updatePieOverViewEmail(sent_mail_success_percent, mail_open_percent);
 
@@ -539,7 +539,7 @@ function updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed
     $("#piechart_mail_total_sent").attr("hidden", false);
     $("#piechart_mail_total_sent").parent().children().remove('.loadercust');
 
-    var sent_percent = ((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
+    var sent_percent = +((sent_mail_count-sent_failed_count) / total_user_email_count * 100).toFixed(2);
     var non_sent_percent = +(100 - sent_percent).toFixed(2);
     var options = {
         series: [sent_percent, non_sent_percent],
@@ -793,11 +793,11 @@ function updatePieTotalMailReplied(total_user_email_count) {
             radialchart_overview_mailcamp.updateSeries(arr_chart_data)
         }
         else{
-            toastr.error('', data.error);
+            toastr.error( data.error);
             $("#piechart_mail_total_replied").text('Loading error!');
         }
     }).fail(function(response) {
-        toastr.error('',  response.statusText);
+        toastr.error(  response.statusText);
         $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
     }); 
 }
@@ -987,7 +987,7 @@ function loadTableCampaignResult1(){
                         var mailpercentagepay = 100;
                     }
 
-                    if (value.employees_compromised	 == '' || value.	employees_compromised	 == 'NULL' ||value.	employees_compromised	 == null) {
+                    if (value.employees_compromised	 == '' || value.employees_compromised	 == 'NULL' ||value.	employees_compromised	 == null) {
                         var employees_compromised = '0';
                         var mailnewperexp = employees_compromised;
                         var mailsignperexp = '%';
@@ -999,7 +999,7 @@ function loadTableCampaignResult1(){
                         var mailpercentageexp = 100;
                     }
 
-                    if (value.emails_reported	 == '' || value.	emails_reported	 == 'NULL' ||value.	emails_reported	 == null) {
+                    if (value.emails_reported	 == '' || value.emails_reported	 == 'NULL' ||value.	emails_reported	 == null) {
                         var emails_reported = '0';
                         var mailnewperexprep = emails_reported;
                         var mailsignperexprep = '%';
@@ -1035,7 +1035,19 @@ function loadTableCampaignResult1(){
                                 </div>
                             </div>`;
 
-                    var mailhtmlexprep = `<div class="card2">
+                var mailhtmlexp = `<div class="card2">
+                            <div class="percent2">
+                            <svg>
+                                <circle cx="25" cy="25" r="22"></circle>
+                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexp};"></circle>
+                            </svg>
+                            <div class="number2">
+                                <h6>${mailnewperexp}<span>${mailsignperexp}</span></h6>
+                            </div>
+                            </div>
+                        </div>`;
+
+                    var mailhtmlexp = `<div class="card2">
                             <div class="percent2">
                             <svg>
                                 <circle cx="25" cy="25" r="22"></circle>
@@ -1047,17 +1059,6 @@ function loadTableCampaignResult1(){
                             </div>
                         </div>`;
 
-                    var mailhtmlexp = `<div class="card2">
-                            <div class="percent2">
-                            <svg>
-                                <circle cx="25" cy="25" r="22"></circle>
-                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexp};"></circle>
-                            </svg>
-                            <div class="number2">
-                                <h6>${mailnewperexprep}<span>${mailsignperexp}</span></h6>
-                            </div>
-                            </div>
-                        </div>`;
 
                     $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
                 });
@@ -1159,7 +1160,7 @@ function loadTableCampaignResult1(){
 
                 if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
                 }else{
-                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['payload']+1;
                 }
 
                 if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
@@ -1472,7 +1473,7 @@ function loadTableCampaignResultadmin(){
 
                 if(value.payloads_clicked == '' || value.payloads_clicked == 'NULL' ||value.payloads_clicked == null){
                 }else{
-                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['sent']+1;
+                    months[parseInt(newDate)]['payload'] = months[parseInt(newDate)]['payload']+1;
                 }
 
                 if(value.employees_compromised == '' || value.employees_compromised == 'NULL' ||value.employees_compromised == null){
@@ -1706,7 +1707,7 @@ function exportReportAction(e) {
         };
     }
     else
-        toastr.error('', 'Table is empty!');
+        toastr.error( 'Table is empty!');
 }
 
 //------------------------Public Access---------------
@@ -1732,7 +1733,7 @@ $("#cb_act_dashboard_link").change(function() {
 
 function enableDisablePublicAccess(new_tk_id=false){
     if(g_campaign_id == ""){
-        toastr.error('', 'Error: No campaign selected');
+        toastr.error( 'Error: No campaign selected');
         $('#cb_act_dashboard_link').prop('checked', false);
         return;
     }
@@ -1750,12 +1751,12 @@ function enableDisablePublicAccess(new_tk_id=false){
         if(response.result == "success"){
             g_tk_id = response.tk_id;
             if($("#cb_act_dashboard_link").prop('checked'))
-                toastr.success('', 'Public access link activated!');   
+                toastr.success( 'Public access link activated!');   
             else
                 toastr.warning('', 'Public access link deactivated!'); 
         }
         else
-            toastr.error('', 'Error changing public access');
+            toastr.error( 'Error changing public access');
 
         $('#dashboard_link_url').html(location.href.split('?')[0] + "?mcamp=" + g_campaign_id + "&tk=" + g_tk_id);
         $("#modal_dashboard_link").find('.loader').remove();

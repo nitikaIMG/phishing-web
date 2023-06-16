@@ -34,7 +34,7 @@ function exportUserAction() {
             })
         }).done(function (response) {
             if(response.error)
-                toastr.error('', 'Error adding user!');
+                toastr.error( 'Error adding user!');
             else{
                 var a = window.document.createElement('a');
                 a.href = window.URL.createObjectURL(new Blob([response],{ type: 'text/csv'}));
@@ -58,7 +58,7 @@ function addUserToTable(e) {
 
     if (RegTest(user_group_name,'COMMON') == false) {
         $("#user_group_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#user_group_name").removeClass("is-invalid");
@@ -90,7 +90,7 @@ function addUserToTable(e) {
         })
     }).done(function (response) {
         if(response.error)
-            toastr.error('', 'Error adding user!');
+            toastr.error( 'Error adding user!');
         else{
             getUserGroupFromGroupId(nextRandomId);
             window.history.replaceState(null,null, location.pathname + '?action=edit&user=' + nextRandomId);
@@ -118,12 +118,12 @@ function deleteRowAction(e) {
         })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             $('#modal_row_delete').modal('toggle');
             getUserGroupFromGroupId(nextRandomId);
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -171,13 +171,13 @@ function editRowAction(e) {
         })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Updated successfully!');
+            toastr.success( 'Updated successfully!');
             $('#modal_modify_row').modal('toggle');
             getUserGroupFromGroupId(nextRandomId);
             g_deny_navigation = null;
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -185,7 +185,7 @@ function editRowAction(e) {
 function addUserFromFile() {
     if (RegTest($('#user_group_name').val(),'COMMON') == false) {
         $("#user_group_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character! Provide a valid name first.');
+        toastr.error( 'Empty/Unsupported character! Provide a valid name first.');
         return;
     } else{
         $("#user_group_name").removeClass("is-invalid");
@@ -196,7 +196,7 @@ function addUserFromFile() {
 $('input[type=file]').change(function() {
     if (RegTest($('#user_group_name').val(),'COMMON') == false) {
         $("#user_group_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#user_group_name").removeClass("is-invalid");
@@ -205,7 +205,7 @@ $('input[type=file]').change(function() {
 
     var fileExtension = ['csv', 'txt', 'lst', 'rtf'];
     if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-        toastr.error('', 'Unsupported file type!');
+        toastr.error( 'Unsupported file type!');
         return;
     }
 
@@ -226,15 +226,15 @@ $('input[type=file]').change(function() {
                 })
             }).done(function (response) {
                 if(response.result == "success"){
-                    toastr.success('', 'User list added successfully!');
+                    toastr.success( 'User list added successfully!');
                     getUserGroupFromGroupId(nextRandomId);
                 }
                 else
-                    toastr.error('', response.error);
+                    toastr.error( response.error);
             }); 
         }
         reader.onerror = function(evt) {
-            toastr.error('', 'Error reading file!');
+            toastr.error( 'Error reading file!');
         }
     }
 });
@@ -242,7 +242,7 @@ $('input[type=file]').change(function() {
 function saveUserGroup(e) {
     if (RegTest($('#user_group_name').val(),'COMMON') == false) {
         $("#user_group_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#user_group_name").removeClass("is-invalid");
@@ -258,12 +258,12 @@ function saveUserGroup(e) {
         })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Saved successfully!');
+            toastr.success( 'Saved successfully!');
             window.history.replaceState(null,null, location.pathname + '?action=edit&user=' + nextRandomId);
             g_deny_navigation = null;
         }
         else
-            toastr.error('', 'Error saving data!');
+            toastr.error( 'Error saving data!');
         enableDisableMe(e);
     }); 
 }
@@ -339,7 +339,7 @@ function userGroupDeletionAction() {
     }).done(function (response) {
         if(response.result == "success"){
            $('#modal_user_group_delete').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             dt_user_group_list.destroy();
             $("#table_user_group_list tbody > tr").remove();
             loadTableUserGroupList();
@@ -357,7 +357,7 @@ function promptUserGroupCopy(id) {
 function UserGroupCopy() {
     if (RegTest($('#modal_new_user_group_name').val(), 'COMMON') == false) {
         $("#modal_new_user_group_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#modal_new_user_group_name").removeClass("is-invalid");
@@ -373,7 +373,7 @@ function UserGroupCopy() {
          })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Copy success!');
+            toastr.success( 'Copy success!');
             $('#modal_user_group_copy').modal('toggle');
             dt_user_group_list.destroy();
             $("#table_user_group_list tbody > tr").remove();

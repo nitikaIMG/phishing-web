@@ -338,10 +338,10 @@ function modifyTimeStampSettings(e){
          }),
     }).done(function (response) {
         if(response.result == "success"){ 
-            toastr.success('', 'Settings saved successfully!');   
+            toastr.success( 'Settings saved successfully!');   
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -385,10 +385,10 @@ function modifySPBaseURL(e){
         }),
     }).done(function (response) {
         if(response.result == "success"){ 
-            toastr.success('', 'URL updated successfully!');   
+            toastr.success( 'URL updated successfully!');   
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -403,10 +403,10 @@ function clearJunkSPData(e){
         }),
     }).done(function (response) {
         if(response.result == "success"){ 
-            toastr.success('', 'Junk data cleared successfully!');   
+            toastr.success( 'Junk data cleared successfully!');   
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }

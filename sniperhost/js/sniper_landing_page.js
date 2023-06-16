@@ -164,8 +164,9 @@ function saveLandPage(e) {
 
     var page_name = $('#tb_page_name').val();
     var page_file_name = $('#tb_page_file_name').val();
+    var domain = $('#modal_export_report_selector').val();
     var page_content = $('#summernote').summernote('code');    
-    console.log(page_content);
+
     enableDisableMe(e);
     $.post({
         url: "../sniperhost/manager/sniperhost_manager",
@@ -175,17 +176,23 @@ function saveLandPage(e) {
             hlp_id: nextRandomId,
             page_name: page_name,
             page_file_name: page_file_name,
+            domain:domain,
             page_content: btoa(unescape(encodeURIComponent(page_content)))
          }),
     }).done(function (response) {
+        console.log(response);
         if(response.result == "success"){ 
-            toastr.success('', 'Saved successfully!');
+            toastr.success(response.result.path);
             window.history.replaceState(null,null, location.pathname + '?lp=' + nextRandomId);
             loadTableLandPageList();
-            generateAccessLink(page_file_name);
+            if(validateFields()){
+                $("#link_output").text('https://'+response.domain+'/'+ page_file_name);
+                Prism.highlightAll();
+            }
+
         }
         else
-            toastr.error('', response.error);
+            toastr.error(response.error);
         enableDisableMe(e);
     }); 
 }
@@ -220,13 +227,42 @@ function viewLandPageDetailsFromId(hlp_id,quite) {
             $("#tb_page_name").val(data.page_name);
             $("#tb_page_file_name").val(data.page_file_name);
             $('#summernote').summernote('code', data.page_content);
-            generateAccessLink(data.page_file_name);
+
+            if(validateFields()){
+                $("#link_output").text('https://'+data.domain_path+'/'+ data.page_file_name);
+                Prism.highlightAll();
+            }
 
             window.history.replaceState(null,null, location.pathname + '?lp=' + hlp_id);
             $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover' });
         }
         else
-            toastr.error('', data.error);
+            toastr.error(data.error);
+    }); 
+}
+
+function get_domains(hlp_id) {
+    $.post({
+        url: "../sniperhost/manager/sniperhost_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_domain",
+            hlp_id:hlp_id
+         })
+    }).done(function (data) {
+        if(!data.error){
+        var domain_path = data.domain_path;
+        $.each(data.resp, function(key,val) {
+            if(domain_path == val.id){
+            $("#modal_export_report_selector").append("<option value='" + val.id + "' selected>" + val.name + "</option>");
+            }else{
+                $("#modal_export_report_selector").append("<option value='" + val.id + "' >" + val.name + "</option>");
+            }
+        });
+          
+        }
+        else
+            toastr.error(data.error);
     }); 
 }
 
@@ -246,27 +282,20 @@ function landPageDeletionAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_lp_delete').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success('Deleted successfully!');
             loadTableLandPageList();
             if(nextRandomId == g_modalValue)
                 window.history.replaceState(null,null, location.pathname);
         }
         else
-            toastr.error("", response.error);
+            toastr.error(response.error);
     }); 
-}
-
-function generateAccessLink(page_file_name){
-    if(validateFields()){
-        $("#link_output").text(window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name);
-        Prism.highlightAll();
-    }
 }
 
 function copyAccessLink(e, page_file_name){
     var $temp = $("<input>");
     $("body").append($temp);
-    $temp.val(window.location.origin + '/spear/sniperhost/lp_pages/' + page_file_name).select();
+    $temp.val(window.location.origin + '/phishing/sniperhost/lp_pages/' + page_file_name).select();
     document.execCommand("copy");
     $temp.remove();
 
@@ -289,7 +318,7 @@ function linkWebTracker(){
     $('#summernote').summernote('restoreRange');
     var url = $("#web_tracker_selector").val();
     if(url == "Empty")
-        toastr.error('', 'Error: Please create web tracker first');
+        toastr.error('Error: Please create web tracker first');
     else{
         switch($("#web_tracker_style_selector").val()){
             case "1": $('#summernote').summernote('pasteHTML', `<a href="` + url + "?rid={{RID}}" + `">` + url + "?rid={{RID}}" + `</a>`); break;
@@ -356,4 +385,43 @@ function copyCode(e,copy_code_class){
             event.trigger.textContent = '';
         }, 2000);
     });    
+}
+
+function getStoreLandingList(){
+    $.post({
+        url: "manager/sniperhost_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing_list",
+            type: "mail_landing",
+         })
+    }).done(function (data) {
+        if(!data['error']){  // no data
+            store_info = data;
+            $.each(data, function(name) {
+                $("#selector_sample_mailtemplates").append("<option value='" + name + "'>" + name + "</option>");
+            });
+            $('#selector_sample_mailtemplates').trigger("change");    
+        }
+    }); 
+}
+
+function insertMailLanding(){
+    $.post({
+        url: "manager/sniperhost_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing_list",
+            type: "mail_landing",
+            name: $("#selector_sample_mailtemplates").val()
+         })
+    }).done(function (data) {
+        if(!data.error){ 
+            var content = JSON.parse(data.content);
+            $('#tb_page_name').val($("#selector_sample_mailtemplates").val());
+            $('#tb_page_file_name').val(data.info);
+            $('#summernote').summernote('code',content.mail_landing);
+
+        }
+    }); 
 }

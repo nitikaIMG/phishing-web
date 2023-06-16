@@ -481,32 +481,41 @@ function getUserGroupFromGroupId($conn, $user_group_id){
 }
 //---------------------------------------Email Template Section --------------------------------
 
-function saveMailTemplate($conn,&$POSTJ){
-	$userid=$_SESSION['user'][0];
-	$mail_template_id = $POSTJ['mail_template_id'];
-	if($mail_template_id == '')
-		$mail_template_id = null;
+function saveMailTemplate($conn, &$POSTJ){
+	
+    // $userid = $_SESSION['user'][0];
+	$userid = $_SESSION['admin'][0];
 
-	$mail_template_name = $POSTJ['mail_template_name'];
-	$mail_template_subject = $POSTJ['mail_template_subject'];
-	$mail_template_content = $POSTJ['mail_template_content'];
-	$timage_type = $POSTJ['timage_type'];
-	$attachments = json_encode($POSTJ['attachments']);
-	$mail_content_type = $POSTJ['mail_content_type'];
-	$entry_time=$GLOBALS['entry_time'];
+    $mail_template_id = $POSTJ['mail_template_id'];
+    if($mail_template_id == '')
+        $mail_template_id = null;
 
-	if(checkAnIDExist($conn,$mail_template_id,'mail_template_id','tb_core_mailcamp_template_list')){
-		$stmt = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `mail_template_name`='$mail_template_name', `mail_template_subject`='$mail_template_subject', `mail_template_content`='$mail_template_content', `timage_type`='$timage_type', `mail_content_type`='$mail_content_type', `attachment`='$attachments',`userid`='$userid' WHERE `mail_template_id`='$mail_template_id'");
-	}
-	else{
+    $mail_template_name = $POSTJ['mail_template_name'];
+    $mail_template_subject = $POSTJ['mail_template_subject'];
+    $mail_template_content = $POSTJ['mail_template_content'];
+    $timage_type = $POSTJ['timage_type'];
+    $attachments = json_encode($POSTJ['attachments']);
+    $mail_content_type = $POSTJ['mail_content_type'];
+    $entry_time = $GLOBALS['entry_time'];
+    $domain = $POSTJ['domain'];
+    $landing_page = $POSTJ['landing_page'];
+    $domain_name = $POSTJ['domain_name'];
+    $landing_name = $POSTJ['landing_name'];
 
-		$stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_template_list`(`mail_template_id`, `mail_template_name`, `mail_template_subject`, `mail_template_content`, `timage_type`, `mail_content_type`, `attachment`,`userid`, `date`) VALUES ('$mail_template_id','$mail_template_name','$mail_template_subject','$mail_template_content','$timage_type','$mail_content_type','$attachments',$userid,'$entry_time')");
-	}
-	if ($stmt->execute() === TRUE){
-		echo(json_encode(['result' => 'success']));	
-	}
-	else 
-		echo(json_encode(['result' => 'failed', 'error' => $stmt->error]));	
+    // Replace {{landing_page}} with 'https://' . $domain_name . '/' . $landing_name
+    $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
+
+    if(checkAnIDExist($conn, $mail_template_id, 'mail_template_id', 'tb_core_mailcamp_template_list')){
+        $stmt = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `mail_template_name`='$mail_template_name', `mail_template_subject`='$mail_template_subject', `mail_template_content`='$mail_template_content', `timage_type`='$timage_type', `mail_content_type`='$mail_content_type', `attachment`='$attachments',`userid`='$userid',`domain`='$domain',`landing_page`='$landing_page' WHERE `mail_template_id`='$mail_template_id'");
+    } else {
+        $stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_template_list`(`mail_template_id`, `mail_template_name`, `mail_template_subject`, `mail_template_content`, `timage_type`, `mail_content_type`, `attachment`,`userid`, `date`,`domain`,`landing_page`) VALUES ('$mail_template_id','$mail_template_name','$mail_template_subject','$mail_template_content','$timage_type','$mail_content_type','$attachments',$userid,'$entry_time','$domain','$landing_page')");
+    }
+
+    if ($stmt->execute() === TRUE){
+        echo(json_encode(['result' => 'success']));    
+    } else {
+        echo(json_encode(['result' => 'failed', 'error' => $stmt->error]));    
+    }
 }
 
 function getmailhtml($conn,$POSTJ){
@@ -531,9 +540,10 @@ function getmailhtml($conn,$POSTJ){
 function getMailTemplateList($conn){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$userid=$_SESSION['user'][0];
-	$result = mysqli_query($conn, "SELECT mail_template_id, mail_template_name, LEFT(mail_template_subject , 50) mail_template_subject, LEFT(mail_template_content , 50) mail_template_content,attachment,date FROM tb_core_mailcamp_template_list WHERE userid='$userid'");
+	// $userid=$_SESSION['user'][0];
+	// $result = mysqli_query($conn, "SELECT mail_template_id, mail_template_name, LEFT(mail_template_subject , 50) mail_template_subject, LEFT(mail_template_content , 50) mail_template_content,attachment,date FROM tb_core_mailcamp_template_list WHERE userid='$userid'");
 
+	$result = mysqli_query($conn, "SELECT mail_template_id, mail_template_name, LEFT(mail_template_subject , 50) mail_template_subject, LEFT(mail_template_content , 50) mail_template_content,attachment,date FROM tb_core_mailcamp_template_list ");
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			$row["attachment"] = json_decode($row["attachment"]);	//avoid double json encoding
@@ -548,7 +558,10 @@ function getMailTemplateList($conn){
 }
 
 function getMailTemplateFromTemplateId($conn, $mail_template_id){
-	$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_template_list WHERE mail_template_id = ?");
+	$stmt = $conn->prepare("SELECT t.*, d.name as domain_name,l.page_file_name FROM tb_core_mailcamp_template_list AS t
+                       JOIN tb_domains AS d ON t.domain = d.id
+					   JOIN tb_hland_page_list AS l ON t.landing_page = l.hlp_id
+                       WHERE t.mail_template_id = ?");
 	$stmt->bind_param("s", $mail_template_id);
 	$stmt->execute();
 	$result = $stmt->get_result();
@@ -910,7 +923,7 @@ function sendTestMailSample($conn,$POSTJ){
     $keyword_vals['{{NOTES}}'] = "Note_content";
     $keyword_vals['{{EMAIL}}'] = $test_to_address;
     $keyword_vals['{{FROM}}'] = $sender_from;
-    $keyword_vals['{{TRACKINGURL}}'] = $serv_variables['baseurl'].'/tmail?mid='."MailCampaign_id".'&rid='.$RID;
+    $keyword_vals['{{TRACKINGURL}}'] = $serv_variables['baseurl'].'/mid='."MailCampaign_id".'&rid='.$RID;
     $keyword_vals['{{TRACKER}}'] = '<img src="'.$keyword_vals['{{TRACKINGURL}}'].'"/>';
     $keyword_vals['{{BASEURL}}'] = $serv_variables['baseurl'];
 	$keyword_vals['{{MUSERNAME}}'] = explode('@', $test_to_address)[0];
@@ -1218,8 +1231,6 @@ function addverificationmail($conn,$POST,$userid){
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'tls';
 		$mail->Port = 587;
-		// $mail->Username = 'mamta01.img@gmail.com'; // YOUR email username
-		// $mail->Password = 'eqvmfchxczllmkpb'; // YOUR email password
 		$mail->Username = 'waseemakram.img@gmail.com'; // YOUR email username
 		$mail->Password = 'rigdfypfwijjzgut'; // YOUR email password
 		// Sender and recipient settings

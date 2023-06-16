@@ -1,7 +1,8 @@
 <?php
 require_once(dirname(__FILE__).'/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
-isSessionValid(true);
+// isSessionValid(true);
+isAdminSessionValid(true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +35,7 @@ isSessionValid(true);
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
-    <?php include(dirname(__FILE__).'/components/navbar.php'); ?>
+    <?php include(dirname(__FILE__).'/components/adminnavbar.php'); ?>
     <!--  END NAVBAR  -->
 
     <!--  BEGIN MAIN CONTAINER  -->
@@ -44,7 +45,7 @@ isSessionValid(true);
         <div class="search-overlay"></div>
 
         <!--  BEGIN SIDEBAR  -->
-        <?php include(dirname(__FILE__).'/components/sidebar.php'); ?>
+        <?php include(dirname(__FILE__).'/components/adminsidebar.php'); ?>
         <!--  END SIDEBAR  -->
 
         <!--  BEGIN CONTENT AREA  -->
@@ -138,15 +139,29 @@ isSessionValid(true);
                                  </div> 
                               </div>         
                            </div>
+
+                           <div class="form-group row">
+                              <label>Domain:</label>
+                              <select class="select2 form-control date-inputmask" required id="domain" onchange="getlanding()" placeholder="Domain">
+                                 <option value="" selected disabled>Select Domain</option>
+                              </select>
+                        </div>
+                        <div class="form-group row">
+                              <label>Landing Page:</label>
+                              <select class="select2 form-control date-inputmask" required id="landing_page" placeholder="Landing Page">
+                                 <option value="" selected disabled>Select Landing Page</option>
+                              </select>
+                        </div>
+
+                        <input type="hidden" name="domain_name" id="domain_name">
+                        <input type="hidden" name="landing_name " id="landing_name">
+                        
                         </div>                   
                      </div>
                      <div class="row m-t-10">
                         <div class="col-md-12 row">
                            <div class="col-md-9">          
-
                               <textarea id="summernote"></textarea>
-
-                                                 
                               <div id="editor_mail_body" hidden=""></div>      
                               <div class="form-group row">
                                  <label class="col-md-8 text-left control-label col-form-label m-t-5">
@@ -544,7 +559,24 @@ isSessionValid(true);
       <script src="<?php echo url ?>/js/mail_template.js"></script>
       <?php
          echo '<script>';
+         if(isset($_GET['action'])){
+            echo'
+             get_domain_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
+         }else{
+            echo' get_domain_list(null);';
+         }
+        
+        echo' function getlanding(){
+            var id  = $("#domain").val();
+            get_landings(id);
+          }
+       ';
          
+       if(isset($_GET['action'])){
+         echo'
+          get_landings_edit("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
+      }
+
          if(isset($_GET['action']) && isset($_GET['template']) && $_GET['template'] != ''){
                echo '$("#section_view_mail_template_list").hide();
                         $("#section_add_mail_template").show();';

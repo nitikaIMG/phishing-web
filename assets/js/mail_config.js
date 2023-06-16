@@ -72,11 +72,11 @@ $('#selector_config_list').on('change', function (e, data) {    //Avoid request 
 
 function uploadSignMailCert(fname,fsize,ftype,fb64){
     if (fsize > 1024*1024*1) {
-        toastr.error('', 'File size exceeded');
+        toastr.error( 'File size exceeded');
         return;
     }
     if (fname.split('.').pop().toLowerCase() != 'pem' && fname.split('.').pop().toLowerCase() != 'crt') {
-        toastr.error('', 'Certificate is not in .pem or .crt format');
+        toastr.error( 'Certificate is not in .pem or .crt format');
         return;
     }
     configData.mail_sign.cert = {'name':fname, 'fb64':fb64.substr(fb64.indexOf(',')+1)};
@@ -85,12 +85,12 @@ function uploadSignMailCert(fname,fsize,ftype,fb64){
 
 function uploadSignMailPVK(fname,fsize,ftype,fb64){
     if (fsize > 1024*1024*1) {
-        toastr.error('', 'File size exceeded');
+        toastr.error( 'File size exceeded');
         return;
     }
 
     if (fname.split('.').pop().toLowerCase() != 'pem' && fname.split('.').pop().toLowerCase() != 'key') {
-        toastr.error('', 'Certificate is not in .pem or .key format');
+        toastr.error( 'Certificate is not in .pem or .key format');
         return;
     }
 
@@ -100,11 +100,11 @@ function uploadSignMailPVK(fname,fsize,ftype,fb64){
 
 function uploadEncMailCert(fname,fsize,ftype,fb64){
     if (fsize > 1024*1024*1) {
-        toastr.error('', 'File size exceeded');
+        toastr.error( 'File size exceeded');
         return;
     }
     if (fname.split('.').pop().toLowerCase() != 'pem' && fname.split('.').pop().toLowerCase() != 'crt') {
-        toastr.error('', 'Certificate is not in .pem or .crt format');
+        toastr.error( 'Certificate is not in .pem or .crt format');
         return;
     }
     configData.mail_enc.cert = {'name':fname, 'fb64':fb64.substr(fb64.indexOf(',')+1)};
@@ -142,11 +142,11 @@ function saveConfigAction(e) {
 
     if($("#cb_signed_mail").is(':checked') == true){
         if($.isEmptyObject(configData.mail_sign.cert)){
-            toastr.error('', 'Mail signing certificate not uploaded!');
+            toastr.error( 'Mail signing certificate not uploaded!');
             return;
         }
         if($.isEmptyObject(configData.mail_sign.pvk)){
-            toastr.error('', 'Mail signing private key not uploaded!');
+            toastr.error( 'Mail signing private key not uploaded!');
             return;
         }
         configData.mail_sign.pvk.pvk_passphrase = $('#pvk_passphrase').val().trim() == ''?null:$('#pvk_passphrase').val().trim();
@@ -158,7 +158,7 @@ function saveConfigAction(e) {
         }
 
     if($("#cb_encrypted_mail").is(':checked') == true && $.isEmptyObject(configData.mail_enc.cert)){
-        toastr.error('', 'Mail encryption certificate not uploaded!');
+        toastr.error( 'Mail encryption certificate not uploaded!');
         return;
     }
 
@@ -184,11 +184,11 @@ function saveConfigAction(e) {
             if($('#modal_new_config').hasClass('show'))   {     
                 $('#modal_new_config').modal('toggle');
             }                
-            toastr.success('', 'Saved successfully!');   
+            toastr.success( 'Saved successfully!');   
             getMcampConfigDetails(nextRandomId);       
         }
         else
-            toastr.error('', 'Error saving data!');
+            toastr.error( 'Error saving data!');
         enableDisableMe(e);
     }); 
 }
@@ -203,13 +203,13 @@ function deleteConfigAction(){
          })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Configuration deleted successfully!');   
+            toastr.success( 'Configuration deleted successfully!');   
             $('#modal_config_delete').modal('toggle');     
             getMcampConfigDetails("default")      
             getMCampConfigFromConfigId("default")
         }
         else
-            toastr.error('', 'Error deleting configuration!<br/>' + response.error);
+            toastr.error( 'Error deleting configuration!<br/>' + response.error);
     });
 }
 
@@ -232,7 +232,7 @@ function getMcampConfigDetails(mconfig_id){
             window.history.replaceState(null,null, location.pathname + '?config=' + mconfig_id);
         }
     }).fail(function() {
-        toastr.error('', 'Error getting configuration list!');
+        toastr.error( 'Error getting configuration list!');
     });
 }
 
@@ -300,7 +300,7 @@ function getMCampConfigFromConfigId(mconfig_id,quite) {
         window.history.replaceState(null,null, location.pathname + '?config=' + mconfig_id_tmp);
         fadeAni();
     }).fail(function() {
-        toastr.error('', 'Error getting data!');
+        toastr.error( 'Error getting data!');
         fadeAni();
     });
 }

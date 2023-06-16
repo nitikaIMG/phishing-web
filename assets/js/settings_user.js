@@ -26,7 +26,7 @@ function getCurrentUser() {
             });
         }
         else
-            toastr.error('', data.error);
+            toastr.error( data.error);
     }); 
 }
 
@@ -64,7 +64,7 @@ function addUserAction(e){
         $("#tb_add_current_pwd").removeClass("is-invalid");
 
     if (new_pwd == '' || confirm_pwd =='') {
-        toastr.error('', 'New password can not be empty!');
+        toastr.error( 'New password can not be empty!');
         return;
     }
     
@@ -86,14 +86,14 @@ function addUserAction(e){
         }),
     }).done(function (response) {
         if(response.result == "success"){ 
-            toastr.success('', 'Information updated successfully!');   
+            toastr.success( 'Information updated successfully!');   
             $("#tb_add_new_pwd").val('');
             $("#tb_add_confirm_pwd").val('');
             $('#ModalAddUser').modal('toggle');
             loadTableUserList();
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -123,7 +123,7 @@ function modifyUserAction(e){
 
         if (new_pwd == '') {
         $("#tb_update_new_pwd").addClass("is-invalid");
-        toastr.error('', 'New Password is required!');
+        toastr.error( 'New Password is required!');
         return;
         } else{
         $("#tb_update_new_pwd").removeClass("is-invalid");
@@ -131,7 +131,7 @@ function modifyUserAction(e){
 
         if (confirm_pwd == '') {
         $("#tb_update_confirm_pwd").addClass("is-invalid");
-        toastr.error('', 'Confirm Password is required!');
+        toastr.error( 'Confirm Password is required!');
         return;
         } else{
         $("#tb_update_confirm_pwd").removeClass("is-invalid");
@@ -139,7 +139,7 @@ function modifyUserAction(e){
 
         if (current_pwd == '') {
         $("#tb_update_current_pwd").addClass("is-invalid");
-        toastr.error('', 'Current Password is required!');
+        toastr.error( 'Current Password is required!');
         return;
         } else{
         $("#tb_update_current_pwd").removeClass("is-invalid");
@@ -167,7 +167,7 @@ function modifyUserAction(e){
          }),
     }).done(function (response) {
         if(response.result == "success"){ 
-            toastr.success('', 'Information updated successfully!');   
+            toastr.success( 'Information updated successfully!');   
             $("#tb_update_current_pwd").val('');
             $("#tb_update_new_pwd").val('');
             $("#tb_update_confirm_pwd").val('');
@@ -176,7 +176,7 @@ function modifyUserAction(e){
             getCurrentUser();
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe(e);
     }); 
 }
@@ -192,12 +192,12 @@ function deleteAccountAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_prompts').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             $('#ModalUserDelete').modal('toggle');
             loadTableUserList();
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
     }); 
 }
 
@@ -271,19 +271,19 @@ function isPwdSecure(new_pwd, confirm_pwd, new_pwd_field, confirm_pwd_field){
     var f_valid = true;
 
     if(new_pwd != new_pwd.trim() || confirm_pwd != confirm_pwd.trim()){
-        toastr.error('', 'Blank spaces at start/end is not permitted!');
+        toastr.error( 'Blank spaces at start/end is not permitted!');
         f_valid = false;
     }
     else{
         new_pwd = new_pwd.trim();
         confirm_pwd = confirm_pwd.trim();
         if(new_pwd != confirm_pwd){
-            toastr.error('', 'Confirm password does not match!');
+            toastr.error( 'Confirm password does not match!');
             f_valid = false;
         }
         else
         if(new_pwd.length<8){
-            toastr.error('', 'Password length should be atleast 8 characters!');
+            toastr.error( 'Password length should be atleast 8 characters!');
             f_valid = false;
         }
     }

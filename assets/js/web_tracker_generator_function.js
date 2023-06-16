@@ -312,7 +312,7 @@ $(function() {
                                          return $('option:selected', e).val()=="FSB"?"FSB":null;
                                      });
         if(arr_filed_types.length>1)
-            toastr.error('', 'Multiple submission buttons not allowed');
+            toastr.error( 'Multiple submission buttons not allowed');
     });
 
     //------------------------------------------
@@ -342,7 +342,7 @@ $(function() {
             },
             function(data, status) {
                 if (data != "success") {
-                    toastr.error('', 'Error changing status!');
+                    toastr.error( 'Error changing status!');
                 }
             });
 
@@ -753,9 +753,9 @@ function saveWebTracker(tracker_id) {
          }),
     }).done(function (response) {
         if(response.result == "success")
-            toastr.success('', 'Saved successfully!');
+            toastr.success( 'Saved successfully!');
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
 
         enableDisableMe($('#genreator-form').find('a[href="#finish"]'));
         window.history.replaceState(null,null, location.pathname + '?tracker=' + tracker_id);
@@ -818,7 +818,7 @@ function editWebTracker(tracker_id) {
             $("#phising_site_final_page_url").val(tracker_step_data.web_forms.data[tracker_step_data.web_forms.data.length-1].next_page_url);
         });
     }).fail(function() {
-        toastr.error('', 'Error getting tracker data!');
+        toastr.error( 'Error getting tracker data!');
     });
 }
 
@@ -865,15 +865,15 @@ function webhookValidate(e){
          }),
     }).done(function (response) {
         if(response == "success"){
-            toastr.success('', 'Access verified successfully!');
+            toastr.success( 'Access verified successfully!');
             $("#tb_webhook_url").removeClass("is-invalid");
         }
         else
-            toastr.error('', 'Failed! ' + response.error);
+            toastr.error( 'Failed! ' + response.error);
 
         enableDisableMe(e);
     }).fail(function() {
-        toastr.error('', 'Invalid response received.  Check access to webhook endpoint!');
+        toastr.error( 'Invalid response received.  Check access to webhook endpoint!');
         enableDisableMe(e);
       }); 
 }

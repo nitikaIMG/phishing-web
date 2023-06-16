@@ -145,7 +145,7 @@ function refreshDashboard(f_refresh=false) {
     if (g_campaign_id != '' && g_tracker_id != '')
         campaignSelected(g_campaign_id, g_tracker_id, f_refresh);
     else
-        toastr.error('', 'Campaign not selected');
+        toastr.error( 'Campaign not selected');
 }
 
 function startLoaders() {
@@ -385,7 +385,7 @@ function updateProgressbar(mailcamp_status, sender_list_id, user_group_id, mail_
             }
         }
         else
-            toastr.error('', data.error);        
+            toastr.error( data.error);        
     });
 }
 
@@ -992,11 +992,11 @@ function updatePieTotalMailReplied(total_user_email_count) {
             radialchart_overview_mailcamp.updateSeries(arr_chart_data)
         }
         else{
-            toastr.error('', data.error);
+            toastr.error( data.error);
             $("#piechart_mail_total_replied").text('Loading error!');
         }
     }).fail(function(response) {
-        toastr.error('',  response.statusText);
+        toastr.error(  response.statusText);
         $("#piechart_mail_total_replied").parent().children().remove('.loadercust');
     });  
 }
@@ -1458,7 +1458,7 @@ $("#cb_act_dashboard_link").change(function() {
 
 function enableDisablePublicAccess(new_tk_id=false){
     if(g_campaign_id == "" || g_tracker_id == ""){
-        toastr.error('', 'Error: No campaign selected');
+        toastr.error( 'Error: No campaign selected');
         $('#cb_act_dashboard_link').prop('checked', false);
         return;
     }
@@ -1477,12 +1477,12 @@ function enableDisablePublicAccess(new_tk_id=false){
         if(response.result == "success"){
             g_tk_id = response.tk_id;
             if($("#cb_act_dashboard_link").prop('checked'))
-                toastr.success('', 'Public access link activated!');   
+                toastr.success( 'Public access link activated!');   
             else
                 toastr.warning('', 'Public access link deactivated!'); 
         }
         else
-            toastr.error('', 'Error changing public access');
+            toastr.error( 'Error changing public access');
 
         $('#dashboard_link_url').html(location.href.split('?')[0] + "?mcamp=" + g_campaign_id + "&tracker=" + g_tracker_id + "&tk=" + g_tk_id);
         $("#modal_dashboard_link").find('.loader').remove();
@@ -1562,5 +1562,5 @@ function exportReportAction(e) {
         };
     }
     else
-        toastr.error('', 'Table is empty!');
+        toastr.error( 'Table is empty!');
 }

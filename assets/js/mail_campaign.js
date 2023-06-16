@@ -127,7 +127,7 @@ function getMailCampaignFromCampaignListId(id) {
                 }
             }
             else
-                toastr.error('', 'Error getting data<br/>' + data.error);
+                toastr.error( 'Error getting data<br/>' + data.error);
         });         
     });
 }
@@ -185,7 +185,7 @@ function saveMailCampaignAction() {
     if(emp_type==0){
         if(($('#employees').val()).length === 0){
             $("#employees").parent().css("border", "1px solid red");
-            toastr.error('', 'None Choosen!');
+            toastr.error( 'None Choosen!');
             return;
         }
     }
@@ -199,21 +199,21 @@ function saveMailCampaignAction() {
 
     if (RegTest(campaign_name, 'COMMON') == false) {
         $("#mail_campaign_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#mail_campaign_name").removeClass("is-invalid");
 
     if ($('#mailTemplateSelector').val() == null) {
         $("#mailTemplateSelector").parent().css("border", "1px solid red");
-        toastr.error('', 'None selected!');
+        toastr.error( 'None selected!');
         return;
     } else
         $("#mailTemplateSelector").parent().css("border", "0px");
 
     if ($('#mailSenderSelector').val() == null) {
         $("#mailSenderSelector").parent().css("border", "1px solid red");
-        toastr.error('', 'None selected!');
+        toastr.error( 'None selected!');
         return;
     } else
         $("#mailSenderSelector").parent().css("border", "0px");
@@ -237,13 +237,13 @@ function saveMailCampaignAction() {
             if($('#modal_new_config').hasClass('show'))   {     
                 $('#modal_new_config').modal('toggle');
             }                
-            toastr.success('', 'Saved successfully!');   
+            toastr.success( 'Saved successfully!');   
             setTimeout(function() {
                 document.location = "mailcampaignlist";
             }, 1000);
         }
         else
-            toastr.error('', response.error);
+            toastr.error( response.error);
         enableDisableMe($("#bt_saveMailCamp"));
     }); 
 }
@@ -283,11 +283,11 @@ function mailCampStartStopAction(id, campaign_name, action_value) {
             $('#modal_prompts').modal('toggle');
 
             if (new_action_value == 3)
-                toastr.success('', 'Success. Campaign Stopped!');
+                toastr.success( 'Success. Campaign Stopped!');
             if (new_action_value == 0)
-                toastr.success('', 'Success. Cmapaign deactivated!');
+                toastr.success( 'Success. Cmapaign deactivated!');
             if (new_action_value == 1)
-                toastr.success('', 'Success. Campaign scheduled!');
+                toastr.success( 'Success. Campaign scheduled!');
         }
         else
             toastr.error("", "Error making chnages!<br/>" + response.error);
@@ -312,11 +312,11 @@ function mailCampaignDeletionAction() {
     }).done(function (response) {
         if(response.result == "success"){
             $('#modal_prompts').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             loadTableCampaignList();
         }
         else
-            toastr.error('', 'Error deleting data!');
+            toastr.error( 'Error deleting data!');
     }); 
 }
 
@@ -330,7 +330,7 @@ function mailCampaignCopyAction() {
 
     if (RegTest(modal_mail_campaign_name, 'COMMON') == false) {
         $("#modal_mail_campaign_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#modal_mail_campaign_name").removeClass("is-invalid");
@@ -346,12 +346,12 @@ function mailCampaignCopyAction() {
          })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Copy success!');
+            toastr.success( 'Copy success!');
             $('#modal_mail_campaign_copy').modal('toggle');
             loadTableCampaignList();
         }
         else
-            toastr.error('', 'Error making copy!');
+            toastr.error( 'Error making copy!');
     }); 
 }
 

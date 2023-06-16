@@ -151,11 +151,11 @@ function addRemoveTrackerImage(mode){
 
 function uploadTrackerImage(fname,fsize,ftype,fb64){
     if (fsize > 1024*1024*4) {
-        toastr.error('', 'File size exceeded. Max image size is 4MB');
+        toastr.error( 'File size exceeded. Max image size is 4MB');
         return;
     }
     if (!ftype.startsWith("image")) {
-        toastr.error('', 'File is not an image');
+        toastr.error( 'File is not an image');
         return;
     }
 
@@ -174,7 +174,7 @@ function uploadTrackerImage(fname,fsize,ftype,fb64){
             $("#lb_tracker_image").text("Custom tracker added");
         }
         else
-            toastr.error('', 'Error uploading image!<br/>' + response.error);
+            toastr.error( 'Error uploading image!<br/>' + response.error);
     }); 
 }
 
@@ -191,10 +191,20 @@ function getTrackerImageType(){
 function saveMailTemplate(e) {
     if (RegTest($('#mail_template_name').val(), "COMMON") == false) {
         $("#mail_template_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#mail_template_name").removeClass("is-invalid");
+
+        if($('#domain').val()==null){
+            toastr.error( 'Domain Required!');
+            return;
+        }
+
+        if($('#landing_page').val()==null){
+            toastr.error( 'Landing Page Required!');
+            return;
+        }
 
     mail_template_content = $('#summernote').summernote('code');
 
@@ -210,19 +220,23 @@ function saveMailTemplate(e) {
             mail_template_content: mail_template_content,
             timage_type: getTrackerImageType(),
             attachments: catchAttachments(),
-            mail_content_type: $('#mail_content_type_selector').val()
+            mail_content_type: $('#mail_content_type_selector').val(),
+            domain: $('#domain').val(),
+            landing_page: $('#landing_page').val(),
+            domain_name: $('#domain_name').val(),
+            landing_name: $('#landing_name').val(),
         })
     }).done(function (response) {
         if(response.result == "success"){
             if(getTrackerImageType() == 0)
                 toastr.warning('', 'No tracker detected. Template saved!');
             else
-                toastr.success('', 'Saved successfully!');
+                toastr.success( 'Saved successfully!');
             window.history.replaceState(null,null, location.pathname + '?action=edit&template=' + nextRandomId);
             g_deny_navigation = null;
         }
         else
-            toastr.error('', 'Error saving data!<br/>' + response.error);
+            toastr.error( 'Error saving data!<br/>' + response.error);
         enableDisableMe(e);
     }); 
 }
@@ -251,8 +265,6 @@ function getMailTemplateFromTemplateId(id) {
             //var att= {file_id: file.file_id, file_name: file.file_name, file.file_disp_name:, inline, file.inline, payload_info: file.payload_info};
             //if(file.payload_info == true){
               //  att.payload_info={custom: file.payload_info.custom, file_extn: file.payload_info.file_extn, file_type:file.payload_info.file_extn.file_type, }
-
-            
             addAttachmentLabel(att_info);
         });
 
@@ -297,7 +309,7 @@ function mailTemplateDeletionAction() {
     }).done(function (response) {
        if(response.result == "success"){
             $('#modal_email_template_delete').modal('toggle');
-            toastr.success('', 'Deleted successfully!');
+            toastr.success( 'Deleted successfully!');
             dt_mail_template_list.destroy();
             $("#table_mail_template_list tbody > tr").remove();
             loadTableMailTemplateList();
@@ -315,7 +327,7 @@ function promptMailTemplateCopy(id) {
 function mailTemplateCopy() {
     if (RegTest($('#modal_new_mail_template_name').val(), "COMMON") == false) {
         $("#modal_new_mail_template_name").addClass("is-invalid");
-        toastr.error('', 'Empty/Unsupported character!');
+        toastr.error( 'Empty/Unsupported character!');
         return;
     } else
         $("#modal_new_mail_template_name").removeClass("is-invalid");
@@ -331,7 +343,7 @@ function mailTemplateCopy() {
          })
     }).done(function (response) {
         if(response.result == "success"){
-            toastr.success('', 'Copy success!');
+            toastr.success( 'Copy success!');
             $('#modal_mail_template_copy').modal('toggle');
             dt_mail_template_list.destroy();
             $("#table_mail_template_list tbody > tr").remove();
@@ -399,7 +411,7 @@ function loadTableMailTemplateList() {
 //-----------------Start Attachment Manager------------------------
 function uploadAttachments(fname,fsize,ftype,fb64){    
     if (fsize > 1024*1024*15) {
-        toastr.error('', 'File size exceeded. Max image size is 15MB');
+        toastr.error( 'File size exceeded. Max image size is 15MB');
         return;
     }
 
@@ -418,7 +430,7 @@ function uploadAttachments(fname,fsize,ftype,fb64){
             triggerAttachmentChanges();      
         }
         else
-            toastr.error('', 'Error uploading file!<br/>' + response.error);
+            toastr.error( 'Error uploading file!<br/>' + response.error);
     }); 
 }
 
@@ -471,7 +483,7 @@ function triggerAttachmentChanges(){
 //-----------------End Attachment Manager------------------------
 function uploadMailBodyFiles(fname,fsize,ftype,fb64,el){   
     if (fsize > 1024*1024*15) {
-        toastr.error('', 'File size exceeded. Max image size is 15MB');
+        toastr.error( 'File size exceeded. Max image size is 15MB');
         return;
     }
 
@@ -494,7 +506,7 @@ function uploadMailBodyFiles(fname,fsize,ftype,fb64,el){
             $(el).closest('.modal').modal('toggle');
         }
         else
-            toastr.error('', 'Error uploading file!<br/>' + response.error);
+            toastr.error( 'Error uploading file!<br/>' + response.error);
         $(el).closest('.modal-content').find('.loader').remove();
     }); 
 }
@@ -503,7 +515,7 @@ function linkWebTracker(){
     $('#summernote').summernote('restoreRange');
     var url = $("#web_tracker_selector").val();
     if(url == "Empty")
-        toastr.error('', 'Error: Please create web tracker first');
+        toastr.error( 'Error: Please create web tracker first');
     else{
         switch($("#web_tracker_style_selector").val()){
             case "1": $('#summernote').summernote('pasteHTML', `<a href="` + url + "?rid={{RID}}" + `">` + url + "?rid={{RID}}" + `</a>`); break;
@@ -518,7 +530,7 @@ function linkLandpage(){
     $('#summernote').summernote('restoreRange');
     var page_file_name = $("#landpage_selector").val();
     if(page_file_name == "Empty")
-        toastr.error('', 'Error: Please create landing page from SniperHost first');
+        toastr.error( 'Error: Please create landing page from SniperHost first');
     else{
         var url = window.location.origin + '/sniperhost/lp_pages/' + page_file_name
         $('#summernote').summernote('pasteHTML', `<a href="` + url + `">` + url + `</a>`);
@@ -532,13 +544,13 @@ function modalTestDeliveryAction(e){
     var sender_data;
 
     if($("#mail_sender_selector").val() == null){
-        toastr.error('', 'No sender list created. Unable to send mail');
+        toastr.error( 'No sender list created. Unable to send mail');
         return;
     }
 
     if (RegTest(test_to_address, "EMAIL") == false) {
         $("#modal_mail_sender_test_mail_to").addClass("is-invalid");
-        toastr.error('', 'Empty/unsupported character!');
+        toastr.error( 'Empty/unsupported character!');
         return;
     } else
         $("#modal_mail_sender_test_mail_to").removeClass("is-invalid");
@@ -574,9 +586,9 @@ function modalTestDeliveryAction(e){
          })
     }).done(function (response) {
         if(response.result == "success")
-                toastr.success('', 'Success. Check your inbox!');
+                toastr.success( 'Success. Check your inbox!');
         else
-            toastr.error('', 'Error sending mail!<br/>' + response.error);
+            toastr.error( 'Error sending mail!<br/>' + response.error);
         $('#modal_test_mail').modal('toggle');
         enableDisableMe(e);
     }); 
@@ -687,6 +699,83 @@ function getStoreList(){
                 $("#selector_sample_mailtemplates").append("<option value='" + name + "'>" + name + "</option>");
             });
             $('#selector_sample_mailtemplates').trigger("change");    
+        }
+    }); 
+}
+
+function get_landings(id){
+    $("#landing_name").val("");
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing_page",
+            id:id
+         })
+    }).done(function (data) {
+        if(!data['error']){ 
+            
+             var mail_landing_page = data.mail_landing_page;
+
+            $.each(data, function(key,val) {
+                $("#landing_page").append("<option value='" + val.hlp_id + "'>" + val.page_file_name + "</option>");
+                $("#landing_name").val(val.page_file_name);
+            });
+        }
+    }); 
+}
+
+
+function get_domain_list(id){
+    $("#domain_name").val("");
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing",
+            id:id
+         })
+    }).done(function (data) {
+        if(!data['error']){  
+            var mail_domain = data.mail_domain;
+
+            $.each(data.resp, function(key, val) {
+                if (mail_domain == val.id) {
+                    $("#domain").append("<option value='" + val.id + "' selected>" + val.name + "</option>");
+                }else{
+                    $("#domain").append("<option value='" + val.id + "'>" + val.name + "</option>");
+                }
+                $("#domain_name").val(val.name);
+    
+                });
+        }
+    }); 
+}
+
+function get_landings_edit(id){
+    $("#landing_name").val("");
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_store_landing_page_edit",
+            id:id
+         })
+    }).done(function (data) {
+        if(!data['error']){ 
+            
+             var mail_landing_page = data.mail_landing_page;
+            
+            $.each(data.resp, function(key, val) {
+                if (mail_landing_page == val.hlp_id) {
+                    $("#landing_page").append("<option value='" + val.hlp_id + "' selected>" + val.page_file_name + "</option>");
+                }else{
+                    $("#landing_page").append("<option value='" + val.hlp_id + "'>" + val.page_file_name + "</option>");
+                }
+                $("#landing_name").val(val.name);
+    
+    
+                });
         }
     }); 
 }
