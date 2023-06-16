@@ -401,11 +401,17 @@ function getMailReplied($conn, $campaign_id, $quite=false){
                 
                     foreach ($array as $result) {
                         $overview = imap_fetch_overview($read, $result, 0);
-                        if ($overview[0]->references == null)
-                            $tmp = explode("@spmailer.generated", $overview[0]->in_reply_to)[0];
-                        else
-                            $tmp = explode("@spmailer.generated", $overview[0]->references)[0];
-                        $header_to_check = explode("<", $tmp)[1];
+
+                        if(isset($overview[0]->references)){
+                            if ($overview[0]->references == null){
+                                $tmp = explode("@spmailer.generated", $overview[0]->in_reply_to)[0];
+                            }else{
+                                $tmp = explode("@spmailer.generated", $overview[0]->references)[0];
+                            $header_to_check = explode("<", $tmp)[1];
+                            }
+                        }else{
+                            $tmp = '';
+                        }
                 
                         if (filter_var($overview[0]->from, FILTER_VALIDATE_EMAIL))
                             $msg_from = $overview[0]->from;
