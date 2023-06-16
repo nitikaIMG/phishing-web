@@ -33,18 +33,10 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     $stmt->execute();
 }
 
-function displayImage($mail_template_id){
-  	$images = glob("uploads/timages/".$mail_template_id.".timg");
-  	if(empty($images))
-  		  $remoteImage = "uploads/timages/default.jpg";
-  	else
-  		  $remoteImage = $images[0];
-  	$imginfo = getimagesize($remoteImage);
-  	header("Cache-Control: no-store");
-  	header("Content-type: {$imginfo['mime']}");
-  	readfile($remoteImage);
-}
-displayImage($mail_template_id);
+function displayImage(){
+    header("Location: landing.php");
+  }
+  displayImage();
 
 //-----------------------------------------
 function verifyMailCmapaign($conn, $campaign_id){

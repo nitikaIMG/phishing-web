@@ -987,7 +987,7 @@ function loadTableCampaignResult1(){
                         var mailpercentagepay = 100;
                     }
 
-                    if (value.employees_compromised	 == '' || value.	employees_compromised	 == 'NULL' ||value.	employees_compromised	 == null) {
+                    if (value.employees_compromised	 == '' || value.employees_compromised	 == 'NULL' ||value.	employees_compromised	 == null) {
                         var employees_compromised = '0';
                         var mailnewperexp = employees_compromised;
                         var mailsignperexp = '%';
@@ -999,7 +999,7 @@ function loadTableCampaignResult1(){
                         var mailpercentageexp = 100;
                     }
 
-                    if (value.emails_reported	 == '' || value.	emails_reported	 == 'NULL' ||value.	emails_reported	 == null) {
+                    if (value.emails_reported	 == '' || value.emails_reported	 == 'NULL' ||value.	emails_reported	 == null) {
                         var emails_reported = '0';
                         var mailnewperexprep = emails_reported;
                         var mailsignperexprep = '%';
@@ -1035,7 +1035,19 @@ function loadTableCampaignResult1(){
                                 </div>
                             </div>`;
 
-                    var mailhtmlexprep = `<div class="card2">
+                var mailhtmlexp = `<div class="card2">
+                            <div class="percent2">
+                            <svg>
+                                <circle cx="25" cy="25" r="22"></circle>
+                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexp};"></circle>
+                            </svg>
+                            <div class="number2">
+                                <h6>${mailnewperexp}<span>${mailsignperexp}</span></h6>
+                            </div>
+                            </div>
+                        </div>`;
+
+                    var mailhtmlexp = `<div class="card2">
                             <div class="percent2">
                             <svg>
                                 <circle cx="25" cy="25" r="22"></circle>
@@ -1047,17 +1059,6 @@ function loadTableCampaignResult1(){
                             </div>
                         </div>`;
 
-                    var mailhtmlexp = `<div class="card2">
-                            <div class="percent2">
-                            <svg>
-                                <circle cx="25" cy="25" r="22"></circle>
-                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexp};"></circle>
-                            </svg>
-                            <div class="number2">
-                                <h6>${mailnewperexprep}<span>${mailsignperexp}</span></h6>
-                            </div>
-                            </div>
-                        </div>`;
 
                     $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
                 });

@@ -389,8 +389,7 @@ function getMailReplied($conn, $campaign_id, $quite=false){
             array_push($RIDs, $row['rid']);
             array_push($email, $row['user_email']);
         }
-        
-        
+          
         //-----------
         $arr_msg_info = [];
 
