@@ -17,10 +17,6 @@ require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/Exception.php'
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php');
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
 
-// print_r(isSessionValid());die;
-// if(isSessionValid() == false && isAdminSessionValid() == false){
-// 	die("Access denied");
-// }
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -1219,11 +1215,23 @@ function addverificationmail($conn,$POST,$userid){
 	$stmt->bind_param('ssss', $userid,$email,$email_domain,$code);
 	if($stmt->execute() === TRUE){
 		$msg = "Hi,<p>It looks you requested for SnipierPhish domain verification. Use this code: ".$code." to verify your domain</p>";
-		$email = "waseemakram.img@gmail.com";
-
 		$headers = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
+		// $mail = new PHPMailerPHPMailer(true);
+		// $mail->isSMTP();
+		// $mail->Host = 'smtp.gmail.com';
+		// $mail->SMTPAuth = true;
+		// $mail->SMTPSecure = 'tls';
+		// $mail->Port = 587;
+		// $mail->Username = 'abhishek@techowl.in'; // YOUR email username
+		// $mail->Password = 'Ilovegirtiger@5831'; // YOUR email password
+		// // Sender and recipient settings
+		// $mail->setFrom('abhishek@techowl.in', 'Phishing');
+		// $mail->addAddress($email ,'Test');
+		// $mail->IsHTML(true);
+		// $mail->Subject = "Domain Verification";
+		// $mail->Body = $msg;
 
 		$mail = new PHPMailerPHPMailer(true);
 		$mail->isSMTP();

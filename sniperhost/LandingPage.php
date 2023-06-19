@@ -349,18 +349,15 @@ isAdminSessionValid(true);
    <script src="<?php echo url ?>/../sniperhost/js/sniper_landing_page.js"></script>
    <!-- <script src="<?php echo url ?>/js/mail_template.js"></script> -->
    <?php
-   echo '<script>';
+   echo '<script>
+   getStoreLandingList();';
    if (isset($_GET['lp'])){
-      echo'get_domains("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
+      echo '$("#section_view_list").hide();
+            viewLandPageDetailsFromId("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);
+            get_domains("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
    }else{
       echo'get_domains(null);';
    }
-   echo'
-   getStoreLandingList();';
- 
-   if (isset($_GET['lp']))
-      echo '$("#section_view_list").hide();
-                     viewLandPageDetailsFromId("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
    echo '</script>';
    ?>
    <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>

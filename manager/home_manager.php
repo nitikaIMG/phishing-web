@@ -1,7 +1,11 @@
 <?php
 //-------------------Session check-----------------------
 require_once(dirname(__FILE__) . '/session_manager.php');
-if(isSessionValid() == false)
+if(isset($_SESSION['admincontact_mail'])){
+	if(!isAdminSessionValid(true)){
+		die("Access denied");
+	}
+}else if(isSessionValid() == false)
 	die("Access denied");
 //-------------------------------------------------------
 header('Content-Type: application/json');
