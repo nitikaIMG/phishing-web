@@ -1059,7 +1059,18 @@ function loadTableCampaignResult1(){
                             </div>
                         </div>`;
 
-
+                        var mailhtmlexprep = `<div class="card2">
+                        <div class="percent2">
+                        <svg>
+                            <circle cx="25" cy="25" r="22"></circle>
+                            <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexprep};"></circle>
+                        </svg>
+                        <div class="number2">
+                            <h6>${mailnewperexp}<span>${mailsignperexprep}</span></h6>
+                        </div>
+                        </div>
+                    </div>`;
+                    
                     $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
                 });
             }
@@ -1372,6 +1383,7 @@ function loadTableCampaignResultadmin(){
                         </div>
                     </div>`;
 
+                    
 
                     $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
                 });

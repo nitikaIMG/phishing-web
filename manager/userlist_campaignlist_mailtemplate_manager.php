@@ -250,6 +250,7 @@ function getUserGroupList($conn,$userid ){
 	$test = array_column($row1, 'domain');
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
+		  if($row["user_data"]!=null){
 			$row["user_data"] = array_column(json_decode($row["user_data"]),"email");
 			$userem =array();
 			foreach($row["user_data"] as $key => $useremail){
@@ -262,6 +263,7 @@ function getUserGroupList($conn,$userid ){
 				
 			}
 			$row["user_data"] = implode(' ', $userem);
+		  }
 			//avoid double json encoding
 			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
         	array_push($resp,$row);
@@ -406,7 +408,6 @@ function getUserGroupFromGroupIdTable($conn,&$POSTJ){
 	$columnSortOrder = $POSTJ['order'][0]['dir'] == 'asc'?'asc':'desc'; // asc or desc
 	$totalRecords = 0;
 	$user_group_id = $POSTJ['user_group_id'];
-
 	if(empty($search_value))
 		$totalRecords_with_filter = $totalRecords;
 	else
@@ -416,6 +417,7 @@ function getUserGroupFromGroupIdTable($conn,&$POSTJ){
 	$row = getUserGroupFromGroupId($conn, $user_group_id);
 
 	if(!empty($row)){
+	    if($row["user_data"] != null){
 		$user_data = json_decode($row["user_data"],true);
 		foreach ($user_data as $item){
 			$item['fname'] = ucfirst($item['fname']);
@@ -428,6 +430,9 @@ function getUserGroupFromGroupIdTable($conn,&$POSTJ){
 		}
 
 		$totalRecords = sizeof($user_data);
+	    }else{
+	        $totalRecords = 0;
+	    }
 		$totalRecords_with_filter = sizeof($arr_filtered);
 		$resp = array(
 		  "draw" => intval($draw),
