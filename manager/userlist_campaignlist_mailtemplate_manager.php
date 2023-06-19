@@ -17,10 +17,6 @@ require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/Exception.php'
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php');
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
 
-// print_r(isSessionValid());die;
-// if(isSessionValid() == false && isAdminSessionValid() == false){
-// 	die("Access denied");
-// }
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');

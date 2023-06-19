@@ -26,7 +26,13 @@ if(isSessionValid() == true){
                     <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="avatar-container">
                             <div class="avatar avatar-sm avatar-indicators avatar-online">
-                                <img alt="avatar" class="avatar_profile" src="<?= $img?>images/users/<?=$_SESSION['user'][5] ?>.png" class="rounded-circle">
+                            <?php
+                                $firstName = substr($_SESSION['user'][2], 0, 1);
+                                $avatarUrl = $img . "images/users/" . $_SESSION['user'][5] . ".png";
+                                
+                            ?>
+                                <!-- <img alt="avatar" class="avatar_profile" src="<!?= $img?>images/users/<!?=$_SESSION['user'][5] ?>.png" class="rounded-circle"> -->
+                                <?= $firstName ?>
                             </div>
                         </div>
                     </a>

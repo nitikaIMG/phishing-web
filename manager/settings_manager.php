@@ -130,36 +130,38 @@ function modifyAccount($conn,$name,$username,$contact_mail,$dp_name,$current_pwd
 		else 
 			echo(json_encode(['result' => 'failed', 'error' => 'Contact mail update failed!']));
 	}else{
-	if(isCurrentPwdCorrect($conn,$current_pwd)){	//current password is correct
-		if($new_pwd == ''){	//update email only
-			$stmt = $conn->prepare("UPDATE tb_main SET name=?, contact_mail=?, dp_name=? WHERE username=?");
-			$stmt->bind_param('ssss', $name,$contact_mail,$dp_name,$username);
-			if ($stmt->execute() === TRUE){
-				echo(json_encode(['result' => 'success']));	
+		if(isCurrentPwdCorrect($conn,$current_pwd)){	//current password is correct
+			if($new_pwd == ''){	//update email only
+				$stmt = $conn->prepare("UPDATE tb_main SET name=?, contact_mail=?, dp_name=? WHERE username=?");
+				$stmt->bind_param('ssss', $name,$contact_mail,$dp_name,$username);
+				if ($stmt->execute() === TRUE){
+					echo(json_encode(['result' => 'success']));	
+				}
+				else 
+					echo(json_encode(['result' => 'failed', 'error' => 'Contact mail update failed!']));
 			}
-			else 
-				echo(json_encode(['result' => 'failed', 'error' => 'Contact mail update failed!']));
-		}
-		else{	//update all
-			$new_pwd_hash = hash("sha256", $new_pwd, false);	
-			$stmt = $conn->prepare("UPDATE tb_main SET name=?, password=?, contact_mail=?, dp_name=? WHERE username=?");
-			$stmt->bind_param('sssss', $name,$new_pwd_hash,$contact_mail,$dp_name,$username);
-			if ($stmt->execute() === TRUE)
-				echo(json_encode(['result' => 'success']));	
-			else 
-				echo(json_encode(['result' => 'failed', 'error' => 'Update failed!']));
-		}
-		setInfoCookie($conn,$_SESSION['username']);	//sets c_data cookie
-	}
-	else
-		echo(json_encode(['result' => 'failed', 'error' => 'Authorization failed! Your password is incorrect!']));
+			else{	//update all
+				$new_pwd_hash = hash("sha256", $new_pwd, false);	
+				$stmt = $conn->prepare("UPDATE tb_main SET name=?, password=?, contact_mail=?, dp_name=? WHERE username=?");
+				$stmt->bind_param('sssss', $name,$new_pwd_hash,$contact_mail,$dp_name,$username);
+				if ($stmt->execute() === TRUE)
+					echo(json_encode(['result' => 'success']));	
+				else 
+					echo(json_encode(['result' => 'failed', 'error' => 'Update failed!']));
+			}
+			setInfoCookie($conn,$_SESSION['username']);	//sets c_data cookie
+		}else
+			echo(json_encode(['result' => 'failed', 'error' => 'Authorization failed! Your password is incorrect!']));
     }
 }
 
 function isCurrentPwdCorrect(&$conn, &$current_pwd){	
 	$current_pwd_hash = hash("sha256", $current_pwd, false);
-	$current_username = $_SESSION['username'];
-
+	if(isset($_SESSION['username'])){
+	    $current_username = $_SESSION['username'];
+	}else{
+		$current_username = $_SESSION['admin'][2];
+	}
 	$stmt = $conn->prepare("SELECT COUNT(*) FROM tb_main WHERE username=? AND password=?");
 	$stmt->bind_param('ss', $current_username, $current_pwd_hash);
 	$stmt->execute();
