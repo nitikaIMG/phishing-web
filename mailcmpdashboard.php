@@ -161,6 +161,10 @@ isSessionValid(true);
                   <div class="col-12 d-flex no-block align-items-center">
                      <h4 class="page-title">Email Campaign Dashboard</h4>
                      <button type="button" class="btn btn-info btn-sm item_private" data-toggle="modal" data-target="#ModalCampaignList"><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> Select Campaign</button>
+                     
+                     <a href="<?=base_url?>mailcmpalldashboard">
+                     <button type="button" class="btn btn-info btn-sm item_private ms-2" data-toggle="modal" ><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> All Campaign</button>
+                    </a>
                   </div>
                </div>
             </div>
@@ -190,7 +194,9 @@ isSessionValid(true);
                               <div class="card-body">
                                     <div class="d-flex no-block align-items-center">
                                        <div>
-                                          <h2 id="del_camp"></h2>
+                                          <h2 id="del_camp">
+                                             NA
+                                          </h2>
                                           <h6 class="text-primary">Yearly Emails Delivered</h6>
                                        </div>
                                        <div class="ml-auto">
@@ -205,7 +211,9 @@ isSessionValid(true);
                               <div class="card-body">
                                     <div class="d-flex no-block align-items-center">
                                        <div>
-                                          <h2 id="past_camp"></h2>
+                                          <h2 id="past_camp">
+                                             NA
+                                          </h2>
                                           <h6 class="text-info">Past Campaigns</h6>
                                        </div>
                                        <div class="ml-auto">
@@ -534,7 +542,7 @@ isSessionValid(true);
             ';
          }else{
             echo 'var g_campaign_id ="", g_tracker_id="";
-                  $(function() {$("#ModalCampaignList").modal("toggle");});';
+            // $(function() {$("#ModalCampaignList").modal("toggle");});';
          }
          echo '</script>';
        
