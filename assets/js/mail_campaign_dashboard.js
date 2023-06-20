@@ -196,7 +196,7 @@ function campaignSelected(campaign_id) {
             campaign_id: g_campaign_id,
         })
     }).done(function (data) {
-        $("#ModalCampaignList").modal("toggle");
+        // $("#ModalCampaignList").modal("toggle");
         if(!data.error){
             $('#disp_camp_name').text(data.campaign_name);
             $('#disp_camp_start').text(data.scheduled_time);
@@ -873,6 +873,13 @@ function loadTableCampaignResult() {
         'pageLength': 20,
         'lengthMenu': [[20, 50, 100, 500, 1000, -1], [20, 50, 100, 500, 1000, "All"]],
         'aoColumnDefs': [{'bSortable': false, 'aTargets': [0]}],
+        "dom": 'Bfrtip',
+        "buttons": [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
         drawCallback:function(){
             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
             $("label>select").select2({minimumResultsForSearch: -1, });
@@ -970,8 +977,8 @@ function loadTableCampaignResult1(){
                         var mailpercentage = 0;
                     }else{
                         var mail_open = '1';
-                        var mailnewper = '✓';
-                        var mailsignper = '';
+                        var mailnewper = '100';
+                        var mailsignper = '%';
                         var mailpercentage = 100;
                     }
 
@@ -982,8 +989,8 @@ function loadTableCampaignResult1(){
                         var mailpercentagepay = 0;
                     }else{
                         var payloads_clicked_open = '1';
-                        var mailnewperpay = '✓';
-                        var mailsignperpay = '';
+                        var mailnewperpay = '100';
+                        var mailsignperpay = '%';
                         var mailpercentagepay = 100;
                     }
 
@@ -994,8 +1001,8 @@ function loadTableCampaignResult1(){
                         var mailpercentageexp = 0;
                     }else{
                         var employees_compromised = '1';
-                        var mailnewperexp = '✓';
-                        var mailsignperexp = '';
+                        var mailnewperexp = '100';
+                        var mailsignperexp = '%';
                         var mailpercentageexp = 100;
                     }
 
@@ -1006,8 +1013,8 @@ function loadTableCampaignResult1(){
                         var mailpercentageexprep = 0;
                     }else{
                         var emails_reported = '1';
-                        var mailnewperexprep = '✓';
-                        var mailsignperexprep = '';
+                        var mailnewperexprep = '100';
+                        var mailsignperexprep = '%';
                         var mailpercentageexprep = 100;
                     }
                   
@@ -1047,17 +1054,6 @@ function loadTableCampaignResult1(){
                             </div>
                         </div>`;
 
-                    var mailhtmlexp = `<div class="card2">
-                            <div class="percent2">
-                            <svg>
-                                <circle cx="25" cy="25" r="22"></circle>
-                                <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexprep};"></circle>
-                            </svg>
-                            <div class="number2">
-                                <h6>${mailnewperexp}<span>${mailsignperexprep}</span></h6>
-                            </div>
-                            </div>
-                        </div>`;
 
                         var mailhtmlexprep = `<div class="card2">
                         <div class="percent2">
@@ -1066,7 +1062,7 @@ function loadTableCampaignResult1(){
                             <circle cx="25" cy="25" r="22" style="--percent: ${mailpercentageexprep};"></circle>
                         </svg>
                         <div class="number2">
-                            <h6>${mailnewperexp}<span>${mailsignperexprep}</span></h6>
+                            <h6>${mailnewperexprep}<span>${mailsignperexprep}</span></h6>
                         </div>
                         </div>
                     </div>`;
@@ -1083,13 +1079,13 @@ function loadTableCampaignResult1(){
                     // "targets": [9,10],
                     "className": "dt-center"
                 }],
-                "dom": 'Bfrtip',
                 "buttons": [
                     'copyHtml5',
                     'excelHtml5',
                     'csvHtml5',
                     'pdfHtml5'
                 ],
+                "dom": 'Bfrtip',
                 "preDrawCallback": function(settings) {
                     $('#table_mail_campaign_result1 tbody').hide();
                 },
@@ -1204,7 +1200,7 @@ function loadTableCampaignResult1(){
 }
 
 function loadTableCampaignResultadmin(){
-
+    
     try {
         dt_mail_campaign_result.destroy();
     } catch (err) {}
@@ -1294,8 +1290,8 @@ function loadTableCampaignResultadmin(){
                     var mailpercentage = 0;
                 }else{
                     var mail_open = '1';
-                    var mailnewper = '✓';
-                    var mailsignper = '';
+                    var mailnewper = '100';
+                    var mailsignper = '%';
                     var mailpercentage = 100;
                 }
 
@@ -1306,8 +1302,8 @@ function loadTableCampaignResultadmin(){
                     var mailpercentagepay = 0;
                 }else{
                     var payloads_clicked_open = '1';
-                    var mailnewperpay = '✓';
-                    var mailsignperpay = '';
+                    var mailnewperpay = '100';
+                    var mailsignperpay = '%';
                     var mailpercentagepay = 100;
                 }
 
@@ -1318,8 +1314,8 @@ function loadTableCampaignResultadmin(){
                     var mailpercentageexp = 0;
                 }else{
                     var employees_compromised = '1';
-                    var mailnewperexp = '✓';
-                    var mailsignperexp = '';
+                    var mailnewperexp = '100';
+                    var mailsignperexp = '%';
                     var mailpercentageexp = 100;
                 }
 
@@ -1330,8 +1326,10 @@ function loadTableCampaignResultadmin(){
                     var mailpercentageexprep = 0;
                 }else{
                     var emails_reported = '1';
-                    var mailnewperexprep = '✓';
-                    var mailsignperexprep = '';
+                    var mailnewperexprep = '100';
+                    var mailsignperexprep = '%';
+                    // var mailnewperexprep = '✓';
+                    // var mailsignperexprep = '';
                     var mailpercentageexprep = 100;
                 }
               

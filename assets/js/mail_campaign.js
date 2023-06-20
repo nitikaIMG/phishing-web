@@ -357,6 +357,7 @@ function mailCampaignCopyAction() {
 
 //-------------------------------------
 function loadTableCampaignList() {
+   
     try {
         dt_mail_campaign_list.destroy();
     } catch (err) {}
@@ -394,7 +395,8 @@ function loadTableCampaignList() {
                                 `<a class="dropdown-item" href="#" onClick="promptMailCampaignDeletion('` + value.campaign_id + `','` + value.campaign_name + `')">Delete</a>
                                 <a class="dropdown-item" href="#" onClick="promptMailCampaignCopy('` + value.campaign_id + `','` + value.campaign_name + `')">Copy</a>
                         </div></div></div>`;
-    
+                     
+
                     switch (value.camp_status) {
                         case "0":
                             var camp_status = `<span class="ff badge badge-pill badge-dark" data-toggle="tooltip" title="Not scheduled"><i class="mdi mdi-alert"></i> Inactive</span>`;
@@ -409,7 +411,29 @@ function loadTableCampaignList() {
                             var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> Completed</span>`;
                             break;
                         case "4":
-                            var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
+
+                                var end_date = value.scheduled_datetime[0]['end_date'];
+                                var end_time = value.scheduled_datetime[0]['end_time'];
+                                
+                                // Get the current date and time
+                                var currentDate = new Date();
+                                var currentTime = currentDate.getTime();
+                                
+                                // Parse the end date and time into a Date object
+                                var endDate = new Date(end_date);
+                                var endTime = new Date(end_time);
+                                  
+                                
+                                if (endDate > currentDate) {
+                                    var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
+                                } else {
+                                    if( endTime.getTime() > currentTime){
+                                        var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
+                                    }else{
+                                        var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span><span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> `;
+                                    }
+                                }
+                         
                             break;
                     }                
                     

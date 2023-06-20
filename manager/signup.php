@@ -30,7 +30,7 @@ if (isset($_POST)) {
     if($row[0] == 0){
         $name='User';
         $dp_name=1;
-        $stmt = $conn->prepare("INSERT INTO `tb_main` ( `name`, `username`, `password`, `contact_mail`, `dp_name`, `v_hash`, `v_hash_time`, `date`, `last_login`, `last_logout`) VALUES ( '$name', '$username', '$pass', '$contact_mail', '$dp_name', '', '', '$$entry_time', '$$entry_time', '')");
+        $stmt = $conn->prepare("INSERT INTO `tb_main` ( `name`, `username`, `password`, `contact_mail`, `dp_name`, `v_hash`, `v_hash_time`, `date`, `last_login`, `last_logout`) VALUES ( '$name', '$username', '$pass', '$contact_mail', '$dp_name', '', '', '$entry_time', '$entry_time', '')");
         $stmt->execute();
 
         echo "success";

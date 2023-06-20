@@ -192,7 +192,7 @@ require_once (dirname(__FILE__).'/includes/config.php');
                             'success'
                             )
                             setTimeout(function () {
-                            window.location.href='<?=App?>signin.php';
+                            window.location.href='<?=App?>/signin.php';
                              }, 2500);
                }else{
                 alert("Email already exist!");
