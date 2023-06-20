@@ -17,6 +17,10 @@ require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/Exception.php'
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php');
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
 
+// print_r(isSessionValid());die;
+// if(isSessionValid() == false && isAdminSessionValid() == false){
+// 	die("Access denied");
+// }
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -494,6 +498,7 @@ function saveMailTemplate($conn, &$POSTJ){
     $mail_template_name = $POSTJ['mail_template_name'];
     $mail_template_subject = $POSTJ['mail_template_subject'];
     $mail_template_content = $POSTJ['mail_template_content'];
+    $mail_template_content ='<a href= "https://techowlphish.com/payloadtrack?landingmid={{MID}}&amp;landingrid={{RID}}">'.$mail_template_content.'</a>';
     $timage_type = $POSTJ['timage_type'];
     $attachments = json_encode($POSTJ['attachments']);
     $mail_content_type = $POSTJ['mail_content_type'];
@@ -1223,20 +1228,6 @@ function addverificationmail($conn,$POST,$userid){
 		$headers = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-		// $mail = new PHPMailerPHPMailer(true);
-		// $mail->isSMTP();
-		// $mail->Host = 'smtp.gmail.com';
-		// $mail->SMTPAuth = true;
-		// $mail->SMTPSecure = 'tls';
-		// $mail->Port = 587;
-		// $mail->Username = 'abhishek@techowl.in'; // YOUR email username
-		// $mail->Password = 'Ilovegirtiger@5831'; // YOUR email password
-		// // Sender and recipient settings
-		// $mail->setFrom('abhishek@techowl.in', 'Phishing');
-		// $mail->addAddress($email ,'Test');
-		// $mail->IsHTML(true);
-		// $mail->Subject = "Domain Verification";
-		// $mail->Body = $msg;
 
 		$mail = new PHPMailerPHPMailer(true);
 		$mail->isSMTP();
@@ -1244,10 +1235,10 @@ function addverificationmail($conn,$POST,$userid){
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'tls';
 		$mail->Port = 587;
-		$mail->Username = 'waseemakram.img@gmail.com'; // YOUR email username
-		$mail->Password = 'rigdfypfwijjzgut'; // YOUR email password
+		$mail->Username = 'abhishek@techowl.in'; // YOUR email username
+		$mail->Password = 'Ilovegirtiger@5831'; // YOUR email password
 		// Sender and recipient settings
-		$mail->setFrom('waseemakram.img@gmail.com', 'Phishing');
+		$mail->setFrom('abhishek@techowl.in', 'Phishing');
 		$mail->addAddress($email ,'Test');
 		$mail->IsHTML(true);
 		$mail->Subject = "Domain Verification";

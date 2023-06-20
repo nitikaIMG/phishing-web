@@ -4,30 +4,31 @@ require_once(dirname(__FILE__) . '/manager/common_functions.php');
 require_once(dirname(__FILE__) . '/libs/browser_detect/BrowserDetection.php');
 date_default_timezone_set('UTC');
 
-if(isset($_GET['landingrid']))
-    $user_id = doFilter($_GET['landingrid'],'ALPHA_NUM');
+if(isset($_GET['payloadrid']))
+    $user_id = doFilter($_GET['payloadrid'],'ALPHA_NUM');
 else
     $user_id = 'Failed';
 
-if(isset($_GET['landingmid']))
-    $campaign_id = doFilter($_GET['landingmid'],'ALPHA_NUM');
+if(isset($_GET['payloadmid']))
+    $campaign_id = doFilter($_GET['payloadmid'],'ALPHA_NUM');
 else
     $campaign_id = 'Failed';
     
 $user_details = verifyMailCmapaignUser($conn, $campaign_id, $user_id);
 if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     $date_time = round(microtime(true) * 1000);
-    if(empty($user_details['employees_compromised'])){
-        $employees_compromised = json_encode(array($date_time));
+
+    if(empty($user_details['payloads_clicked'])){
         $payloads_clicked = json_encode(array($date_time));
     }else{
-        $tmp=json_decode($user_details['employees_compromised']);
+        $tmp=json_decode($user_details['payloads_clicked']);
         array_push($tmp,$date_time);
-        $employees_compromised = json_encode($tmp);
         $payloads_clicked = json_encode(array($tmp));
     }
-    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET payloads_clicked=?, employees_compromised=? WHERE campaign_id=? AND rid=?");
-    $stmt->bind_param('ssss', $payloads_clicked,$employees_compromised,$campaign_id,$user_id);
+
+    
+    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET payloads_clicked=? WHERE campaign_id=? AND rid=?");
+    $stmt->bind_param('sss', $payloads_clicked,$campaign_id,$user_id);
     $stmt->execute();
 }
 

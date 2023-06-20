@@ -40,6 +40,7 @@ $date_time = round(microtime(true) * 1000);
 $user_browser = $ua_info->getName().' '.($ua_info->getVersion() == "unknown"?"":$ua_info->getVersion());
 $user_os = $ua_info->getPlatformVersion();
 $device_type = $ua_info->isMobile()?"Mobile":"Desktop";
+
 if(empty($POSTJ['ip_info']))
     $ip_info = getIPInfo($conn, $public_ip);
 else

@@ -173,6 +173,9 @@ isSessionValid(true);
                <div class="row">
                   <div class="col-12 d-flex no-block align-items-center">
                      <h4 class="page-title">Email Campaign Dashboard</h4>
+                     <!-- <a href="<?=base_url?>mailcmpdashboard">
+                     <button type="button" class="btn btn-info btn-sm item_private ms-2" data-toggle="modal" ><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> All Campaign</button>
+                    </a> -->
                   </div>
                </div>
             </div>

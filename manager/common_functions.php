@@ -252,16 +252,16 @@ function checkAnIDExist($conn,$id_value,$id_name,$table_name){
 
 //-----------------Tracker Specific----------------------------
 function getIPInfo($conn, $public_ip) {
-    $stmt = $conn->prepare("SELECT ip_info FROM tb_data_mailcamp_live WHERE public_ip = ?");
-    $stmt->bind_param("s", $public_ip);
-    $stmt->execute();
-    $result = $stmt->get_result()->fetch_assoc();
-    if (empty($result['ip_info'])) {
-        $stmt = $conn->prepare("SELECT ip_info FROM tb_data_webpage_visit WHERE public_ip = ?");
-        $stmt->bind_param("s", $public_ip);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-        if (empty($result['ip_info'])) {
+    // $stmt = $conn->prepare("SELECT ip_info FROM tb_data_mailcamp_live WHERE public_ip = ?");
+    // $stmt->bind_param("s", $public_ip);
+    // $stmt->execute();
+    // $result = $stmt->get_result()->fetch_assoc();
+    // if (empty($result['ip_info'])) {
+        // $stmt = $conn->prepare("SELECT ip_info FROM tb_data_webpage_visit WHERE public_ip = ?");
+        // $stmt->bind_param("s", $public_ip);
+        // $stmt->execute();
+        // $result = $stmt->get_result()->fetch_assoc();
+        // if (empty($result['ip_info'])) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -270,8 +270,8 @@ function getIPInfo($conn, $public_ip) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = json_decode(curl_exec($ch), true);
             return json_encode(craftIPInfoArr($output));
-        } else return ($result['ip_info']);
-    } else return ($result['ip_info']);
+        // } else return ($result['ip_info']);
+    // } else return ($result['ip_info']);
 }
 
 function craftIPInfoArr($output){
