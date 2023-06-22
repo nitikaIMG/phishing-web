@@ -433,26 +433,72 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 	$totalRecords = $row[0];
 	$totalRecords_with_filter = $totalRecords;//will be updated from below
 
-	$stmt = $conn->prepare("SELECT * FROM tb_data_mailcamp_live WHERE campaign_id=? ".$colSortString." LIMIT ? OFFSET ?");
-	$stmt->bind_param("sss", $campaign_id,$limit,$offset);
-	$stmt->execute();
-	$result = $stmt->get_result();
-	$rows = $result->fetch_all(MYSQLI_ASSOC);
+	    $stmt = $conn->prepare("SELECT tb_data_mailcamp_live.*, tb_core_mailcamp_list.campaign_data
+		FROM tb_data_mailcamp_live
+		JOIN tb_core_mailcamp_list ON tb_data_mailcamp_live.campaign_id = tb_core_mailcamp_list.campaign_id
+		WHERE tb_data_mailcamp_live.campaign_id = ? ".$colSortString." LIMIT ? OFFSET ?");
+		$stmt->bind_param("sss", $campaign_id, $limit, $offset);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$rows = $result->fetch_all(MYSQLI_ASSOC);
+
+		// Iterate through each row and join with tb_mail_template
+		foreach ($rows as &$row) {
+			$campaign_data = json_decode($row['campaign_data'], true);
+			$mail_template_id = $campaign_data['mail_template']['id'];
+
+			$mail_template_stmt = $conn->prepare("SELECT tb_core_mailcamp_template_list.*,tb_hland_page_list.page_file_name FROM tb_core_mailcamp_template_list
+			JOIN tb_hland_page_list ON tb_hland_page_list.hlp_id = tb_core_mailcamp_template_list.landing_page
+			WHERE tb_core_mailcamp_template_list.mail_template_id = ?");
+			$mail_template_stmt->bind_param("s", $mail_template_id);
+			$mail_template_stmt->execute();
+			$mail_template_result = $mail_template_stmt->get_result();
+			$mail_template_row = $mail_template_result->fetch_assoc();
+
+			$row['mail_template_name'] = $mail_template_row['mail_template_name'];
+			$row['page_file_name'] = $mail_template_row['page_file_name'];
+			// $row['mail_template'] = $mail_template_row;
+		}
 
 	foreach($rows as $i => $row){
+		
 		$tmp = [];
 		$ip_info = json_decode($row['ip_info'],true);
 		foreach ($selected_col as $col){ 
-		
-			if($col=='mail_open'||$col=='mail_open_times'||$col=='mail_open_count'||$col=='mail_first_open'||$col=='mail_last_open'){
+
+			if($col=='mail_template_name'){
+				$tmp[$col] = $row['mail_template_name'];	
+			 }
+ 
+			 if($col=='page_file_name'){
+				 $tmp[$col] = $row['page_file_name'];	
+			 }
+ 
+			if($col=='payloads_clicked'||$col=='payloads_clicked_times'||$col=='payloads_clicked_count'||$col=='payloads_clicked_open'||$col=='payloads_clicked_open'){
+	    		if($col=='payloads_clicked')
+	    			$tmp[$col] = count((array)$row['payloads_clicked'])>0?true:false;
+	    		elseif($col=='payloads_clicked_count')
+	    			$tmp[$col] = count((array)$row['payloads_clicked']);
+	    		elseif($col=='payloads_clicked_times'){
+		    		$tmp[$col] = [];
+		    		foreach (json_decode($row['payloads_clicked']) as $open_time)
+		    			array_push($tmp[$col],getInClientTime($DTime_info,$open_time));
+		    	}
+		    	elseif($col=='payloads_clicked_open' && count((array)$row['payloads_clicked']) >0)
+		    		$tmp[$col] = getInClientTime($DTime_info,json_decode($row['payloads_clicked'],true)[0]);
+		    	elseif($col=='payloads_clicked_open' && count((array)$row['payloads_clicked']) > 0)
+		    		$tmp[$col] = getInClientTime($DTime_info,json_decode($row['payloads_clicked'],true)[count((array)$row['payloads_clicked'])-1]);
+		    	else
+		    		$tmp[$col]=null;
+		    }elseif($col=='mail_open'||$col=='mail_open_times'||$col=='mail_open_count'||$col=='mail_first_open'||$col=='mail_last_open'){
 	    		if($col=='mail_open')
 	    			$tmp[$col] = count((array)$row['mail_open_times'])>0?true:false;
 	    		elseif($col=='mail_open_count')
 	    			$tmp[$col] = count((array)$row['mail_open_times']);
 	    		elseif($col=='mail_open_times'){
 		    		$tmp[$col] = [];
-		    		foreach (json_decode($row['mail_open_times']) as $open_time)
-		    			array_push($tmp[$col],getInClientTime($DTime_info,$open_time));
+		    		foreach (json_decode($row['mail_open_times']) as $open_time1)
+		    			array_push($tmp[$col],getInClientTime($DTime_info,$open_time1));
 		    	}
 		    	elseif($col=='mail_first_open' && count((array)$row['mail_open_times']) >0)
 		    		$tmp[$col] = getInClientTime($DTime_info,json_decode($row['mail_open_times'],true)[0]);
@@ -460,16 +506,45 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 		    		$tmp[$col] = getInClientTime($DTime_info,json_decode($row['mail_open_times'],true)[count((array)$row['mail_open_times'])-1]);
 		    	else
 		    		$tmp[$col]=null;
-		    }
-		    elseif($col=='public_ip'||$col=='user_agent'||$col=='mail_client'||$col=='platform'||$col=='device_type'||$col=='all_headers'){
+		    }elseif($col=='employees_compromised'||$col=='employees_compromised_times'||$col=='employees_compromised_count'||$col=='employees_compromised_open'||$col=='employees_compromised_open'){
+	    		if($col=='employees_compromised')
+	    			$tmp[$col] = count((array)$row['employees_compromised'])>0?true:false;
+	    		elseif($col=='employees_compromised_count')
+	    			$tmp[$col] = count((array)$row['employees_compromised']);
+	    		elseif($col=='employees_compromised_times'){
+		    		$tmp[$col] = [];
+		    		foreach (json_decode($row['employees_compromised']) as $open_time2)
+		    			array_push($tmp[$col],getInClientTime($DTime_info,$open_time2));
+		    	}
+		    	elseif($col=='employees_compromised_open' && count((array)$row['employees_compromised']) >0)
+		    		$tmp[$col] = getInClientTime($DTime_info,json_decode($row['employees_compromised'],true)[0]);
+		    	elseif($col=='employees_compromised_open' && count((array)$row['employees_compromised']) > 0)
+		    		$tmp[$col] = getInClientTime($DTime_info,json_decode($row['employees_compromised'],true)[count((array)$row['employees_compromised'])-1]);
+		    	else
+		    		$tmp[$col]=null;
+		    }elseif($col=='public_ip'||$col=='user_agent'||$col=='mail_client'||$col=='platform'||$col=='device_type'||$col=='all_headers'){
 		    	if($tb_data_single == true)
 		    		$tmp[$col] = json_decode($row[$col],true)[0];
 		    	else
 		    		$tmp[$col] = json_decode($row[$col],true);
-		    }
+		    }elseif ($col == 'click_evid') {
+				$ip = json_decode($row['public_ip'], true);
+				$mail = json_decode($row['mail_client'], true);
+				if (!empty($ip)) {
+					$tmp[$col] = implode(', ', $ip).'/'.implode(', ', $mail);
+				} else {
+					$tmp[$col] = null;
+				}
+			}
 		    elseif($col=='send_time')
-				$tmp[$col] = getInClientTime($DTime_info,$row[$col]);	
-			elseif(array_key_exists($col,$row))
+				$tmp[$col] = getInClientTime($DTime_info,$row[$col]);
+			elseif($col=='compromised_evid'){
+				if($row['compromised_email']!=null){
+					$tmp[$col] = $row['compromised_email'].'/'.$row['compromised_pass'];
+				}else{
+					$tmp[$col] = null;
+				}
+			}elseif(array_key_exists($col,$row))
 				$tmp[$col] = $row[$col];	    
 	    	elseif(array_key_exists($col,(array)$ip_info))
 	    		$tmp[$col] = $ip_info[$col];
@@ -484,7 +559,8 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data($conn, $POST
 
 		    	if(stripos($d_string, $search_value) !== false)
 		    		$f_found = true;
-		    }		    
+		    }	
+				    
 		}
 	
 		if(!empty($tmp))
