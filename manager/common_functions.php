@@ -252,16 +252,16 @@ function checkAnIDExist($conn,$id_value,$id_name,$table_name){
 
 //-----------------Tracker Specific----------------------------
 function getIPInfo($conn, $public_ip) {
-    // $stmt = $conn->prepare("SELECT ip_info FROM tb_data_mailcamp_live WHERE public_ip = ?");
-    // $stmt->bind_param("s", $public_ip);
-    // $stmt->execute();
-    // $result = $stmt->get_result()->fetch_assoc();
-    // if (empty($result['ip_info'])) {
-        // $stmt = $conn->prepare("SELECT ip_info FROM tb_data_webpage_visit WHERE public_ip = ?");
-        // $stmt->bind_param("s", $public_ip);
-        // $stmt->execute();
-        // $result = $stmt->get_result()->fetch_assoc();
-        // if (empty($result['ip_info'])) {
+    $stmt = $conn->prepare("SELECT ip_info FROM tb_data_mailcamp_live WHERE public_ip = ?");
+    $stmt->bind_param("s", $public_ip);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    if (empty($result['ip_info'])) {
+        $stmt = $conn->prepare("SELECT ip_info FROM tb_data_webpage_visit WHERE public_ip = ?");
+        $stmt->bind_param("s", $public_ip);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        if (empty($result['ip_info'])) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -270,8 +270,8 @@ function getIPInfo($conn, $public_ip) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = json_decode(curl_exec($ch), true);
             return json_encode(craftIPInfoArr($output));
-        // } else return ($result['ip_info']);
-    // } else return ($result['ip_info']);
+        } else return ($result['ip_info']);
+    } else return ($result['ip_info']);
 }
 
 function craftIPInfoArr($output){
@@ -282,12 +282,13 @@ function craftIPInfoArr($output){
     $ip_info['isp'] = empty($output['org'])?null:$output['org'];
     $ip_info['timezone'] = (empty($output['timezone'])||empty($output['utc_offset']))?null:$output['timezone'].' ('.$output['utc_offset'].')';
     $ip_info['coordinates'] = (empty($output['latitude'])||empty($output['longitude']))?null:$output['latitude'].'(lat)/'.$output['longitude'].'(long)';
+
     return $ip_info;
 }
 
 function getMailClient($user_agent) {
-
     $browser        = "unknown";
+
     $browser_array = array(
             '/msie|trident/i'      => 'Internet Explorer',
             '/firefox/i'   => 'Firefox',
@@ -306,12 +307,13 @@ function getMailClient($user_agent) {
             '/YahooMobile/i'   => 'Yahoo Mobile Mail',
             '/Lotus-Notes/i'   => 'IBM Lotus Notes',
             '/Roundcube/i'   => 'Roundcube',
-            '/Horde/i'   => 'Horde',
+            '/Horde/i'   => 'Horde'
         );
 
     foreach ($browser_array as $regex => $value)
         if (preg_match($regex, $user_agent))
             $browser = $value;
+
     return $browser;
 }
 
@@ -324,7 +326,6 @@ function getPublicIP(){
     getenv('REMOTE_ADDR');
     return htmlspecialchars($public_ip);
 }
-
 //---------------------------------------------------------------------
 function getCampaignDataFromCampaignID($conn, $campaign_id){
     $stmt = $conn->prepare("SELECT campaign_data FROM tb_core_mailcamp_list WHERE campaign_id = ?");

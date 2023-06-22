@@ -30,12 +30,12 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET payloads_clicked=? WHERE campaign_id=? AND rid=?");
     $stmt->bind_param('sss', $payloads_clicked,$campaign_id,$user_id);
     $stmt->execute();
+    displayImage();
 }
 
 function displayImage(){
     header("Location: landing.php");
   }
-  displayImage();
 
 //-----------------------------------------
 function verifyMailCmapaign($conn, $campaign_id){
