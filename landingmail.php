@@ -25,7 +25,7 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
         $tmp=json_decode($user_details['employees_compromised']);
         array_push($tmp,$date_time);
         $employees_compromised = json_encode($tmp);
-        $payloads_clicked = json_encode(array($tmp));
+        $payloads_clicked = json_encode($tmp);
     }
 
     $email_comp = $_POST['email'];

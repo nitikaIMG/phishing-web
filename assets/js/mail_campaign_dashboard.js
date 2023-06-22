@@ -3,7 +3,8 @@ var chart_live_mailcamp, radialchart_overview_mailcamp, piechart_mail_total_sent
 var g_tb_data_single = true;
 var reply_emails = {};
 var allReportColList=[], allReportColListSelected=[];
-var dic_all_col={rid:'RID', user_name:'Name', user_email:'Email', sending_status:'Status', send_time:'Sent Time', send_error:'Send Error',mail_open:'Mail Open',mail_open_count:'Mail(open count)',mail_first_open:'Mail(first open)',mail_last_open:'Mail(last open)',mail_open_times:'Mail(all open times)',public_ip:'Public IP',user_agent:'User Agent',mail_client:'Mail Client',platform:'Platform',device_type:'Device Type',all_headers:'HTTP Headers',mail_reply:'Mail Reply',mail_reply_count:'Mail (reply count)',mail_reply_content:'Mail (reply content)', country:'Country', city:'City', zip:'Zip', isp:'ISP', timezone:'Timezone', coordinates:'Coordinates'};
+var dic_all_col={rid:'RID', user_name:'Name', user_email:'Email', sending_status:'Email Delivery', send_time:'Delivery Date', send_error:'Send Error',mail_open:'Mail Viewed',mail_open_count:'Mail(open count)',mail_first_open:'Mail(first open)',mail_last_open:'Mail(last open)',mail_open_times:'Mail(all open times)',public_ip:'Public IP',user_agent:'User Agent',mail_client:'Mail Client',platform:'Platform',device_type:'Device Type',all_headers:'HTTP Headers',mail_reply:'Mail Reply',mail_reply_count:'Mail (reply count)',mail_reply_content:'Mail (reply content)', country:'Country', city:'City', zip:'Zip', isp:'ISP', timezone:'Timezone', coordinates:'Coordinates',payloads_clicked:"Payloads clicked",payloads_clicked_times:"Click Date",employees_compromised:"Employees Compromised",employees_compromised_times:"Compromissed Date",
+click_evid:"Click Evid",compromised_evid:"Compromised Evidence",mail_template_name:"Email Template",page_file_name:"Website Template"};
 
 $("#tb_camp_result_colums_list_mcamp").select2();
 $("#modal_export_report_selector").select2({
@@ -40,7 +41,8 @@ ele.sortable({
 
 function getAllReportColListSelected(){
     allReportColListSelected=[];
-    var allReportColListSelected =["rid", "user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","public_ip","mail_client","platform","device_type","mail_reply","country"];
+    var allReportColListSelected =["rid", "user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","public_ip","mail_client","platform","device_type","mail_reply","payloads_clicked","employees_compromised","compromised_email","country"];
+    
     $.each($("#tb_camp_result_colums_list_mcamp").find("option"), function () {
         allReportColList[$(this).text()] = $(this).val();
     });
@@ -821,7 +823,7 @@ function loadTableCampaignResult() {
     var arr_tb_heading=[];  
     arr_tb_heading.push({ data: 'sn', title: "SN" });
 
-    var allReportColListSelected =["user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","public_ip","mail_client","platform","device_type","mail_reply","country"];
+    var allReportColListSelected =["user_name", "user_email", "sending_status", "send_time", "send_error", "mail_open","mail_open_times","mail_reply","payloads_clicked","payloads_clicked_times","employees_compromised","employees_compromised_times","click_evid","compromised_evid","mail_template_name","page_file_name","country"];
  
     $.each(allReportColListSelected, function(index, item) {
         if (item.startsWith("Field"))
@@ -829,7 +831,6 @@ function loadTableCampaignResult() {
         else
             arr_tb_heading.push({ data: item, title : dic_all_col[item]});
     });
- 
 
     dt_mail_campaign_result = $('#table_mail_campaign_result').DataTable({
         'processing': true,
@@ -851,6 +852,16 @@ function loadTableCampaignResult() {
 
                 for (var i=0; i<resp.data.length; i++){
                     resp.data[i]['sn'] = i+1;
+                    if(resp.data[i].payloads_clicked!=null){
+                        resp.data[i].payloads_clicked = "<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>";
+                    }
+                    
+                    if(resp.data[i].employees_compromised==true){
+                        resp.data[i].employees_compromised = "<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>";
+                    }else{
+                        resp.data[i].employees_compromised = "<center><i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i></center>";
+                    }
+                  
                     if(resp.data[i].mail_open==true)
                         resp.data[i].mail_open = "<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>";
                     else

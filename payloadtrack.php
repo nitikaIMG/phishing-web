@@ -18,12 +18,13 @@ $user_details = verifyMailCmapaignUser($conn, $campaign_id, $user_id);
 if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     $date_time = round(microtime(true) * 1000);
 
+   
     if(empty($user_details['payloads_clicked'])){
         $payloads_clicked = json_encode(array($date_time));
     }else{
         $tmp=json_decode($user_details['payloads_clicked']);
         array_push($tmp,$date_time);
-        $payloads_clicked = json_encode(array($tmp));
+        $payloads_clicked = json_encode($tmp);
     }
 
     
