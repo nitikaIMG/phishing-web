@@ -22,7 +22,9 @@ else
     $mail_template_id = 'Failed';
 
 $ua_info = new Wolfcast\BrowserDetection();
-$public_ip = getPublicIP();//Verify campaign is active
+$public_ip = getPublicIP();
+
+//Verify campaign is active
 $user_details = verifyMailCmapaignUser($conn, $campaign_id, $user_id);
 if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
 
@@ -38,14 +40,12 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     if($mail_client == "unknown")
         $mail_client = $ua_info->getName().' '.($ua_info->getVersion() == "unknown"?"":$ua_info->getVersion());
       
-    if(empty($user_details['mail_open_times'])){
+    if(empty($user_details['mail_open_times']))
         $mail_open_times = json_encode(array($date_time));
-        // $payloads_clicked = json_encode(array($date_time));
-    }else{
+    else{
         $tmp=json_decode($user_details['mail_open_times']);
         array_push($tmp,$date_time);
         $mail_open_times = json_encode($tmp);
-        // $payloads_clicked = json_encode(array($tmp));
     }
 
     if(empty($user_details['public_ip']))
@@ -94,7 +94,6 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     foreach (apache_request_headers() as $headers => $value) { 
         $allHeaders .= htmlspecialchars("$headers: $value\r\n"); 
     } 
-    
     if(empty($user_details['all_headers']))
         $allHeaders = json_encode(array($allHeaders));
     else{
@@ -103,18 +102,15 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
         $allHeaders = json_encode($tmp);
     }
 
-    // $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_open_times=?,public_ip=?,ip_info=?,user_agent=?,mail_client=?,platform=?,device_type=?,all_headers=?,payloads_clicked=? WHERE campaign_id=? AND rid=?");
-    // $stmt->bind_param('sssssssssss', $mail_open_times,$public_ip,$ip_info,$user_agent,$mail_client,$user_os,$device_type,$allHeaders,$payloads_clicked,$campaign_id,$user_id);
-    
     $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_open_times=?,public_ip=?,ip_info=?,user_agent=?,mail_client=?,platform=?,device_type=?,all_headers=? WHERE campaign_id=? AND rid=?");
-    $stmt->bind_param('sssssssssss', $mail_open_times,$public_ip,$ip_info,$user_agent,$mail_client,$user_os,$device_type,$allHeaders,$campaign_id,$user_id);
+    $stmt->bind_param('ssssssssss', $mail_open_times,$public_ip,$ip_info,$user_agent,$mail_client,$user_os,$device_type,$allHeaders,$campaign_id,$user_id);
     $stmt->execute();
 }
 
 function displayImage($mail_template_id){
-  	$images = glob("uploads/timages/".$mail_template_id.".timg");
+  	$images = glob("spear/uploads/timages/".$mail_template_id.".timg");
   	if(empty($images))
-  		  $remoteImage = "uploads/timages/default.jpg";
+  		  $remoteImage = "spear/uploads/timages/default.jpg";
   	else
   		  $remoteImage = $images[0];
   	$imginfo = getimagesize($remoteImage);
