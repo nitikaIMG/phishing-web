@@ -507,11 +507,11 @@ function saveMailTemplate($conn, &$POSTJ){
     $domain_name = $POSTJ['domain_name'];
     $landing_name = $POSTJ['landing_name'];
 
-    $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
-
 	if (strpos($mail_template_content, 'payloadtrack') === false) {
-        $mail_template_content = '<a href="https://techowlphish.com/payloadtrack?payloadgmid={{MID}}&amp;payloadrid={{RID}}">' . $mail_template_content . '</a>';
-      }
+        $mail_template_content = '<a href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}">' . $mail_template_content . '</a>';
+    }
+	
+    $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
 
     if(checkAnIDExist($conn, $mail_template_id, 'mail_template_id', 'tb_core_mailcamp_template_list')){
         $stmt = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `mail_template_name`='$mail_template_name', `mail_template_subject`='$mail_template_subject', `mail_template_content`='$mail_template_content', `timage_type`='$timage_type', `mail_content_type`='$mail_content_type', `attachment`='$attachments',`userid`='$userid',`domain`='$domain',`landing_page`='$landing_page' WHERE `mail_template_id`='$mail_template_id'");

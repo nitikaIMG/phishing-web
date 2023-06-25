@@ -848,12 +848,13 @@ function loadTableCampaignResult() {
                     return JSON.stringify(d);
                 },
             dataSrc: function ( resp ){
-             console.log(resp);
 
                 for (var i=0; i<resp.data.length; i++){
                     resp.data[i]['sn'] = i+1;
-                    if(resp.data[i].payloads_clicked!=null){
+                    if(resp.data[i].payloads_clicked==true){
                         resp.data[i].payloads_clicked = "<center><i class='fas fa-check fa-lg text-success' data-toggle='tooltip' title='Yes'></i></center>";
+                    }else{
+                        resp.data[i].payloads_clicked = "<center><i class='fas fa-times fa-lg text-danger' data-toggle='tooltip' title='No'></i></center>";
                     }
                     
                     if(resp.data[i].employees_compromised==true){
@@ -916,6 +917,7 @@ function loadTableCampaignResult1(){
             action_type: "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1",
          }),
     }).done(function (data) {
+     
         $(function() {
             if(!data.error){
                 $("#succ_camp").append(data.total);
@@ -923,14 +925,17 @@ function loadTableCampaignResult1(){
                 $("#past_camp").append(data.past_camp);
 
                 $.each(data.resp, function(key, value) {
+                   
                     var count = JSON.parse(value.campaign_data);
                     var emp_count = (count.user_group.id).split(",");
                     var date = value.scheduled_datetime;
                     var start_date = new Date(date[0]['start_date']);
                     var end_date = new Date(date[0]['end_date']);
+                    var today = moment().format('DD/MM/YYYY'); // Get today's date
                     var newDate = moment(start_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
                     var newDate1 = moment(end_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
+                   
                     switch (value.sending_status) {
                         case 1:     //In progress
                             var status = '<span class="label label-table label-warning" style="color:black"><b>In Progress</b></span>';
@@ -1077,13 +1082,19 @@ function loadTableCampaignResult1(){
                         </div>
                         </div>
                     </div>`;
-                    
-                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
+
+                    if (moment(newDate1, 'DD/MM/YYYY').isBefore(moment(today, 'DD/MM/YYYY'))) {
+                        var cam_status = 'Past';
+                    } else {
+                        var cam_status = 'Active';
+                    }
+
+                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td onclick=\"document.location='mailcmpdashboard?mcamp=" + value.campaign_id + "'\">" + value.campaign_name + "</td><td>"+cam_status+"</td><td>" + status + "</td><td>" + (newDate) + ' - ' + (newDate1) + "</td><td>" + emp_count.length + "</td><td>" + delivered + " " + html + "</td><td>" + mail_open + " " + mailhtml + "</td><td>" + payloads_clicked_open + " " + mailhtmlpay + "</td><td>" + employees_compromised + " " + mailhtmlexp + "</td><td>" + emails_reported + " " + mailhtmlexprep + "</td></tr>");
                 });
             }
 
             dt_mail_campaign_list = $('#table_mail_campaign_result1').DataTable({
-                "aaSorting": [6, 'desc'],
+                "aaSorting": [6, 'asc'],
                 'pageLength': 20,
                 'lengthMenu': [[20, 50, 100, -1], [20, 50, 100, 'All']],
                 'columnDefs': [{

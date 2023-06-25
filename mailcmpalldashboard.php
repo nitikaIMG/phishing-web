@@ -305,6 +305,7 @@ isSessionValid(true);
                                              <tr>
                                                 <th>#</th>
                                                 <th>Campaign Name</th>
+                                                <th>Campaign </th>
                                                 <th>Status</th>
                                                 <th>Scheduled Date</th>
                                                 <th>Employees</th>
