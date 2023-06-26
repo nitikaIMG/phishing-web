@@ -287,37 +287,37 @@ isSessionValid(true);
 
             <!-- ============================================================== -->
             <!-- Start Table View  -->
-               <div class="row">
-                  <div class="col-12">
-                     <div class="card">
-                        <div class="card-body">
-                           <div class="row">
-                              <div class="col-md-12">
-                                 <p>Active Campaigns</p>
-                                </div>
-                           </div>
-                           <div class="row">
-                              <div class="col-md-12 m-t-20">    
-                                 <div class="row">                    
-                                    <div class="table-responsive">
-                                       <table id="table_mail_campaign_result1" class="table table-striped table-bordered">
-                                          <thead>
-                                             <tr>
-                                                <th>#</th>
-                                                <th>Campaign Name</th>
-                                                <th>Status</th>
-                                                <th>Scheduled Date</th>
-                                                <th>Employees</th>
-                                                <th>Email Delivered</th>
-                                                <th>Email Viewed</th>
-                                                <th>Payloads Clicked</th>
-                                                <th>Employees Compromised</th>
-                                                <th>Emails Reported</th>
-                                             </tr>
-                                          </thead>
-                                          <tbody>
-                                          </tbody>
-                                       </table>
+               <!-- Active Table View  -->
+                  <div class="row">
+                     <div class="col-12">
+                        <div class="card">
+                           <div class="card-body">
+                              <div class="row">
+                                 <div class="col-md-12">
+                                    <p>Active Campaigns</p>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-md-12 m-t-20">    
+                                    <div class="row">                    
+                                       <div class="table-responsive">
+                                          <table id="table_mail_campaign_result1" class="table table-striped table-bordered">
+                                             <thead>
+                                                <tr>
+                                                   <th>Campaign Name</th>
+                                                   <th>Status</th>
+                                                   <th>Scheduled Date</th>
+                                                   <th>Employees</th>
+                                                   <th>Email Delivered</th>
+                                                   <th>Email Viewed</th>
+                                                   <th>Payloads Clicked</th>
+                                                   <th>Employees Compromised</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                             </tbody>
+                                          </table>
+                                       </div>
                                     </div>
                                  </div>
                               </div>
@@ -325,7 +325,45 @@ isSessionValid(true);
                         </div>
                      </div>
                   </div>
-               </div>
+               <!-- Active Table View  -->
+               <!-- Past Table View  -->
+                  <div class="row">
+                     <div class="col-12">
+                        <div class="card">
+                           <div class="card-body">
+                              <div class="row">
+                                 <div class="col-md-12">
+                                    <p>Past Campaigns</p>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-md-12 m-t-20">    
+                                    <div class="row">                    
+                                       <div class="table-responsive">
+                                          <table id="table_mail_campaign_result2" class="table table-striped table-bordered">
+                                             <thead>
+                                                <tr>
+                                                   <th>Campaign Name</th>
+                                                   <th>Scheduled Date</th>
+                                                   <th>Employees</th>
+                                                   <th>Email Delivered</th>
+                                                   <th>Email Viewed</th>
+                                                   <th>Payloads Clicked</th>
+                                                   <th>Employees Compromised</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               <!-- Past Table View  -->
             <!-- ============================================================== -->
             <!-- End Table View  -->
 

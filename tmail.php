@@ -21,25 +21,13 @@ if(isset($_GET['mtid'])){
 else
     $mail_template_id = 'Failed';
 
-$ua_info = new Wolfcast\BrowserDetection();
-$public_ip = getPublicIP();
-
 //Verify campaign is active
 $user_details = verifyMailCmapaignUser($conn, $campaign_id, $user_id);
 if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
 
-    $user_agent = htmlspecialchars($_SERVER['HTTP_USER_AGENT']);   
     $date_time = round(microtime(true) * 1000); //(new DateTime())->format('d-m-Y H:i:s.u');    
-    $user_os = $ua_info->getPlatformVersion();
-    $device_type = $ua_info->isMobile()?"Mobile":"Desktop";
-	$ip_info = getIPInfo($conn, $public_ip);
     $mail_open_times ='';
-    $allHeaders ='';
 
-    $mail_client = getMailClient($user_agent);    
-    if($mail_client == "unknown")
-        $mail_client = $ua_info->getName().' '.($ua_info->getVersion() == "unknown"?"":$ua_info->getVersion());
-      
     if(empty($user_details['mail_open_times']))
         $mail_open_times = json_encode(array($date_time));
     else{
@@ -48,69 +36,16 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
         $mail_open_times = json_encode($tmp);
     }
 
-    if(empty($user_details['public_ip']))
-        $public_ip = json_encode(array($public_ip));
-    else{
-        $tmp=json_decode($user_details['public_ip']);
-        array_push($tmp,$public_ip);
-        $public_ip = json_encode($tmp);
-    }
-
-    if(!empty($user_details['ip_info']))
-        $ip_info = $user_details['ip_info'];
-
-    if(empty($user_details['user_agent']))
-        $user_agent = json_encode(array($user_agent));
-    else{
-        $tmp=json_decode($user_details['user_agent']);
-        array_push($tmp,$user_agent);
-        $user_agent = json_encode($tmp);
-    }
-
-    if(empty($user_details['mail_client']))
-        $mail_client = json_encode(array($mail_client));
-    else{
-        $tmp=json_decode($user_details['mail_client']);
-        array_push($tmp,$mail_client);
-        $mail_client = json_encode($tmp);
-    }
-
-    if(empty($user_details['platform']))
-        $user_os = json_encode(array($user_os));
-    else{
-        $tmp=json_decode($user_details['platform']);
-        array_push($tmp,$user_os);
-        $user_os = json_encode($tmp);
-    }
-
-    if(empty($user_details['device_type']))
-        $device_type = json_encode(array($device_type));
-    else{
-        $tmp=json_decode($user_details['device_type']);
-        array_push($tmp,$device_type);
-        $device_type = json_encode($tmp);
-    }
-
-    foreach (apache_request_headers() as $headers => $value) { 
-        $allHeaders .= htmlspecialchars("$headers: $value\r\n"); 
-    } 
-    if(empty($user_details['all_headers']))
-        $allHeaders = json_encode(array($allHeaders));
-    else{
-        $tmp=json_decode($user_details['all_headers']);
-        array_push($tmp,$allHeaders);
-        $allHeaders = json_encode($tmp);
-    }
-
-    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_open_times=?,public_ip=?,ip_info=?,user_agent=?,mail_client=?,platform=?,device_type=?,all_headers=? WHERE campaign_id=? AND rid=?");
-    $stmt->bind_param('ssssssssss', $mail_open_times,$public_ip,$ip_info,$user_agent,$mail_client,$user_os,$device_type,$allHeaders,$campaign_id,$user_id);
+    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET mail_open_times=? WHERE campaign_id=? AND rid=?");
+    $stmt->bind_param('sss', $mail_open_times,$campaign_id,$user_id);
     $stmt->execute();
+    displayImage($mail_template_id);
 }
 
 function displayImage($mail_template_id){
-  	$images = glob("spear/uploads/timages/".$mail_template_id.".timg");
+  	$images = glob("uploads/timages/".$mail_template_id.".timg");
   	if(empty($images))
-  		  $remoteImage = "spear/uploads/timages/default.jpg";
+  		  $remoteImage = "uploads/timages/default.jpg";
   	else
   		  $remoteImage = $images[0];
   	$imginfo = getimagesize($remoteImage);
@@ -118,7 +53,7 @@ function displayImage($mail_template_id){
   	header("Content-type: {$imginfo['mime']}");
   	readfile($remoteImage);
 }
-displayImage($mail_template_id);
+
 
 //-----------------------------------------
 function verifyMailCmapaign($conn, $campaign_id){

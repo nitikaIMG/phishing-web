@@ -1,4 +1,3 @@
-
 <?php
 require_once(dirname(__FILE__) . '/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
@@ -290,7 +289,7 @@ isAdminSessionValid(true);
                         <div class="card-body">
                            <div class="row">
                               <div class="col-md-12">
-                                 <p>Active Campaigns</p>
+                                 <p>Phishing Campaign Overview</p>
                                 </div>
                            </div>
                            <div class="row">
