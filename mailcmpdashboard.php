@@ -1,4 +1,3 @@
-
 <?php
 require_once(dirname(__FILE__) . '/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
@@ -166,7 +165,8 @@ isSessionValid(true);
             </div>
             <div class="container-fluid">
 
-               <div class="row">
+            <!-- Start past Chart View  -->
+               <!-- <div class="row">
                   <div class="row draggable-cards" id="draggable-area">
                         <div class="col-lg-4 col-md-6">
                            <div class="card border-bottom border-success card-hover">
@@ -220,13 +220,14 @@ isSessionValid(true);
                            </div>
                         </div>
                   </div>
-               </div>
+               </div> -->
+            <!-- Start past Chart View  -->
 
             <!-- ============================================================== -->
             <!-- Start Chart View  -->
 
              <!-- Start Pie Chart View  -->
-               <div class="row">
+               <!-- <div class="row">
                   <div class="col-md-12">   
                      <div class="card">
                         <div class="card-body">     
@@ -251,11 +252,11 @@ isSessionValid(true);
                         </div>
                      </div>
                   </div>
-               </div>
+               </div> -->
                <!-- End Pie Chart View  -->
         
                <!-- Start Area Chart View  -->
-               <div class="row">
+               <!-- <div class="row">
                   <div class="col-12">
                      <div class="card">
                         <div class="card-body">
@@ -268,7 +269,7 @@ isSessionValid(true);
                         </div>
                      </div>
                   </div>
-               </div>
+               </div> -->
                <!-- End Area Chart View  -->
 
             <!-- ============================================================== -->
@@ -282,12 +283,53 @@ isSessionValid(true);
                         <div class="card-body">
                            <div class="row">
                               <div class="col-md-12">
-                                 <p>Active Campaigns</p>
+                                 <p>Phishing Campaign Overview</p>
                                 </div>
                            </div>
                            <div class="row">
                               <div class="col-md-12 m-t-20">    
                                  <div class="row">                    
+                                    <div class="table-responsive">
+                                       <table id="table_mail_campaign_result_camp" class="table table-striped table-bordered">
+                                          <thead>
+                                          <tr>
+                                                   <th>Campaign Name</th>
+                                                   <th>Status</th>
+                                                   <th>Scheduled Date</th>
+                                                   <th>Employees</th>
+                                                   <th>Email Delivered</th>
+                                                   <th>Email Viewed</th>
+                                                   <th>Payloads Clicked</th>
+                                                   <th>Employees Compromised</th>
+                                                </tr>
+                                          </thead>
+                                          <tbody>
+                                          </tbody>
+                                       </table>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="card-body">
+                           <div class="row">
+                              <div class="col-md-12">
+                                 <p>Phishing Campaign Statistics</p>
+                                </div>
+                           </div>
+                           <div class="row">
+                              <div class="col-md-12 m-t-20">    
+                                 <div class="row">   
+                                 <div>
+                                 Toggle column: <a class="toggle-vis" data-column="1">Name</a> - <a class="toggle-vis" data-column="2">Email</a> - <a class="toggle-vis" data-column="3">Email Delivery</a> - <a class="toggle-vis" data-column="4">Delivery Date</a> - <a class="toggle-vis" data-column="5">Mail Viewed</a> - <a class="toggle-vis" data-column="6">Mail(all open times)</a>- <a class="toggle-vis" data-column="7">Mail Reply</a>- <a class="toggle-vis" data-column="8">Payloads clicked- <a class="toggle-vis" data-column="9">Click Date- <a class="toggle-vis" data-column="10">
+                                 Employees Compromised- <a class="toggle-vis" data-column="11">
+                                 Compromissed Date- <a class="toggle-vis" data-column="12">
+                                 Click Evid- <a class="toggle-vis" data-column="13">
+                                 Compromised Evidence- <a class="toggle-vis" data-column="14">
+                                 Email Template- <a class="toggle-vis" data-column="15">
+                                 Website Template- <a class="toggle-vis" data-column="16">
+                                 Country- <a class="toggle-vis" data-column="17">
+                           </div><br>             
                                     <div class="table-responsive">
                                        <table id="table_mail_campaign_result" class="table table-striped table-bordered">
                                           <thead>
@@ -507,7 +549,6 @@ isSessionValid(true);
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
-
       
       <?php 
          if(isset($_GET['tk']) && isset($_GET['mcamp']) && amIPublic($_GET['tk'],$_GET['mcamp']) == true){
@@ -536,12 +577,36 @@ isSessionValid(true);
             campaignSelected("' . doFilter($_GET['mcamp'],'ALPHA_NUM') . '");
             ';
          }else{
-            echo 'var g_campaign_id ="", g_tracker_id="";
-            // $(function() {$("#ModalCampaignList").modal("toggle");});';
+            echo 'var g_campaign_id ="", g_tracker_id="";';
          }
          echo '</script>';
        
       ?>
+
+      <script>
+
+         $(document).ready(function () {
+            var table;
+
+            if ($.fn.DataTable.isDataTable('#table_mail_campaign_result')) {
+               table = $('#table_mail_campaign_result').DataTable();
+            } else {
+               table = $('#table_mail_campaign_result').DataTable({
+                  scrollY: '200px',
+                  paging: false,
+               });
+            }
+         $('a.toggle-vis').on('click', function (e) {
+            e.preventDefault();
+
+            var column = table.column($(this).attr('data-column'));
+
+            // Toggle the visibility
+            column.visible(!column.visible());
+         });
+         });
+
+      </script>
 
       <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>
       <script defer src="<?php echo url ?>/js/libs/toastr.min.js"></script>

@@ -17,10 +17,6 @@ require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/Exception.php'
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/PHPMailer.php');
 require_once(dirname(__FILE__,2).'/vendor/phpmailer/phpmailer/src/SMTP.php');
 
-// print_r(isSessionValid());die;
-// if(isSessionValid() == false && isAdminSessionValid() == false){
-// 	die("Access denied");
-// }
 //-------------------------------------------------------
 date_default_timezone_set('UTC');
 $entry_time = (new DateTime())->format('d-m-Y h:i A');
@@ -251,23 +247,28 @@ function getUserGroupList($conn,$userid ){
 	$stmt->execute();
 	$result1 = $stmt->get_result();
 	$row1 = mysqli_fetch_all($result1, MYSQLI_ASSOC);
+	
 	$test = array_column($row1, 'domain');
+
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
-		  if($row["user_data"]!=null){
-			$row["user_data"] = array_column(json_decode($row["user_data"]),"email");
-			$userem =array();
-			foreach($row["user_data"] as $key => $useremail){
-				$usere = end(explode('@',$useremail));
-				if(in_array($usere, $test)){
-					array_push($userem,'<span class="verdom label-table" style="display: inline-block; margin-bottom: 1px; color:black"><b>'.$usere.'</b></span>');
-				}else{
-					array_push($userem,'<span class=" unverdom label-table" style="display: inline-block; margin-bottom: 1px; color:black"><b>'.$usere.'</b></span>');
-				}
-				
-			}
-			$row["user_data"] = implode(' ', $userem);
-		  }
+		  
+		  if ($row["user_data"] != null) {
+            $user_data = json_decode($row["user_data"], true);
+            if ($user_data) {
+                $emails = array_column($user_data, 'email');
+                $userem = array();
+                foreach ($emails as $key => $useremail) {
+                    $usere = end(explode('@', $useremail));
+                    if (in_array($usere, $test)) {
+                        array_push($userem, '<span class="verdom label-table" style="display: inline-block; margin-bottom: 1px; color:black"><b>' . $usere . '</b></span>');
+                    } else {
+                        array_push($userem, '<span class="unverdom label-table" style="display: inline-block; margin-bottom: 1px; color:black"><b>' . $usere . '</b></span>');
+                    }
+                }
+                $row["user_data"] = implode(' ', $userem);
+            }
+        }
 			//avoid double json encoding
 			$row["date"] = getInClientTime_FD($DTime_info,$row['date'],null,'d-m-Y h:i A');
         	array_push($resp,$row);
@@ -277,7 +278,6 @@ function getUserGroupList($conn,$userid ){
 	else
 		echo json_encode(['error' => 'No data']);	
 }
-
 
 function getuserslist($conn,$userid ){
 	$resp = [];
@@ -507,11 +507,11 @@ function saveMailTemplate($conn, &$POSTJ){
     $domain_name = $POSTJ['domain_name'];
     $landing_name = $POSTJ['landing_name'];
 
-	if (strpos($mail_template_content, 'payloadtrack') === false) {
+    $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
+
+    if (strpos($mail_template_content, 'payloadtrack') === false) {
         $mail_template_content = '<a href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}">' . $mail_template_content . '</a>';
     }
-	
-    $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
 
     if(checkAnIDExist($conn, $mail_template_id, 'mail_template_id', 'tb_core_mailcamp_template_list')){
         $stmt = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `mail_template_name`='$mail_template_name', `mail_template_subject`='$mail_template_subject', `mail_template_content`='$mail_template_content', `timage_type`='$timage_type', `mail_content_type`='$mail_content_type', `attachment`='$attachments',`userid`='$userid',`domain`='$domain',`landing_page`='$landing_page' WHERE `mail_template_id`='$mail_template_id'");
@@ -1330,4 +1330,3 @@ function chnageutcformate($date){
 		return false;
 	}
 }
-?>

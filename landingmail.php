@@ -97,15 +97,12 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
          $allHeaders = json_encode($tmp);
     }
 
-     
     if(empty($user_details['employees_compromised'])){
         $employees_compromised = json_encode(array($date_time));
-        $payloads_clicked = json_encode(array($date_time));
     }else{
         $tmp=json_decode($user_details['employees_compromised']);
         array_push($tmp,$date_time);
         $employees_compromised = json_encode($tmp);
-        $payloads_clicked = json_encode($tmp);
     }
 
     $email_comp = $_POST['email'];
@@ -114,18 +111,40 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     }else{
         $pass_comp = $_POST['text'];
     }
+
+    if (empty($user_details['compromised_email'])) {
+        $compromised_email = json_encode(array($email_comp));
+    } else {
+        $tmp = json_decode($user_details['compromised_email'], true);
+        if ($tmp === null) {
+            $tmp = array($user_details['compromised_email']);
+        }
+        array_push($tmp, $email_comp);
+        $compromised_email = json_encode($tmp);
+    }
+
+    if(empty($user_details['compromised_pass'])){
+        $compromised_pass = json_encode(array($pass_comp));
+    }else{
+        $tmp = json_decode($user_details['compromised_pass'], true);
+        if ($tmp === null) {
+            $tmp = array($user_details['compromised_pass']);
+        }
+        array_push($tmp, $pass_comp);
+        $compromised_pass = json_encode($tmp);
+    }
     
-    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET payloads_clicked=?,public_ip=?,mail_client=?,ip_info=?,user_agent=?,platform=?,device_type=?,all_headers=?,employees_compromised=?,compromised_email=? ,compromised_pass=?   WHERE campaign_id=? AND rid=?");
-    $stmt->bind_param('sssssssssssss', $payloads_clicked,$public_ip,$mail_client,$ip_info,$user_agent,$user_os,$device_type,$allHeaders,$employees_compromised,$email_comp,$pass_comp,$campaign_id,$user_id);
+    $stmt = $conn->prepare("UPDATE tb_data_mailcamp_live SET payloads_clicked=?,public_ip=?,mail_client=?,ip_info=?,user_agent=?,platform=?,device_type=?,all_headers=?,employees_compromised=?,compromised_email=? ,compromised_pass=? WHERE campaign_id=? AND rid=?");
+    $stmt->bind_param('sssssssssssss', $payloads_clicked,$public_ip,$mail_client,$ip_info,$user_agent,$user_os,$device_type,$allHeaders,$employees_compromised,$compromised_email,$compromised_pass,$campaign_id,$user_id);
     $stmt->execute();
 
     displayImage();
 }
 
-function displayImage(){
-  header("Location: landing.php");
+function displayImage() {
+    header("Location: landing.php");
+    exit; // Ensure that the script exits after sending the header
 }
-
 //-----------------------------------------
 function verifyMailCmapaign($conn, $campaign_id){
     $stmt = $conn->prepare("SELECT scheduled_time,camp_status FROM tb_core_mailcamp_list where campaign_id = ?");
