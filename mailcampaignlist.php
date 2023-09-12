@@ -1,9 +1,10 @@
+<?php 
 
-<?php
-require_once(dirname(__FILE__) . '/manager/session_manager.php');
+require_once(dirname(__FILE__).'/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
 isSessionValid(true);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -16,6 +17,8 @@ isSessionValid(true);
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="">
       <meta name="author" content="">
+      <meta name="robots" content="noindex, nofollow" />
+
  
       <!-- Custom CSS -->
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
@@ -29,16 +32,17 @@ isSessionValid(true);
             color: white;
          }
          .disabled{
-            border: 1px solid #999999 !important;
-            background-color: #cccccc !important;
-            color: #666666 !important;
+            border: 2px solid #ffffff !important;
+            background-color: #0e1726 !important;
+            color: #ffffff !important;
             cursor: not-allowed;
             pointer-events: all !important;
+                border-radius: 16px !important;
          }
 
          .moveall,
          .removeall {
-         border: 1px solid #ccc !important;
+         /*border: 1px solid #ccc !important;*/
          
          &:hover {
             background: #efefef;
@@ -58,7 +62,7 @@ isSessionValid(true);
             padding: 10px;
          }
          body.dark .form-control {
-            color: #3e5569 !important
+            /*color: #3e5569 !important*/
          }
       </style>
       
@@ -98,7 +102,7 @@ isSessionValid(true);
             <div class="page-breadcrumb">
                <div class="row">
                   <div class="col-12 d-flex no-block align-items-center">
-                     <h4 class="page-title">Email Campaigns</h4>
+                     <!--<h4 class="page-title">Email Campaigns</h4>-->
                   </div>
                </div>
             </div>
@@ -113,7 +117,7 @@ isSessionValid(true);
                <div class="card">
                   <div class="card-body">
                      <div class="row">
-                        <div class="col-md-12 mb-2">
+                        <div class="col-md-12 mb-3">
                            <button type="button" class="btn btn-info btn-sm" onclick="document.location='mailcampaignlist?action=add&campaign=new'"><i class="fas fa-plus"></i> New Mail Campaign</button>
                         </div>
                      </div>

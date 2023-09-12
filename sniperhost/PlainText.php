@@ -11,6 +11,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="">
       <meta name="author" content="">
+      <meta name="robots" content="noindex, nofollow" />
+
   
       <!-- Custom CSS -->      
       <link rel="stylesheet" type="text/css" href="../css/select2.min.css">

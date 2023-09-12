@@ -8,13 +8,14 @@ isSessionValid(true);
 <html lang="en">
 
 <head>
+    
     <?php include(dirname(__FILE__).'/components/header.php'); ?>
     <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
    <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/style.min.css">
    <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/dataTables.foundation.min.css">
    <style>
     .table-bordered{
-        border: 1px solid #dee2e6 !important;
+        /*border: 1px solid #dee2e6 !important;*/
     }
     .apexcharts-legend .apexcharts-legend-series:last-child {
         display: none !important;
@@ -55,7 +56,7 @@ isSessionValid(true);
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 ms-2 d-flex no-block align-items-center">
-                        <h4 class="page-title">User Dashboard</h4>
+                        <!--<h4 class="page-title">User Dashboard</h4>-->
                     </div>
                 </div>
             </div>
@@ -68,15 +69,14 @@ isSessionValid(true);
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
-                                            <h5 class="card-title">User Dashboard</h5>
+                                            <!--<h5 class="card-title">User Dashboard </h5>-->
                                             <div class="col-sm-12 col-lg-4">
                                                 <h1 class="font-bold mb-1" id="past_camp_last_week">9</h1>
                                                 <h6 class="mb-3">Emails Delivered (Past Week)</h6>
                                                 <p>A weekly aggregation of all phishing emails delivered across all
                                                     active campaigns. Metrics are updated nightly.</p>
-                                                <a class="mt-3 btn btn-lg btn-info"
-                                                    href="<?=base_url?>mailcmpdashboard">View Detailed Reports</a>
-                                            </div>
+                                                <a class="mt-3 mb-3 btn btn-lg btn-secondary"
+                                                    href="<?=base_url?>mailcmpdashboard">View Detailed Reports</a> </div>
 
                                             <div class="col-sm-12 col-lg-8 border-left m-t-15 d-none d-md-block">
 
@@ -102,7 +102,7 @@ isSessionValid(true);
                                                     <!-- col -->
                                                     <div class="col-lg-3 col-md-6">
                                                         <div class="d-flex align-items-center">
-                                                            <div class="mr-2"><span class="text-info display-5"><i
+                                                            <div class="mr-2"><span class="text display-5"><i
                                                                         class="mdi mdi-email"></i></span></div>
                                                             <div>
                                                                 <span>Emails Delivered</span>
@@ -114,7 +114,7 @@ isSessionValid(true);
                                                     <!-- col -->
                                                     <div class="col-lg-3 col-md-6">
                                                         <div class="d-flex align-items-center">
-                                                            <div class="mr-2"><span class="text-primary display-5"><i
+                                                            <div class="mr-2"><span class="text display-5"><i
                                                                         class="mdi mdi-web"></i></span></div>
                                                             <div>
                                                                 <span>Past Campaigns</span>
@@ -126,7 +126,7 @@ isSessionValid(true);
                                                     <!-- col -->
                                                     <div class="col-lg-3 col-md-6">
                                                         <div class="d-flex align-items-center">
-                                                            <div class="mr-2"><span class="text-cyan display-5"><i
+                                                            <div class="mr-2"><span class="text display-5"><i
                                                                         class="mdi mdi-school"></i></span></div>
                                                             <div>
                                                                 <span>Training Modules</span>
@@ -170,72 +170,37 @@ isSessionValid(true);
                             </div>
                         </div>
 
-                        <!-- <div class="row mt-3">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <h5 class="card-title">Employee Reported Phishing</h5>
-                                            <div class="row">
-                                                <div class="col-md-12 m-t-20">
-                                                    <div class="row">
-                                                        <div class="table-responsive">
-                                                            <table id="table_mail_report_list" class="table table-bordered w-100 style-3 dt-table-hover dataTable no-footer">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Reported By</th>
-                                                                        <th>Report Date</th>
-                                                                        <th>Attribution</th>
-                                                                        <th>Actions</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="row mt-3">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <h5 class="card-title">Domain Tool Search History</h5>
-                                            <div class="row">
-                                                <div class="col-md-12 m-t-20">
-                                                    <div class="row">
-                                                        <div class="table-responsive">
-                                                            <table id="table_mail_search_history_list" class="table table-bordered w-100 style-3 dt-table-hover dataTable no-footer">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Domain Name</th>
-                                                                        <th>Mail Gateway</th>
-                                                                        <th>Spam Filter</th>
-                                                                        <th>Malware Filter</th>
-                                                                        <th>Mail Sender Status</th>
-                                                                        <th>Mail Receiver Status</th>
-                                                                        <th>Last Searched</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
+                        <!--<div class="row mt-3">-->
+                        <!--    <div class="col-12">-->
+                        <!--        <div class="card">-->
+                        <!--            <div class="card-body">-->
+                        <!--                <div class="row">-->
+                        <!--                    <h5 class="card-title">Employee Reported Phishing</h5>-->
+                        <!--                    <div class="row">-->
+                        <!--                        <div class="col-md-12 m-t-20">-->
+                        <!--                            <div class="row">-->
+                        <!--                                <div class="table-responsive">-->
+                        <!--                                    <table id="table_mail_report_list" class="table table-bordered w-100 style-3 dt-table-hover dataTable no-footer">-->
+                        <!--                                        <thead>-->
+                        <!--                                            <tr>-->
+                        <!--                                                <th>Reported By</th>-->
+                        <!--                                                <th>Report Date</th>-->
+                        <!--                                                <th>Attribution</th>-->
+                        <!--                                                <th>Actions</th>-->
+                        <!--                                            </tr>-->
+                        <!--                                        </thead>-->
+                        <!--                                        <tbody>-->
+                        <!--                                        </tbody>-->
+                        <!--                                    </table>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!--                    </div>-->
+                        <!--                </div>-->
+                        <!--            </div>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--</div>-->
 
                     </div>
                 </div>

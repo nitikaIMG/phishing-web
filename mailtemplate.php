@@ -140,6 +140,10 @@ isAdminSessionValid(true);
                               </div>         
                            </div>
 
+                           <div class="form-group row"  id="defaultmail">
+                              <label><input type="checkbox" name="default" id="default" value="1"> Set as default</label>
+                          </div>
+
                            <div class="form-group row">
                               <label>Domain:</label>
                               <select class="select2 form-control date-inputmask" required id="domain" onchange="getlanding()" placeholder="Domain">
@@ -152,9 +156,16 @@ isAdminSessionValid(true);
                                  <option value="" selected disabled>Select Landing Page</option>
                               </select>
                         </div>
+                        <div class="form-group row">
+                              <label>smtp server:</label>
+                              <select class="select2 form-control date-inputmask" required id="smtp_server" placeholder="smtp server">
+                                 <option value="" selected disabled>Select smtp server</option>
+                              </select>
+                        </div>
 
                         <input type="hidden" name="domain_name" id="domain_name">
                         <input type="hidden" name="landing_name " id="landing_name">
+                        <input type="hidden" name="smtp_name" id="smtp_name">
                         
                         </div>                   
                      </div>
@@ -194,7 +205,7 @@ isAdminSessionValid(true);
                                         <span class="panel-title">
                                             <span>Keywords</span>
                                         <span>
-                                   </div>
+                                   </div> 
                                    <div id="collapseOne" class="panel-collapse collapse table-dark row show" data-toggle="collapse" aria-expanded="false">
                                        <div class="panel-body">
                                           <div class="table-responsive">
@@ -565,6 +576,12 @@ isAdminSessionValid(true);
          }else{
             echo' get_domain_list(null);';
          }
+         if(isset($_GET['action'])){
+            echo'
+            get_smtp_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
+         }else{
+            echo' get_smtp_list(null);';
+         }
         
         echo' function getlanding(){
             var id  = $("#domain").val();
@@ -576,6 +593,11 @@ isAdminSessionValid(true);
          echo'
           get_landings_edit("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
       }
+        if(isset($_GET['action'])){
+         echo'
+         get_default_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
+      }
+
 
          if(isset($_GET['action']) && isset($_GET['template']) && $_GET['template'] != ''){
                echo '$("#section_view_mail_template_list").hide();

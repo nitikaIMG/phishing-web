@@ -15,6 +15,8 @@ isAdminSessionValid(true);
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="">
       <meta name="author" content="">
+      <meta name="robots" content="noindex, nofollow" />
+
 
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css"> 
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/prism.css"/>

@@ -1,4 +1,3 @@
-
 <?php
 require_once(dirname(__FILE__) . '/manager/session_manager.php');
 require_once(dirname(__FILE__).'/includes/config.php');
@@ -16,6 +15,8 @@ isSessionValid(true);
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="">
       <meta name="author" content="">
+      <meta name="robots" content="noindex, nofollow" />
+
 
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css"> 
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/prism.css"/>
@@ -130,6 +131,10 @@ isSessionValid(true);
 
          div.dataTables_wrapper div.dataTables_filter input {
             background-color: white !important;
+         }
+         #table_mail_campaign_result1 tbody tr td:first-child {
+             cursor: pointer;
+             text-decoration: underline;
          }
       </style> 
 

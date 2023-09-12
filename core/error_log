@@ -1,0 +1,30 @@
+[01-Jun-2023 07:23:59 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:23:59 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:23:59 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:23:59 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:24:05 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:24:05 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:24:05 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:24:05 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:26:04 UTC] PHP Warning:  Undefined variable $argv in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 371
+[01-Jun-2023 07:26:04 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 371
+[01-Jun-2023 07:26:04 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 340
+[01-Jun-2023 07:26:04 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 346
+[01-Jun-2023 07:26:04 UTC] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 346
+[01-Jun-2023 07:55:56 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:55:56 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:55:56 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[01-Jun-2023 07:55:56 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:45:30 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:45:30 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:45:30 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:45:30 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:47 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:47 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:47 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:47 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:50 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:50 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:50 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:51:50 UTC] PHP Deprecated:  parse_str(): Passing null to parameter #1 ($string) of type string is deprecated in /home/techowlphish/public_html/manager/common_functions.php on line 168
+[02-Jun-2023 04:53:05 UTC] PHP Warning:  Undefined variable $query in /home/techowlphish/public_html/manager/common_functions.php on line 169

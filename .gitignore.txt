@@ -1,4 +1,5 @@
 /spear
-/lib
 /views
+/libs
 /vendor
+/config

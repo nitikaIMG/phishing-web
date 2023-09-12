@@ -5,9 +5,14 @@ require_once(dirname(__FILE__) . '/libs/browser_detect/BrowserDetection.php');
 date_default_timezone_set('UTC');
 
 if(isset($_GET['landingrid']))
+
     $user_id = doFilter($_GET['landingrid'],'ALPHA_NUM');
+   
 else
     $user_id = 'Failed';
+
+    // echo $user_id;
+    // die();
 
 if(isset($_GET['landingmid']))
     $campaign_id = doFilter($_GET['landingmid'],'ALPHA_NUM');

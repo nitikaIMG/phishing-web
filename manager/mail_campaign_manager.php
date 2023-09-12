@@ -33,6 +33,7 @@ if (isset($_POST)) {
 		}
 
 		if($POSTJ['action_type'] == "save_campaign_list")
+		
 			saveCampaignList($conn, $POSTJ);
 		if($POSTJ['action_type'] == "get_campaign_list")
 			getCampaignList($conn);
@@ -248,7 +249,7 @@ function pullMailCampaignFieldData($conn){
 		$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}
 
-	$result = mysqli_query($conn, "SELECT mail_template_id,mail_template_name FROM tb_core_mailcamp_template_list");
+	$result = mysqli_query($conn, "SELECT mail_template_id,mail_template_name,default_template FROM tb_core_mailcamp_template_list");
 	if(mysqli_num_rows($result) > 0){
 		$resp['mail_template'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	}

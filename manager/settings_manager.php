@@ -52,8 +52,12 @@ if (isset($_POST)) {
 			getStoreList($conn, $POSTJ['type'], (isset($POSTJ['name'])?$POSTJ['name']:""));
 		if($POSTJ['action_type'] == "get_store_landing")
 			getStoreLanding($conn,$POSTJ['id']);
+		if($POSTJ['action_type'] == "get_default_store_landing")
+			getdefaultStoreLanding($conn,$POSTJ['id']);
 		if($POSTJ['action_type'] == "get_store_landing_page")
-			getStoreLandingPage($conn,$POSTJ['id']);
+			getStoreLandingPage($conn,$POSTJ['id']); 
+		if($POSTJ['action_type'] == "get_smtp_landing")
+		    getsmtplanding($conn,$POSTJ['id']);
 		if($POSTJ['action_type'] == "get_store_landing_page_edit")
 			getStoreLandingPageEdit($conn,$POSTJ['id']);
 	}
@@ -130,28 +134,29 @@ function modifyAccount($conn,$name,$username,$contact_mail,$dp_name,$current_pwd
 		else 
 			echo(json_encode(['result' => 'failed', 'error' => 'Contact mail update failed!']));
 	}else{
-		if(isCurrentPwdCorrect($conn,$current_pwd)){	//current password is correct
-			if($new_pwd == ''){	//update email only
-				$stmt = $conn->prepare("UPDATE tb_main SET name=?, contact_mail=?, dp_name=? WHERE username=?");
-				$stmt->bind_param('ssss', $name,$contact_mail,$dp_name,$username);
-				if ($stmt->execute() === TRUE){
-					echo(json_encode(['result' => 'success']));	
-				}
-				else 
-					echo(json_encode(['result' => 'failed', 'error' => 'Contact mail update failed!']));
+	if(isCurrentPwdCorrect($conn,$current_pwd)){	//current password is correct
+		if($new_pwd == ''){	//update email only
+			$stmt = $conn->prepare("UPDATE tb_main SET name=?, contact_mail=?, dp_name=? WHERE username=?");
+			$stmt->bind_param('ssss', $name,$contact_mail,$dp_name,$username);
+			if ($stmt->execute() === TRUE){
+				echo(json_encode(['result' => 'success']));	
 			}
-			else{	//update all
-				$new_pwd_hash = hash("sha256", $new_pwd, false);	
-				$stmt = $conn->prepare("UPDATE tb_main SET name=?, password=?, contact_mail=?, dp_name=? WHERE username=?");
-				$stmt->bind_param('sssss', $name,$new_pwd_hash,$contact_mail,$dp_name,$username);
-				if ($stmt->execute() === TRUE)
-					echo(json_encode(['result' => 'success']));	
-				else 
-					echo(json_encode(['result' => 'failed', 'error' => 'Update failed!']));
-			}
-			setInfoCookie($conn,$_SESSION['username']);	//sets c_data cookie
-		}else
-			echo(json_encode(['result' => 'failed', 'error' => 'Authorization failed! Your password is incorrect!']));
+			else 
+				echo(json_encode(['result' => 'failed', 'error' => 'Contact mail update failed!']));
+		}
+		else{	//update all
+			$new_pwd_hash = hash("sha256", $new_pwd, false);	
+			$stmt = $conn->prepare("UPDATE tb_main SET name=?, password=?, contact_mail=?, dp_name=? WHERE username=?");
+			$stmt->bind_param('sssss', $name,$new_pwd_hash,$contact_mail,$dp_name,$username);
+			if ($stmt->execute() === TRUE)
+				echo(json_encode(['result' => 'success']));	
+			else 
+				echo(json_encode(['result' => 'failed', 'error' => 'Update failed!']));
+		}
+		setInfoCookie($conn,$_SESSION['username']);	//sets c_data cookie
+	}
+	else
+		echo(json_encode(['result' => 'failed', 'error' => 'Authorization failed! Your password is incorrect!']));
     }
 }
 
@@ -162,6 +167,7 @@ function isCurrentPwdCorrect(&$conn, &$current_pwd){
 	}else{
 		$current_username = $_SESSION['admin'][2];
 	}
+
 	$stmt = $conn->prepare("SELECT COUNT(*) FROM tb_main WHERE username=? AND password=?");
 	$stmt->bind_param('ss', $current_username, $current_pwd_hash);
 	$stmt->execute();
@@ -401,6 +407,24 @@ function getStoreLandingPage($conn,$id){
 	else
 		echo json_encode(['error' => 'No data']);	
 }
+function getsmtplanding($conn,$id){
+	
+    $resp = [];
+	$result1 = mysqli_query($conn, "SELECT * FROM `tb_core_mailcamp_sender_list` WHERE `status` = 0 ");
+	$result = mysqli_query($conn, "SELECT `smtp_server`  FROM `tb_core_mailcamp_template_list` WHERE `mail_template_id` = '$id' ");
+	
+	
+    if(mysqli_num_rows($result1) > 0){
+		$resp['smtp_server'] = mysqli_fetch_all($result1, MYSQLI_ASSOC);
+		$row = mysqli_fetch_assoc($result);
+		if ($row) {
+			$smtpServer = $row['smtp_server'];
+		}
+		echo json_encode(['smtp_server'=>$resp['smtp_server'],'smpt_id' =>$row['smtp_server']]);
+	}	else
+	    echo json_encode(['error' => 'No data']);
+
+}
 
 function getStoreLanding($conn,$id){
 
@@ -411,6 +435,7 @@ function getStoreLanding($conn,$id){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
 			array_push($resp,$row);
 		}
+	
 
 		if($id!=null){
 
@@ -428,6 +453,22 @@ function getStoreLanding($conn,$id){
 	}
 	else
 		echo json_encode(['error' => 'No data']);	
+}
+
+function getdefaultStoreLanding($conn,$id){
+	
+	$result = mysqli_query($conn, "SELECT * FROM `tb_core_mailcamp_template_list` WHERE `mail_template_id` = '$id' AND  `default_template` = 1");
+	
+	if(mysqli_num_rows($result) > 0){
+		$row = mysqli_fetch_assoc($result);
+		if ($row) {
+		 $default_template = $row['default_template'];
+	   }
+		echo json_encode(['default_template'=>$default_template]);
+	}else{
+		echo json_encode(['default_template'=>0]);	
+	}
+		
 }
 
 function getStoreLandingPageEdit($conn,$id){

@@ -8,11 +8,14 @@ isAdminSessionValid(true);
 <head>
 
    <meta charset="utf-8">
+   
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <!-- Tell the browser to be responsive to screen width -->
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta name="description" content="">
    <meta name="author" content="">
+   <meta name="robots" content="noindex, nofollow" />
+
 
    <?php
    include(dirname(__FILE__) . '../../components/header.php');
@@ -349,15 +352,18 @@ isAdminSessionValid(true);
    <script src="<?php echo url ?>/../sniperhost/js/sniper_landing_page.js"></script>
    <!-- <script src="<?php echo url ?>/js/mail_template.js"></script> -->
    <?php
-   echo '<script>
-   getStoreLandingList();';
+   echo '<script>';
    if (isset($_GET['lp'])){
-      echo '$("#section_view_list").hide();
-            viewLandPageDetailsFromId("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);
-            get_domains("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
+      echo'get_domains("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
    }else{
       echo'get_domains(null);';
    }
+   echo'
+   getStoreLandingList();';
+ 
+   if (isset($_GET['lp']))
+      echo '$("#section_view_list").hide();
+                     viewLandPageDetailsFromId("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
    echo '</script>';
    ?>
    <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>

@@ -397,7 +397,7 @@ function updatePieOverViewEmail(sent_mail_percent, open_mail_percent) {
     $("#radialchart_overview_mailcamp").parent().children().remove('.loadercust');
 
     var options = {
-        series: [sent_mail_percent, open_mail_percent, 0], //value 0 updated in another function
+        series: [sent_mail_percent.toFixed(2), open_mail_percent.toFixed(2), 0], //value 0 updated in another function
         chart: {
             type: 'radialBar',
         },
@@ -472,7 +472,7 @@ function updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed
                             show: true,
                             fontSize: '14px',
                             formatter: function(val) {
-                                return val + "%";
+                                return val.toFixed(2) + "%";
                             }
                         },
                         total: {
@@ -551,14 +551,14 @@ function updatePieTotalMailOpen(total_user_email_count, open_mail_count, open_ma
                             show: true,
                             fontSize: '14px',
                             formatter: function(val) {
-                                return val + "%";
+                                return val.toFixed(2) + "%";
                             }
                         },
                         total: {
                             show: true,
                             label: 'Total',
                             formatter: function(w) {
-                                return w.globals.series[0] + "% (" + open_mail_count + "/" + total_user_email_count + ")";
+                                return w.globals.series[0].toFixed(2) + "% (" + open_mail_count + "/" + total_user_email_count + ")";
                             }
                         }
                     }
@@ -580,9 +580,9 @@ function updatePieTotalMailOpen(total_user_email_count, open_mail_count, open_ma
                 w
             }) {
                 if (seriesIndex == 0)
-                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex] + `%</div>`;
+                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex].toFixed(2) + `%</div>`;
                 else
-                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex] + `%</div>`;
+                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex].toFixed(2) + `%</div>`;
             },
         },
         colors: ['#e6b800', '#d9d9d9'],
@@ -1679,14 +1679,14 @@ function updatePieTotalMailReplied1(total_user_email_count, mail_replies, mail_r
                             show: true,
                             fontSize: '14px',
                             formatter: function(val) {
-                                return val + "%";
+                                return val.toFixed(2) + "%";
                             }
                         },
                         total: {
                             show: true,
                             label: 'Total',
                             formatter: function(w) {
-                                return w.globals.series[0] + "% (" + mail_replies + "/" + total_user_email_count + ")";
+                                return w.globals.series[0].toFixed(2) + "% (" + mail_replies + "/" + total_user_email_count + ")";
                             }
                         }
                     }
@@ -1708,9 +1708,9 @@ function updatePieTotalMailReplied1(total_user_email_count, mail_replies, mail_r
                 w
             }) {
                 if (seriesIndex == 0)
-                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex] + `%</div>`;
+                    return `<div class="chart-tooltip">Opened: ` + series[seriesIndex].toFixed(2) + `%</div>`;
                 else
-                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex] + `%</div>`;
+                    return `<div class="chart-tooltip">Not opened: ` + series[seriesIndex].toFixed(2) + `%</div>`;
             },
         },
         colors: ['#e6b800', '#d9d9d9'],

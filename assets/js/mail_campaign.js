@@ -34,14 +34,22 @@ function pullMailCampaignFieldData() {
             action_type: "pull_mail_campaign_field_data"
          })
     }).done(function (data) {
-        console.log(data);
+   
         if(!data['error']){  // no data error
             $.each(data.user_group, function() {
                 $('#employees').append('<option value="' + this.user_group_id +'/'+this.user_group_name +'">' + this.user_group_name + '</option>');
             });
-
+            console.log(data.mail_template);
             $.each(data.mail_template, function() {
-                $('#mailTemplateSelector').append('<option value="' + this.mail_template_id + '">' + this.mail_template_name + '</option>');
+                var optionText = this.mail_template_name;
+                    if (this.default_template === "1") {
+                       optionText += ' (DEFAULT)';
+                    }
+                    $('#mailTemplateSelector').append('<option value="' + this.mail_template_id + '">' + optionText + '</option>');
+                    if (this.default_template === "1") {
+                      $('#mailTemplateSelector').val(this.mail_template_id);
+                    }
+                    
             });
 
             $.each(data.mail_sender, function() {
@@ -133,17 +141,20 @@ function getMailCampaignFromCampaignListId(id) {
 }
 
 function promptSaveMailCampaign() {
+
     var date = $("#datetimepicker_launch").val();
     var time = $("#start_time").val();
     var date1 = date.split("-")[0]+''+time+':00';
     var date = moment(date1, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss');
 
     if ($("#cb_act_deact_campaign").is(':checked') && (new Date(date).valueOf()) <= (new Date($.now()))) {
+  
         $('#modal_prompts').modal('toggle');
         $("#modal_prompts_body").text("");
         $("#modal_prompts_body").append("The scheduled time is in past. This will start the campaign immediately. Do you want to save and start campaign \"" + $('#mail_campaign_name').val() + "\"?<br/><br/><i>Note: This will delete previous results of this campaign</i>");
         $("#modal_prompts_confirm_button").replaceWith(`<button type="button" class="btn btn-danger" id="modal_prompts_confirm_button" onClick="saveMailCampaignAction()">Save</button>`);
     } else
+   
         saveMailCampaignAction();
 }
 
@@ -374,7 +385,6 @@ function loadTableCampaignList() {
             if(!data.error){
                 $.each(data, function(key, value) {
                     var action_items_campaign_table = '';
-                
                     if (value.camp_status == 0)
                         action_items_campaign_table += `<button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Activate" onClick="promptMailCampActDeact('` + value.campaign_id + `','` + value.campaign_name + `','` + value.camp_status + `',$(this))"><i class="mdi mdi-play"></i></button>`;
                     if (value.camp_status == 2 || value.camp_status == 4)
@@ -409,7 +419,7 @@ function loadTableCampaignList() {
                             var camp_status = `<span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> In-progress</span>`;
                             break;
                         case "3":
-                            var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> Completed</span>`;
+                            var camp_status = `<span class="badge badge-pill badge-success mr-1" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> Completed</span>`;
                             break;
                         case "4":
 
@@ -426,12 +436,12 @@ function loadTableCampaignList() {
                                   
                                 
                                 if (endDate > currentDate) {
-                                    var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
+                                    var camp_status = `<span class="badge badge-pill badge-success mr-1" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
                                 } else {
                                     if( endTime.getTime() > currentTime){
-                                        var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
+                                        var camp_status = `<span class="badge badge-pill badge-success mr-1" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> <span class="badge badge-pill badge-primary" data-toggle="tooltip" title="Phishing status"><i class="mdi mdi-fish"></i> In-progress</span>`;
                                     }else{
-                                        var camp_status = `<span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span><span class="badge badge-pill badge-success" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> `;
+                                        var camp_status = `<span class="badge badge-pill badge-success mr-1" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span><span class="badge badge-pill badge-success mr-1" data-toggle="tooltip" title="Mail sending status"><i class="mdi mdi-email"></i> Completed</span> `;
                                     }
                                 }
                          

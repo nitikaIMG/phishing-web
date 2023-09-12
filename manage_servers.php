@@ -16,6 +16,8 @@ isSessionValid(true);
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta name="description" content="">
    <meta name="author" content="">
+   <meta name="robots" content="noindex, nofollow" />
+
 
    <!-- Custom CSS -->
    <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css">
@@ -67,7 +69,7 @@ isSessionValid(true);
          <div class="page-breadcrumb breadcrumb-withbutton">
             <div class="row align-items-center my-3" >
                <div class="col-sm d-flex no-block align-items-center">
-                  <h3 class="page-title m-0">Mail Server Integrations</h3>
+                  <!--<h3 class="page-title m-0">Mail Server Integrations</h3>-->
                   <!-- <div class="ml-auto text-right" id="store-area">
                      <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal_store"><i class="fa fas fa-warehouse"></i> Store</button>
                   </div> -->
@@ -120,7 +122,7 @@ isSessionValid(true);
                                                 </ul>
                                                 </td>
                                                 <td>
-                                                   <button class="btn btn-success" disabled>Integrated</button>
+                                                   <button class="btn btn-secondary" disabled>Integrated</button>
                                                 </td>
                                              </tr>
                                              <tr>
@@ -144,7 +146,7 @@ isSessionValid(true);
                                                 </td>
                                                 <!-- <td><button class="btn btn-success">New Integration</button></td> -->
                                                 <td>
-                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#mailIntemodal">
+                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#mailIntemodal">
                                                    New Integration
                                                 </button></td>
 
@@ -277,7 +279,6 @@ isSessionValid(true);
                                     <input type="text" class="form-control" id="mail_sender_from" placeholder="Name <username@mailserver.com>">
                                  </div>
                               </div>
-                              <input type="checkbox" id="cb_auto_mailbox" checked class="d-none">
                               
                               <!-- <div class="form-group row">
                                  <label for="mail_sender_mailbox" class="col-sm-3 text-left control-label col-form-label">Mailbox:</label>

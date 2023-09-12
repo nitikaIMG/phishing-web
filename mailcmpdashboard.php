@@ -15,6 +15,8 @@ isSessionValid(true);
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="description" content="">
       <meta name="author" content="">
+      <meta name="robots" content="noindex, nofollow" />
+
 
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/select2.min.css"> 
       <link rel="stylesheet" type="text/css" href="<?php echo url ?>/customecss/css/prism.css"/>
@@ -329,7 +331,8 @@ isSessionValid(true);
                                  Email Template- <a class="toggle-vis" data-column="15">
                                  Website Template- <a class="toggle-vis" data-column="16">
                                  Country- <a class="toggle-vis" data-column="17">
-                           </div><br>             
+                           </div> 
+                           <br>
                                     <div class="table-responsive">
                                        <table id="table_mail_campaign_result" class="table table-striped table-bordered">
                                           <thead>

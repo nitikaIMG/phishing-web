@@ -189,8 +189,6 @@ function getTrackerImageType(){
 }
 
 function saveMailTemplate(e) {
-    console.log($('#landing_name').val());
-    
     if (RegTest($('#mail_template_name').val(), "COMMON") == false) {
         $("#mail_template_name").addClass("is-invalid");
         toastr.error( 'Empty/Unsupported character!');
@@ -206,15 +204,23 @@ function saveMailTemplate(e) {
             toastr.error( 'Landing Page Required!');
             return;
         }
+        if($('#smtp_server').val()==null){
+            toastr.error( 'Smtp Server Page Required!');
+            return;
+        }
 
     mail_template_content = $('#summernote').summernote('code');
-
+      if ($('#default').is(':checked')) {
+        var defaultValue = $('#default').val();
+      }else{
+        var defaultValue = 0;
+      }
     enableDisableMe(e);
     $.post({
         url: "manager/userlist_campaignlist_mailtemplate_manager",
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({ 
-            action_type: "save_mail_template",
+            action_type: "save_mail_template", 
             mail_template_id: nextRandomId,
             mail_template_name: $('#mail_template_name').val(),
             mail_template_subject: $('#mail_template_subject').val(),
@@ -226,6 +232,8 @@ function saveMailTemplate(e) {
             landing_page: $('#landing_page').val(),
             domain_name: $('#domain_name').val(),
             landing_name: $('#landing_name').val(),
+            smtp_server: $('#smtp_server').val(),
+            default: defaultValue,
         })
     }).done(function (response) {
         if(response.result == "success"){
@@ -258,13 +266,14 @@ function getMailTemplateFromTemplateId(id) {
             mail_template_id: id,
         })
     }).done(function (data) {
+        console.log(data.domain_name);
         $('#mail_template_name').val(data.mail_template_name);
         $('#mail_template_subject').val(data.mail_template_subject);
         $('#summernote').summernote('code', data.mail_template_content);//.replace(/\n/gi, "<br/>"));
         $("#mail_content_type_selector").val(data.mail_content_type).trigger("change");
         $("#landing_name").val(data.page_file_name);
         $("#domain_name").val(data.domain_name);
-        console.log(data.page_file_name);
+      
         $.each(data.attachment, function(i,att_info) {
             //var att= {file_id: file.file_id, file_name: file.file_name, file.file_disp_name:, inline, file.inline, payload_info: file.payload_info};
             //if(file.payload_info == true){
@@ -366,7 +375,7 @@ function loadTableMailTemplateList() {
             action_type: "get_mail_template_list"
          })
     }).done(function (data) {
-        console.log(data);   
+     
            if(!data['error']){  // no data
             $.each(data, function(key, value) {
                 var action_items_mail_template_table = `<div class="d-flex no-block align-items-center"><button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" onclick="document.location='mailtemplate?action=edit&template=` + value.mail_template_id + `'" title="View/Edit"><i class="mdi mdi-pencil"></i></button><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Copy" onclick="promptMailTemplateCopy('` + value.mail_template_id + `')"><i class="mdi mdi-content-copy"></i></button><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="promptMailTemplateDeletion('` + value.mail_template_id + `')"><i class="mdi mdi-delete-variant"></i></button></div>`;
@@ -742,6 +751,7 @@ function get_domain_list(id){
     }).done(function (data) {
         if(!data['error']){  
             var mail_domain = data.mail_domain;
+           
 
             $.each(data.resp, function(key, val) {
                 if (mail_domain == val.id) {
@@ -749,12 +759,64 @@ function get_domain_list(id){
                 }else{
                     $("#domain").append("<option value='" + val.id + "'>" + val.name + "</option>");
                 }
-                $("#domain_name").val(val.name);
+                console.log(val.name);
+                // $("#domain_name").val(val.name);
     
                 });
         }
     }); 
 }
+
+function get_default_list(id){
+
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_default_store_landing",
+            id:id
+         })
+    }).done(function (data) {
+        if(!data['error']){  
+            var default_template = data.default_template;
+            if(default_template == 1){
+                $("#defaultmail").html('');
+                $("#defaultmail").append('<label><input type="checkbox" name="default" id="default" value="1" checked > Set as default</label>');
+            }
+        }
+    }); 
+}
+
+function get_smtp_list(id){
+    $("#smtp_name").val("");
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_smtp_landing",
+            id:id
+         })
+    }).done(function (data) {
+       
+        if(!data['error']){  
+            var smtp_server = data.smtp_server;
+            var smtp_id = data.smpt_id;
+        
+            $.each(smtp_server, function(key, val) {
+            
+                if (smtp_id == val.userid) {
+                    $("#smtp_server").append("<option value='" + val.userid + "' selected>" + val.sender_smtp_server + "</option>");
+                }else{
+                  
+                    $("#smtp_server").append("<option value='" + val.userid + "'>" + val.sender_smtp_server + "</option>");
+                }
+                $("#smtp_name").val(val.sender_smtp_server);
+    
+                });
+        }
+    }); 
+}
+
 
 function get_landings_edit(id){
     $("#landing_name").val("");
