@@ -742,3 +742,6 @@ input:checked + .slider:before {
 .number-spinner{
 	min-width: 100px;
 }
+.select2{
+    height:auto !important;
+}

@@ -243,10 +243,10 @@ isAdminSessionValid(true);
                                                       <td>{{FROM}}</td>
                                                       <td>Sender email address</td>
                                                    </tr>
-                                                   <tr>
-                                                      <td>{{TRACKINGURL}}</td>
-                                                      <td>Tracker image URL</td>
-                                                   </tr>
+                                                   <!--<tr>-->
+                                                   <!--   <td>{{TRACKINGURL}}</td>-->
+                                                   <!--   <td>Tracker image URL</td>-->
+                                                   <!--</tr>-->
                                                    <tr>
                                                       <td>{{TRACKER}}</td>
                                                       <td>Tracker image HTML</td>

@@ -2,7 +2,7 @@
 <meta name="robots" content="noindex, nofollow" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-<title>Phishing Admin</title>
+<title>Techowl Phish</title>
 <link rel="icon" type="image/x-icon" href="<?php echo url ?>/src/assets/img/only-logo1.png" />
 <link href="<?php echo url ?>/collapsible-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo url ?>/collapsible-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />

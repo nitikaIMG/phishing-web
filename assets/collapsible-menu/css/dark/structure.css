@@ -49,6 +49,9 @@ body.dark {
     ======================
   */
 }
+.note-editor p {
+    color: #111 !important;
+}
 body.dark p {
   margin-top: 0;
   margin-bottom: 0.625rem;

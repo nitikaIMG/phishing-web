@@ -111,8 +111,8 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     }
 
     $email_comp = $_POST['email'];
-    if(isset($_POST['password'])){
-        $pass_comp = $_POST['password'];
+    if(isset($_POST['userpassword'])){
+        $pass_comp = $_POST['userpassword'];
     }else{
         $pass_comp = $_POST['text'];
     }

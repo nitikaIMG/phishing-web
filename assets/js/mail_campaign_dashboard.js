@@ -400,6 +400,7 @@ function updatePieOverViewEmail(sent_mail_percent, open_mail_percent) {
         series: [sent_mail_percent.toFixed(2), open_mail_percent.toFixed(2), 0], //value 0 updated in another function
         chart: {
             type: 'radialBar',
+            foreColor:'#999',
         },
         plotOptions: {
             radialBar: {
@@ -456,6 +457,7 @@ function updatePieTotalSent(total_user_email_count, sent_mail_count, sent_failed
         series: [sent_percent, non_sent_percent],
         chart: {
             type: 'donut',
+            foreColor:'#999',
         },
         plotOptions: {
             pie: {
@@ -535,6 +537,7 @@ function updatePieTotalMailOpen(total_user_email_count, open_mail_count, open_ma
         series: [open_mail_percent, non_open_percent],
         chart: {
             type: 'donut',
+            foreColor:'#999',
         },
         plotOptions: {
             pie: {
@@ -1537,11 +1540,32 @@ function loadTableCampaignResultadmin(){
                 }],
                 "dom": 'Bfrtip',
                 "buttons": [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ],
+                        {
+                            extend: 'copyHtml5',
+                            exportOptions: {
+                                orthogonal: 'landscape'
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            exportOptions: {
+                                orthogonal: 'landscape'
+                            }
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            exportOptions: {
+                                orthogonal: 'landscape'
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape', // Set orientation to landscape
+                            exportOptions: {
+                                orthogonal: 'landscape'
+                            }
+                        }
+                    ],
                 "preDrawCallback": function(settings) {
                     $('#table_mail_campaign_result1 tbody').hide();
                 },
@@ -1663,6 +1687,7 @@ function updatePieTotalMailReplied1(total_user_email_count, mail_replies, mail_r
         series: [mail_replies_percent, non_open_percent],
         chart: {
             type: 'donut',
+            foreColor:'#999',
         },
         plotOptions: {
             pie: {
@@ -2148,7 +2173,7 @@ function loadSuccessChart(mail_open,payload,comp){
         },
         legend: {
         formatter: function(val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex]+ "%"
+            return val + " - " + opts.w.globals.series[opts.seriesIndex].toFixed(2)+ "%"
         }
         },
         title: {

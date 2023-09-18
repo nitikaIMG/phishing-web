@@ -161,7 +161,7 @@ isSessionValid(true);
                <div class="row">
                   <div class="col-12 d-flex no-block align-items-center">
                      <h4 class="page-title">Email Campaign Dashboard</h4>
-                     <button type="button" class="btn btn-info btn-sm item_private" data-toggle="modal" data-target="#ModalCampaignList"><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> Select Campaign</button>
+                     <!--<button type="button" class="btn btn-info btn-sm item_private" data-toggle="modal" data-target="#ModalCampaignList"><i class="mdi mdi-hand-pointing-right" title="Select mail campaign" data-toggle="tooltip" data-placement="bottom"></i> Select Campaign</button>-->
                   </div>
                </div>
             </div>

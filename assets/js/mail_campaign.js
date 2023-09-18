@@ -27,6 +27,7 @@ $(function() {
 });
 
 function pullMailCampaignFieldData() {
+    console.log('entered');
     $.post({
         url: "manager/mail_campaign_manager",
         contentType: 'application/json; charset=utf-8',

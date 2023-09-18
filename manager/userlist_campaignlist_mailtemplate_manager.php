@@ -129,15 +129,20 @@ function addUserToTable($conn, &$POSTJ){
 
 	$uid = getRandomStr(10);
 	array_push($user_data,['uid'=>$uid, 'fname'=>$POSTJ['fname'], 'lname'=>$POSTJ['lname'], 'email'=>$POSTJ['email'], 'company'=>$POSTJ['company'], 'job' =>$POSTJ['job']]);
+	$user_Domain = [];
+	foreach($user_data as $us_data){
+	    $user_Domain[] = explode('@',$us_data['email'])[1];
+	}
+	$userdom = json_encode($user_Domain);
 	$user_data = json_encode(array_unique($user_data, SORT_REGULAR));
 
 	if(checkAnIDExist($conn,$user_group_id,'user_group_id','tb_core_mailcamp_user_group')){
-		$stmt = $conn->prepare("UPDATE tb_core_mailcamp_user_group SET user_group_name=?, user_data=? WHERE user_group_id=?");
-		$stmt->bind_param('sss', $user_group_name,$user_data,$user_group_id);
+		$stmt = $conn->prepare("UPDATE tb_core_mailcamp_user_group SET user_group_name=?, user_domain=?, user_data=? WHERE user_group_id=?");
+		$stmt->bind_param('ssss', $user_group_name,$userdom,$user_data,$user_group_id);
 	}
 	else{
-		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_user_group(user_group_id,user_group_name,user_data,date) VALUES(?,?,?,?)");
-		$stmt->bind_param('ssss', $user_group_id,$user_group_name,$user_data,$GLOBALS['entry_time']);
+		$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_user_group(user_group_id,user_group_name,user_data,date,user_domain) VALUES(?,?,?,?,?)");
+		$stmt->bind_param('ssss', $user_group_id,$user_group_name,$user_data,$GLOBALS['entry_time'],$userdom);
 	}
 
 	if($stmt->execute() === TRUE){
@@ -522,7 +527,16 @@ function saveMailTemplate($conn, &$POSTJ){
 		$row = $result1->fetch_assoc() ;
 		$domain_name = $row['name'];
 	}
-	
+    $landing_name = ($landing_page != '')?$landing_page:$landing_name;
+
+    $stmt = $conn->prepare("SELECT * FROM tb_hland_page_list WHERE hlp_id=?");
+	$stmt->bind_param("s", $landing_name);
+	$stmt->execute();
+	$result1 = $stmt->get_result();
+	if($result1->num_rows != 0){
+		$row = $result1->fetch_assoc() ;
+		$landing_name = $row['page_file_name'];
+	}
     $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
 
     if (strpos($mail_template_content, 'payloadtrack') === false) {

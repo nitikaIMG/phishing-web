@@ -243,10 +243,32 @@ function makeCopyMailCampaignList($conn, $old_campaign_id, $new_campaign_id, $ne
 function pullMailCampaignFieldData($conn){
 	$resp;
 	$userid=$_SESSION['user'][0];
-	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%') AND `userid` = '$userid'");
+	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name,user_data,user_domain FROM tb_core_mailcamp_user_group WHERE (`user_data` NOT LIKE '%gmail%' AND `user_data` NOT LIKE '%yahoo%') AND `userid` = '$userid'");
 // 	$result = mysqli_query($conn, "SELECT user_group_id,user_group_name FROM tb_core_mailcamp_user_group WHERE `userid` = '$userid' ");
+	
 	if(mysqli_num_rows($result) > 0){
-		$resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		$reponsegrp = $resp['user_group'] = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	    $res_ver = mysqli_query($conn, "SELECT domain FROM tb_mail_verify WHERE `status` = 1");
+	    $verify_mail = mysqli_fetch_all($res_ver, MYSQLI_ASSOC);
+	    if(!empty($verify_mail)){
+	        foreach($reponsegrp as $key => $usergp){
+    			$userdet = json_decode($usergp['user_domain']);
+    			$cnt = 0;
+    			if(!empty($userdet)){
+    	            foreach($verify_mail as $ver_mail){
+    	                if(array_search($ver_mail['domain'],$userdet) != ''){
+    	                    $cnt++;
+    	                }
+    	            }
+    	            if($cnt <= count($userdet) || $cnt == 0){
+    	                unset($resp['user_group'][$key]);
+    	            }
+                }else{
+                     unset($resp['user_group'][$key]);
+                }
+    		}
+	    }
+		
 	}
 
 	$result = mysqli_query($conn, "SELECT mail_template_id,mail_template_name,default_template FROM tb_core_mailcamp_template_list");
