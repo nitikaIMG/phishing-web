@@ -114,7 +114,7 @@ if(verifyMailCmapaign($conn, $campaign_id) == true && $user_details != 'empty'){
     if(isset($_POST['userpassword'])){
         $pass_comp = $_POST['userpassword'];
     }else{
-        $pass_comp = $_POST['text'];
+        $pass_comp = $_POST['password'];
     }
 
     if (empty($user_details['compromised_email'])) {

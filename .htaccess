@@ -1,8 +1,31 @@
 Options -Indexes
 RewriteEngine On
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Silent rewrite for /TechowlPhish2/Techowlphish/
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^(.*)$ /TechowlPhish2/Techowlphish/$1 [L]
+
+# Redirect requests with .php extension to extension-less URL
+RewriteCond %{THE_REQUEST} \s/+(.*?/)?(.*?)\.php[\s?]
+RewriteRule ^ /%1%2 [R=301,L]
+
+# Internally rewrite extension-less URL to .php file
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+
+# Internally rewrite extension-less URL to .php file
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+
+
 
 # BEGIN cPanel-generated php ini directives, do not edit
 # Manual editing of this file may result in unexpected behavior.
@@ -20,6 +43,11 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
    php_value upload_max_filesize 2M
    php_flag zlib.output_compression Off
 </IfModule>
+# Prevent search engines from indexing the site
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+
 <IfModule lsapi_module>
    php_flag display_errors On
    php_value max_execution_time 30

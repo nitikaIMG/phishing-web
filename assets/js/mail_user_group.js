@@ -495,8 +495,10 @@ function loadTableUsersList() {
         if(!data.error){  // no data
              $.each(data, function(key, value) { 
                 var action_items_user_group_table = `<a class="" data-toggle="tooltip" data-placement="top" style="margin: 6px;" onclick="window.open('useraccess?action=login&id=` + value.id + `','_blank')" title="" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></a>`;
+                
+                var user_status = (value.status =='1')?'checked':'';
 
-                $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.name + "</td><td>" + value.username + "</td><td>"+value.contact_mail+"</td><td>" + action_items_user_group_table + "</td></tr>");
+                $("#table_user_group_list tbody").append("<tr><td></td><td>" + value.name + "</td><td>" + value.username + "</td><td>"+value.contact_mail+"</td><td><div class='switch mt-3'><label><input type='checkbox' class='topselling' data-id='"+ value.id +"' "+user_status+"><span class='lever switch-col-red layout-switch'></span></label></div></td><td>" + action_items_user_group_table + "</td></tr>");
             });
         }
         dt_user_group_list = $('#table_user_group_list').DataTable({
@@ -552,3 +554,23 @@ function domainverification() {
         //     toastr.error("", response.error);
     });
 }
+
+  $(document).on('change', '.topselling', function () {
+    var status = $(this).prop('checked') ? 1 : 0;
+    var id = $(this).data('id');
+    $.post({
+      url: "manager/userlist_campaignlist_mailtemplate_manager",
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        action_type: "update_user_status",
+        status: status,
+        id: id
+      })
+    }).done(function (response) {
+      if (response.result == "success") {
+        toastr.success('', 'User status updated successfully!');
+      } else {
+        toastr.error('', response.error);
+      }
+    });
+  });

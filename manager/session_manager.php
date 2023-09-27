@@ -17,11 +17,14 @@ error_reporting(E_ERROR | E_PARSE); //Disable warnings
 function validateLogin($contact_mail,$pwd){	
 	global $conn;
 	$pwdhash = hash("sha256", $pwd, false);
-	$stmt = $conn->prepare("SELECT COUNT(*) FROM tb_main where contact_mail='$contact_mail' AND password='$pwdhash'");
+	$stmt = $conn->prepare("SELECT COUNT(*),status FROM tb_main where contact_mail='$contact_mail' AND password='$pwdhash'");
 	// $stmt->bind_param('ss', $contact_mail,$pwdhash);
 	$stmt->execute();
 	$row = $stmt->get_result()->fetch_row();
 	if($row[0] > 0){
+	    if($row[1] == 0){
+	        return false;
+	    }
 		setInfoCookie($conn,$contact_mail);
 		updateLoginLogout($conn, $contact_mail, $GLOBALS['entry_time'], true);
 		$os = getOSType();
@@ -305,7 +308,7 @@ function terminateSession($redirection=true){
 	if($redirection){
 		ob_end_clean();   // clear output buffer
 		$redirecturl = App;
-		header("Location:$redirecturl/signin");
+		header("Location:$redirecturl/TechowlPhish2/Techowlphish/index.php");
 		die();
 	}
 }

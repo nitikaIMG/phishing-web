@@ -1663,3 +1663,19 @@ Stack trace:
 [12-Sep-2023 06:00:20 UTC] PHP Warning:  Undefined array key "email" in /home/techowlphish/public_html/landingmail.php on line 113
 [12-Sep-2023 06:00:20 UTC] PHP Warning:  Undefined array key "text" in /home/techowlphish/public_html/landingmail.php on line 117
 [12-Sep-2023 06:00:20 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/techowlphish/public_html/landingmail.php:113) in /home/techowlphish/public_html/landingmail.php on line 150
+[17-Sep-2023 19:30:24 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Server shutdown in progress in /home/techowlphish/public_html/core/sniperphish_manager.php:33
+Stack trace:
+#0 /home/techowlphish/public_html/core/sniperphish_manager.php(33): mysqli->prepare('SELECT campaign...')
+#1 /home/techowlphish/public_html/core/sniperphish_manager.php(24): getScheduledCampaigns(Object(mysqli))
+#2 {main}
+  thrown in /home/techowlphish/public_html/core/sniperphish_manager.php on line 33
+[22-Sep-2023 05:24:52 UTC] PHP Warning:  Undefined array key "text" in /home/techowlphish/public_html/landingmail.php on line 117
+[22-Sep-2023 05:24:52 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/techowlphish/public_html/landingmail.php:117) in /home/techowlphish/public_html/landingmail.php on line 150
+[22-Sep-2023 10:10:07 UTC] PHP Warning:  Undefined array key "text" in /home/techowlphish/public_html/landingmail.php on line 117
+[22-Sep-2023 10:10:07 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/techowlphish/public_html/landingmail.php:117) in /home/techowlphish/public_html/landingmail.php on line 150
+[26-Sep-2023 05:07:42 UTC] PHP Parse error:  syntax error, unexpected token ";", expecting ")" in /home/techowlphish/public_html/edit_domain_admin.php on line 171
+[26-Sep-2023 05:07:52 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ";", expecting "," or ";" in /home/techowlphish/public_html/edit_domain_admin.php on line 173
+[26-Sep-2023 05:11:16 UTC] PHP Parse error:  syntax error, unexpected token "/" in /home/techowlphish/public_html/edit_domain_admin.php on line 177
+[26-Sep-2023 05:26:11 UTC] PHP Warning:  Undefined array key "email" in /home/techowlphish/public_html/landingmail.php on line 113
+[26-Sep-2023 05:26:11 UTC] PHP Warning:  Undefined array key "password" in /home/techowlphish/public_html/landingmail.php on line 117
+[26-Sep-2023 05:26:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/techowlphish/public_html/landingmail.php:113) in /home/techowlphish/public_html/landingmail.php on line 150

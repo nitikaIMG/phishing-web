@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="x-ua-compatible" content="IE=edge">
+	<meta name="author" content="SemiColonWeb">
+	<meta name="description" content="Create SAAS &amp; AI Subscription Websites with Canvas Template. Get Canvas to build powerful websites easily with the Highly Customizable &amp; Best Selling Bootstrap Template, today.">
+
+	<!-- Font Imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Cookie&display=swap" rel="stylesheet">
+
+	<!-- Core Style -->
+	<link rel="stylesheet" href="style.css">
+
+	
+
+	<!-- Font Icons -->
+	<link rel="stylesheet" href="css/font-icons.css">
+
+	<!-- Plugins/Components CSS -->
+	<link rel="stylesheet" href="css/swiper.css">
+
+	<!-- Saas Page Module Specific Stylesheet -->
+	<link rel="stylesheet" href="demos/saas-2/saas-2.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="css/custom.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Document Title
+	============================================= -->
+	<title>TechOwl Phish</title>
+
+</head>
+
+<body class="stretched">
+
+	<!-- Document Wrapper
+	============================================= -->
+	<div id="wrapper">
+
+		<!-- Header
+		============================================= -->
+		<header id="header">
+			<div id="header-wrap">
+				<div class="container">
+					<div class="header-row">
+
+						<!-- Logo
+						============================================= -->
+						<div id="logo" class="col-lg-2 me-lg-auto">
+							<a href="/" class="w-auto">
+								<img class="logo-default" srcset="https://techowlphish.com/assets/src/assets/img/techPhish.png, https://techowlphish.com/assets/src/assets/img/techPhish.png.png 2x" src="https://techowlphish.com/assets/src/assets/img/techPhish.png" alt="TechOwl Phish">
+								<img class="logo-dark" srcset="demos/saas-2/images/logo-dark.png, demos/saas-2/images/logo-dark@2x.png 2x" src="demos/saas-2/images/logo-dark@2x.png" alt="TechOwl Phish">
+							</a>
+						</div>
+						<!-- #logo end -->
+
+                        <div class="header-misc ms-auto col-lg-2 justify-content-lg-end">
+							<a href="https://techowlphish.com/signin" class="button button-border button-rounded rounded border-contrast-500" style="--cnvs-btn-fontsize: 1.125rem">
+							    <!--<i class="bi-asterisk d-none d-md-inline-block me-2 fs-6"></i>-->
+							    Log In</a>
+						</div>
+
+						<div class="primary-menu-trigger">
+							<button class="cnvs-hamburger" type="button" title="Open Mobile Menu">
+								<span class="cnvs-hamburger-box"><span class="cnvs-hamburger-inner"></span></span>
+							</button>
+						</div>
+
+						<!-- Primary Navigation
+						============================================= -->
+						<nav class="primary-menu with-arrows">
+
+							<ul class="one-page-menu menu-container" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
+								<li class="menu-item">
+									<a href="#section-services" class="menu-link" data-href="#section-services"><div>Services</div></a>
+								</li>
+								<li class="menu-item">
+									<a href="#section-pricing" class="menu-link" data-href="#section-pricing"><div>Pricing</div></a>
+								</li>
+								<li class="menu-item">
+									<a href="#section-faqs" class="menu-link" data-href="#section-faqs"><div>FQAs</div></a>
+								</li>
+								<li class="menu-item">
+									<a href="#section-blog" class="menu-link" data-href="#section-blog"><div>Blog</div></a>
+								</li>
+								<li class="menu-item">
+									<a href="#section-contactUs" class="menu-link" data-href="#section-contactUs"><div>Contact Us</div></a>
+								</li>
+							</ul>
+
+						</nav><!-- #primary-menu end -->
+
+					</div>
+				</div>
+			</div>
+			<div class="header-wrap-clone"></div>
+		</header>
+		<!-- #header end -->
+
+
+	</div><!-- #wrapper end -->
+
+
+	<!-- JavaScripts
+	============================================= -->
+	<script src="js/plugins.min.js"></script>
+	<script src="js/functions.bundle.js"></script>
+		<script src="smooth-scroll.js"></script>
+
+
+ <!-- JavaScripts -->
+        <script src="js/plugins.min.js"></script>
+        <script src="js/functions.bundle.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
+
+
+
+	<script>
+		window.addEventListener('load', function () {
+			var swiperParent = new Swiper('.swiper-testimonial', {
+				slidesPerView: 3,
+				spaceBetween: 30,
+				navigation: {
+					prevEl: '.slider-arrow-left',
+					nextEl: '.slider-arrow-right'
+				},
+				pagination: {
+					el: ".swiper-pagination",
+					clickable: true,
+				},
+				breakpoints: {
+					1: {
+						slidesPerView: 1
+					},
+					576: {
+						slidesPerView: 1
+					},
+					768: {
+						slidesPerView: 2
+					},
+					1200: {
+						slidesPerView: 3
+					}
+				}
+			});
+
+			var SwiperTabsContainer = new Swiper('.swiper-tab-container', {
+				loop: true,
+				slidesPerView: 1,
+				autoHeight: true,
+				autoplay: {
+					delay: 5000,
+					disableOnInteraction: false,
+					autoplayDisableOnInteraction: false
+				},
+				effect: 'fade',
+				fadeEffect: {
+					crossFade: true
+				},
+				longSwipes: true,
+				autoplayDisableOnInteraction: true,
+				on: {
+					activeIndexChange: function (swiper) {
+						var index = swiper.realIndex;
+						jQuery('.swiper-tab-link').removeClass('active');
+						jQuery('.swiper-tab-link').eq(index).addClass('active');
+					}
+				}
+			});
+
+			jQuery('.swiper-tab-link').on('click', function () {
+				var index = jQuery(this).index();
+				SwiperTabsContainer.slideToLoop(index);
+				jQuery('.swiper-tab-link').removeClass('active');
+				jQuery(this).addClass('active');
+			});
+		});
+	</script>
+        
+    </div>
+</body>
+</html>
+</body>
+</html>

@@ -104,6 +104,16 @@ if (isset($_POST)){
 			getuserslist($conn,$POSTJ,$userid);
 		if($POSTJ['action_type'] == "multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_admin")
 			multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data_admin($conn,$POSTJ);
+		if($POSTJ['action_type'] == "update_user_status")
+			update_user_status($conn,$POSTJ);
+		if($POSTJ['action_type'] == "get_domain_list_admin")
+			get_domain_list_admin($conn,$POSTJ);
+		if($POSTJ['action_type'] == "save_domain_by_admin")
+			saveDomainListByAdmin($conn, $POSTJ);
+		if($POSTJ['action_type'] == "get_domain_by_id")
+			getDomainById($conn,$POSTJ['domain_id']);
+		if($POSTJ['action_type'] == "update_domain_by_id")
+			updateDomainById($conn,$POSTJ);
 	}
 	if(isset($_POST['action_type'])){
 		if($_POST['action_type'] == "add_mail_verification")
@@ -292,7 +302,7 @@ function getUserGroupList($conn,$userid ){
 function getuserslist($conn,$userid ){
 	$resp = [];
 	$DTime_info = getTimeInfo($conn);
-	$result = mysqli_query($conn, "SELECT id,name,username, contact_mail FROM tb_main Where user_role = 0");
+	$result = mysqli_query($conn, "SELECT id,name,username, contact_mail, status FROM tb_main Where user_role = 0");
 	if(mysqli_num_rows($result) > 0){
 		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $row){
         	array_push($resp,$row);
@@ -496,8 +506,9 @@ function getUserGroupFromGroupId($conn, $user_group_id){
 }
 //---------------------------------------Email Template Section --------------------------------
 
-function saveMailTemplate($conn, &$POSTJ){
+function saveMailTemplate_old_26_09_2023($conn, &$POSTJ){
 	
+	#Code with domain name 
     // $userid = $_SESSION['user'][0];
 	$userid = $_SESSION['admin'][0];
 
@@ -540,7 +551,7 @@ function saveMailTemplate($conn, &$POSTJ){
     $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
 
     if (strpos($mail_template_content, 'payloadtrack') === false) {
-        $mail_template_content = '<a href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}">' . $mail_template_content . '</a>';
+        $mail_template_content = '<a href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}" style="text-decoration: none;">' . $mail_template_content . '</a>';
     }
 
     if(checkAnIDExist($conn, $mail_template_id, 'mail_template_id', 'tb_core_mailcamp_template_list')){
@@ -556,6 +567,85 @@ function saveMailTemplate($conn, &$POSTJ){
 			$stmts->execute();				
 		  }
 		  $stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_template_list`(`mail_template_id`, `mail_template_name`, `mail_template_subject`, `mail_template_content`, `timage_type`, `mail_content_type`, `attachment`,`userid`, `date`,`domain`,`landing_page`,`default_template`,`smtp_server`) VALUES ('$mail_template_id','$mail_template_name','$mail_template_subject','$mail_template_content','$timage_type','$mail_content_type','$attachments',$userid,'$entry_time','$domain','$landing_page','$default','$smtp_server')");  
+    }
+    
+    if ($stmt->execute() === TRUE ){
+		echo(json_encode(['result' => 'success']));    
+	} else {
+        echo(json_encode(['result' => 'failed', 'error' => $stmt->error]));    
+    }
+	
+}
+
+function saveMailTemplate($conn, &$POSTJ){
+	
+    // $userid = $_SESSION['user'][0];
+	$userid = $_SESSION['admin'][0];
+
+    $mail_template_id = $POSTJ['mail_template_id'];
+    if($mail_template_id == '')
+        $mail_template_id = null;
+
+    $mail_template_name = $POSTJ['mail_template_name'];
+    $mail_template_subject = $POSTJ['mail_template_subject'];
+    $mail_template_content = $POSTJ['mail_template_content'];
+    $timage_type = $POSTJ['timage_type'];
+    $attachments = json_encode($POSTJ['attachments']);
+    $mail_content_type = $POSTJ['mail_content_type'];
+    $entry_time = $GLOBALS['entry_time'];
+    $landing_page = $POSTJ['landing_page'];
+    $smtp_email_prefix = $POSTJ['smtp_email_prefix'];
+    $smtp_from_name = $POSTJ['smtp_from_name'];
+	$default = $POSTJ['default'];
+	
+	#get domain name
+	$stmt = $conn->prepare("SELECT * FROM tb_hland_page_list WHERE hlp_id=?");
+	$stmt->bind_param("s", $landing_page);
+	$stmt->execute();
+	$result1 = $stmt->get_result();
+	if($result1->num_rows != 0){
+		$row = $result1->fetch_assoc() ;
+		$landing_name = $row['page_file_name'];
+		$domain = $row['domain'];
+	}
+
+	$stmt2 = $conn->prepare("SELECT * FROM tb_domains WHERE id=?");
+	$stmt2->bind_param("s", $domain);
+	$stmt2->execute();
+	$result1 = $stmt2->get_result();
+	if($result1->num_rows != 0){
+		$row = $result1->fetch_assoc() ;
+		$domain_name = $row['name'];
+		$sender_id = $row['sender_id'];
+	}
+	$RID = getRandomStr(6);
+	$smtp_from = $smtp_email_prefix.'@'.$domain_name;
+	$status = '2';
+    $stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_sender_list (sender_list_id, sender_name, userid, domain_id, sender_SMTP_server, sender_from, sender_acc_username, sender_acc_pwd, auto_mailbox, sender_mailbox, cust_headers,status, dsn_type, date) SELECT ?, ?, userid, ?, sender_SMTP_server, ?, sender_acc_username, sender_acc_pwd, auto_mailbox, sender_mailbox, cust_headers, ?, dsn_type, ? FROM tb_core_mailcamp_sender_list WHERE sender_list_id = ?");
+    
+    $stmt->bind_param("sssssss", $RID,$smtp_from_name, $domain,$smtp_from,$status,$GLOBALS['entry_time'], $sender_id);
+
+    $stmt->execute();
+    
+    $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
+
+    if (strpos($mail_template_content, 'payloadtrack') === false) {
+        $mail_template_content = '<a href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}" style="text-decoration: none;">' . $mail_template_content . '</a>';
+    }
+
+    if(checkAnIDExist($conn, $mail_template_id, 'mail_template_id', 'tb_core_mailcamp_template_list')){
+		if($default == 1) {
+		    $stmts = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `default_template`= 0 ");
+			$stmts->execute();
+		}
+            $stmt = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `mail_template_name`='$mail_template_name', `mail_template_subject`='$mail_template_subject', `mail_template_content`='$mail_template_content', `timage_type`='$timage_type', `mail_content_type`='$mail_content_type', `attachment`='$attachments',`userid`='$userid',`domain`='$domain',`landing_page`='$landing_page',`default_template`= '$default',`smtp_server`='$RID',`from_name` = '$smtp_from_name',`email_prefix` ='$smtp_email_prefix' WHERE `mail_template_id`='$mail_template_id'");
+           
+		} else {
+		  if($default == 1) {
+			$stmts = $conn->prepare("UPDATE `tb_core_mailcamp_template_list` SET `default_template`= 0 ");
+			$stmts->execute();				
+		  }
+		  $stmt = $conn->prepare("INSERT INTO `tb_core_mailcamp_template_list`(`mail_template_id`, `mail_template_name`, `mail_template_subject`, `mail_template_content`, `timage_type`, `mail_content_type`, `attachment`,`userid`, `date`,`domain`,`landing_page`,`default_template`,`smtp_server`,`from_name`,`email_prefix`) VALUES ('$mail_template_id','$mail_template_name','$mail_template_subject','$mail_template_content','$timage_type','$mail_content_type','$attachments',$userid,'$entry_time','$domain','$landing_page','$default','$RID','$smtp_from_name','$smtp_email_prefix')");  
     }
     
     if ($stmt->execute() === TRUE ){
@@ -636,7 +726,7 @@ function deleteMailTemplateFromTemplateId($conn,$mail_template_id){
 
 function makeCopyMailTemplate($conn, $old_mail_template_id, $new_mail_template_id, $new_mail_template_name){
 	$userid=$_SESSION['user'][0];
-	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_template_list (mail_template_id,userid,mail_template_name,mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,date) SELECT ?,userid,?, mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,? FROM tb_core_mailcamp_template_list WHERE mail_template_id=?");
+	$stmt = $conn->prepare("INSERT INTO tb_core_mailcamp_template_list (mail_template_id,userid,mail_template_name,mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,date,from_name,email_prefix,domain,landing_page,smtp_server) SELECT ?,userid,?, mail_template_subject,mail_template_content,timage_type,mail_content_type,attachment,?,from_name,email_prefix,domain,landing_page,smtp_server FROM tb_core_mailcamp_template_list WHERE mail_template_id=?");
 	$stmt->bind_param("ssss", $new_mail_template_id, $new_mail_template_name, $GLOBALS['entry_time'], $old_mail_template_id);
 	
 	if ($stmt->execute() === TRUE)
@@ -800,7 +890,7 @@ function getSenderList($conn,$userid){
 	$resp = [];
 	$resp1 = [];
 	$DTime_info = getTimeInfo($conn);
-	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date,status FROM tb_core_mailcamp_sender_list where userid=$userid");
+	$result = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date,status FROM tb_core_mailcamp_sender_list where userid='.$userid.'");
 	$result1 = mysqli_query($conn, "SELECT sender_list_id,sender_name,sender_SMTP_server,sender_from,sender_acc_username,sender_mailbox,cust_headers,dsn_type,date,status FROM tb_core_mailcamp_sender_list where status = 0");
 	
 	if(mysqli_num_rows($result) > 0 || mysqli_num_rows($result1) > 0){
@@ -1266,21 +1356,21 @@ function addverificationmail($conn,$POST,$userid){
 	$stmt->bind_param('ssss', $userid,$email,$email_domain,$code);
 	if($stmt->execute() === TRUE){
 	  
-		$msg = "Hi,<p>It looks you requested for SnipierPhish domain verification. Use this code: ".$code." to verify your domain</p>";
+		$msg = "Hi,<p>It looks you requested for Techowlphish domain verification. Use this code: ".$code." to verify your domain</p>";
 		$headers = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
 
 		$mail = new PHPMailerPHPMailer(true);
 		$mail->isSMTP();
-		$mail->Host = 'mail.npcci.com';
+		$mail->Host = 'mail.smtp2go.com';
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'tls';
 		$mail->Port = 587;
-		$mail->Username = 'compliance@npcci.com'; // YOUR email username
-		$mail->Password = 'y,0faSYwNk-f'; // YOUR email password
+		$mail->Username = 'notificationinfo'; // YOUR email username
+		$mail->Password = 'Ya3n5fdCWTsEgmtm'; // YOUR email password
 		// Sender and recipient settings
-		$mail->setFrom('abhishek@techowl.in', 'Phishing');
+		$mail->setFrom('google@alertweb.me', 'notificationinfo');
 		$mail->addAddress($email ,'Test');
 		$mail->IsHTML(true);
 		$mail->Subject = "Domain Verification";
@@ -1372,4 +1462,106 @@ function chnageutcformate($date){
 		return false;
 	}
 }
+
+function update_user_status($conn,$POST){
+	$stmt = $conn->prepare("SELECT * FROM tb_main WHERE id = ?");
+	$stmt->bind_param("s",$POST['id']);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if($row = $result->fetch_assoc()){
+		$id = $POST['id'];
+		$status = $POST['status'];
+		$stmt = $conn->prepare("UPDATE tb_main SET status=? WHERE id = ?");
+		$stmt->bind_param('ss', $status,$id);
+		if($stmt->execute() === TRUE){
+			echo(json_encode(['result' => 'success']));	
+		}
+		else 
+			echo(json_encode(['result' => 'failed', 'error' => 'Error adding user!']));	
+
+	}else{
+
+	}
+}
+
+function get_domain_list_admin($conn,$userid){
+	
+	$resp = [];
+	$result = mysqli_query($conn, "SELECT * FROM tb_domains");
+    date_default_timezone_set('Asia/Kolkata'); 
+	if(mysqli_num_rows($result) > 0){
+		foreach (mysqli_fetch_all($result, MYSQLI_ASSOC) as $key => $row){
+		    $data["count"] = $key+1;
+		    $data["id"] = $row['id'];
+		    $data["name"] = $row['name'];
+			$data["path"] = $row['path'];
+			$data["created_at"] = date('d-m-Y h:i A',strtotime('+5 hours 30 minutes',strtotime($row['created_at'])));
+			$data["modified_at"] = date('d-m-Y h:i A',strtotime('+5 hours 30 minutes',strtotime($row['modified_at'])));
+        	array_push($resp,$data);
+		}
+		echo json_encode($resp, JSON_INVALID_UTF8_IGNORE);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+	$result->close();
+}
+
+function saveDomainListByAdmin($conn, &$POSTJ){
+
+	$adminid = $_SESSION['admincontact_mail'];
+	if(isset($adminid)){
+		$user_id = 1;
+	$name = $POSTJ['name'];
+	$path = $POSTJ['path'];
+	$sender_id = $POSTJ['sender_id'];
+	$stmt = $conn->prepare("INSERT INTO tb_domains(name,path,sender_id) VALUES(?,?,?)");
+		$stmt->bind_param('sss', $name,$path,$sender_id);
+		
+		if ($stmt->execute() === TRUE)
+		echo json_encode(['result' => 'success']);
+	else 
+		echo 'false';die();
+		echo json_encode(['result' => 'failed']);
+	}
+}
+
+function getDomainById($conn, $domain_id){
+	$stmt = $conn->prepare("SELECT * FROM tb_domains WHERE id = ?");
+	$stmt->bind_param("s", $domain_id);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if($result->num_rows > 0){
+		$row = $result->fetch_assoc() ;
+		echo json_encode($row, JSON_INVALID_UTF8_IGNORE) ;
+	}			
+	else
+		echo json_encode(['error' => 'No data']);	
+	$stmt->close();
+}
+
+function updateDomainById($conn,$POST){
+	$stmt = $conn->prepare("SELECT * FROM tb_domains WHERE id = ?");
+	$stmt->bind_param("s",$POST['domain_id']);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if($row = $result->fetch_assoc()){
+		$id = $row['id'];
+		$name = $POST['name'];
+		$path = $POST['path'];
+		$sender_id = $POST['sender_id'];
+		$stmt = $conn->prepare("UPDATE tb_domains SET name=?, path=?, sender_id=? WHERE id=?");
+		$stmt->bind_param('ssss', $name,$path,$sender_id,$id);
+		if($stmt->execute() === TRUE){
+			echo(json_encode(['result' => 'success']));	
+		}
+		else 
+			echo(json_encode(['result' => 'failed', 'error' => 'Error adding user!']));	
+
+	}else{
+        echo json_encode(['error' => 'No data']);	
+	}
+    $stmt->close();
+
+}
+
 ?>

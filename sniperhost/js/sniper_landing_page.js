@@ -163,7 +163,10 @@ function saveLandPage(e) {
         return;
 
     var page_name = $('#tb_page_name').val();
-    var page_file_name = $('#tb_page_file_name').val();
+    var page_file_name_d = $('#tb_page_name').val();
+    page_file_name_d = page_file_name_d.replace(/[^\w\s]/gi, '');
+    page_file_name_d = page_file_name_d.replace(/\s+/g, '_');
+    var page_file_name = page_file_name_d+'.php'
     var domain = $('#modal_export_report_selector').val();
     var page_content = $('#summernote').summernote('code');    
 
@@ -204,11 +207,11 @@ function validateFields(){
     } else
         $("#tb_page_name").removeClass("is-invalid");
 
-    if($('#tb_page_file_name').val() == ''){
-        $("#tb_page_file_name").addClass("is-invalid");
-        return false;
-    } else
-        $("#tb_page_file_name").removeClass("is-invalid");
+    // if($('#tb_page_file_name').val() == ''){
+    //     $("#tb_page_file_name").addClass("is-invalid");
+    //     return false;
+    // } else
+    //     $("#tb_page_file_name").removeClass("is-invalid");
     return true;
 }
 
@@ -225,7 +228,7 @@ function viewLandPageDetailsFromId(hlp_id,quite) {
             nextRandomId = hlp_id;
             $("#lb_ht_id").text(hlp_id);
             $("#tb_page_name").val(data.page_name);
-            $("#tb_page_file_name").val(data.page_file_name);
+            // $("#tb_page_file_name").val(data.page_file_name);
             $('#summernote').summernote('code', data.page_content);
 
             if(validateFields()){
@@ -419,7 +422,7 @@ function insertMailLanding(){
         if(!data.error){ 
             var content = JSON.parse(data.content);
             $('#tb_page_name').val($("#selector_sample_mailtemplates").val());
-            $('#tb_page_file_name').val(data.info);
+            // $('#tb_page_file_name').val(data.info);
             $('#summernote').summernote('code',content.mail_landing);
 
         }

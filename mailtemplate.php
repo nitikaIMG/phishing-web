@@ -144,12 +144,6 @@ isAdminSessionValid(true);
                               <label><input type="checkbox" name="default" id="default" value="1"> Set as default</label>
                           </div>
 
-                           <div class="form-group row">
-                              <label>Domain:</label>
-                              <select class="select2 form-control date-inputmask" required id="domain" onchange="getlanding()" placeholder="Domain">
-                                 <option value="" selected disabled>Select Domain</option>
-                              </select>
-                        </div>
                         <div class="form-group row">
                               <label>Landing Page:</label>
                               <select class="select2 form-control date-inputmask" required id="landing_page" placeholder="Landing Page">
@@ -157,10 +151,14 @@ isAdminSessionValid(true);
                               </select>
                         </div>
                         <div class="form-group row">
-                              <label>smtp server:</label>
-                              <select class="select2 form-control date-inputmask" required id="smtp_server" placeholder="smtp server">
-                                 <option value="" selected disabled>Select smtp server</option>
-                              </select>
+                            <div class="col-md-6">
+                                 <label for="mail_template_subject" class="text-left control-label col-form-label">From Name:</label>
+                                 <input type="text" class="form-control" id="mail_template_from_name" placeholder="Enter From Name">
+                            </div>
+                            <div class="col-md-6">
+                                 <label for="mail_template_subject" class="text-left control-label col-form-label">Email Prefix:</label>
+                                 <input type="text" class="form-control" id="mail_template_email_prefix" placeholder="Enter Email Prefix">
+                            </div>
                         </div>
 
                         <input type="hidden" name="domain_name" id="domain_name">
@@ -570,18 +568,18 @@ isAdminSessionValid(true);
       <script src="<?php echo url ?>/js/mail_template.js"></script>
       <?php
          echo '<script>';
-         if(isset($_GET['action'])){
-            echo'
-             get_domain_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
-         }else{
-            echo' get_domain_list(null);';
-         }
-         if(isset($_GET['action'])){
-            echo'
-            get_smtp_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
-         }else{
-            echo' get_smtp_list(null);';
-         }
+        //  if(isset($_GET['action'])){
+        //     echo'
+        //      get_domain_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
+        //  }else{
+        //     echo' get_domain_list(null);';
+        //  }
+        //  if(isset($_GET['action'])){
+        //     echo'
+        //     get_smtp_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
+        //  }else{
+        //     echo' get_smtp_list(null);';
+        //  }
         
         echo' function getlanding(){
             var id  = $("#domain").val();
@@ -597,6 +595,12 @@ isAdminSessionValid(true);
          echo'
          get_default_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
       }
+      
+        if(isset($_GET['action'])){
+            echo 'get_landing_list("' . doFilter($_GET['template'],'ALPHA_NUM') . '");';
+        }else{
+            echo 'get_landing_list(null);';
+        }
 
 
          if(isset($_GET['action']) && isset($_GET['template']) && $_GET['template'] != ''){

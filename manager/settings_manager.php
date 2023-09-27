@@ -60,6 +60,10 @@ if (isset($_POST)) {
 		    getsmtplanding($conn,$POSTJ['id']);
 		if($POSTJ['action_type'] == "get_store_landing_page_edit")
 			getStoreLandingPageEdit($conn,$POSTJ['id']);
+		if($POSTJ['action_type'] == "get_smtp_domain")
+		    getsmtpdomain($conn,$POSTJ['id']);
+		if($POSTJ['action_type'] == "get_landing_listing")
+		    getlandinglisting($conn,$POSTJ['id']);
 	}
 }
 
@@ -617,5 +621,46 @@ function clearLog(&$conn){
     
     $conn->close();
 }
+
+function getsmtpdomain($conn,$id){
+	
+    $resp = [];
+	$result1 = mysqli_query($conn, "SELECT * FROM `tb_core_mailcamp_sender_list` WHERE `status` = 0 ");
+	$result = mysqli_query($conn, "SELECT `sender_id`  FROM `tb_domains` WHERE `id` = '$id' ");
+	
+	
+    if(mysqli_num_rows($result1) > 0){
+		$resp['smtp_server'] = mysqli_fetch_all($result1, MYSQLI_ASSOC);
+		$row = mysqli_fetch_assoc($result);
+		if ($row) {
+			$smtpServer = $row['sender_id'];
+		}
+		echo json_encode(['smtp_server'=>$resp['smtp_server'],'smpt_id' =>$row['sender_id']]);
+	}	else
+	    echo json_encode(['error' => 'No data']);
+
+}
 //-------------------------------------
+
+
+function getlandinglisting($conn,$id){
+    $resp = [];
+	$result = mysqli_query($conn, "SELECT * FROM `tb_hland_page_list`");
+	$resp = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	
+	$stmt = $conn->prepare("SELECT landing_page FROM `tb_core_mailcamp_template_list` WHERE `mail_template_id` = ?");
+	$stmt->bind_param("s", $id);
+	$stmt->execute();
+	$result1 = $stmt->get_result();
+	if($result1->num_rows != 0){
+		$row = $result1->fetch_assoc() ;
+		$mail_landing_page = $row['landing_page'];
+	}
+	if($resp){
+		echo json_encode(['resp'=>$resp,'mail_landing_page'=>$mail_landing_page]);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+}
+
 ?>

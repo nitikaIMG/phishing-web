@@ -45,6 +45,14 @@
              </div>
             </a>
         </li>
+        <li class="menu <?php echo basename($_SERVER['PHP_SELF']) == 'admin_domain_list.php' ? 'active' : ''; ?>">
+            <a href="<?=base_url?>admin_domain_list" aria-expanded="true" class="dropdown-toggle" >
+             <div class="">
+             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+             <span>Domain Listing</span>
+             </div>
+            </a>
+        </li>
                <li class="menu <?php echo basename($_SERVER['PHP_SELF']) == 'mailtemplate.php' || basename($_SERVER['PHP_SELF']) =='mailsender.php' || basename($_SERVER['PHP_SELF']) =='LandingPage.php'  ? 'active' : ''; ?>">
                 <a href="<?=base_url?>#templates" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <div class="">

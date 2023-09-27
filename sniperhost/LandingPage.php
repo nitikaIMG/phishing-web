@@ -96,28 +96,30 @@ isAdminSessionValid(true);
                <div class="card">
                   <div class="card-body">
                      <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                            <div class="form-group">
-                              <label>Page Name:</label>
-                              <input type="text" class="form-control date-inputmask" id="tb_page_name" placeholder="My page">
+                              <label class="m-0">Page Name:</label>
+                              <input type="text" class="form-control date-inputmask" id="tb_page_name" placeholder="Enter Page Name">
                            </div>
                         </div>
-                        <div class="col-md-3">
-                           <div class="form-group">
-                              <label>Page File Name:</label>
-                              <input type="text" class="form-control date-inputmask" id="tb_page_file_name" placeholder="mypage.html">
-                           </div>
-                        </div>
+                        <!--<div class="col-md-3">-->
+                        <!--   <div class="form-group">-->
+                        <!--      <label>Page File Name:</label>-->
+                        <!--      <input type="text" class="form-control date-inputmask" id="tb_page_file_name" placeholder="mypage.html">-->
+                        <!--   </div>-->
+                        <!--</div>-->
 
-                        <div class="col-md-3">
-                              <label>Domain:</label>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="m-0">Domain:</label>
                               <select class="select2 form-control date-inputmask" id="modal_export_report_selector" placeholder="Domain">
                                  <option value="" selected disabled>Select Domain</option>
                               </select>
+                            </div>
                         </div>
 
-                        <div class="col-md-3 align-items-right text-right float-right">
-                           <button type="button" class="btn btn-info" onclick="saveLandPage($(this))"><i class="fa fas fa-save"></i> Save</button>
+                        <div class="col-md-4 d-flex align-items-center">
+                           <button type="button" class="btn btn-info" onclick="saveLandPage($(this))" style="padding: 0.75rem 1.25rem;"><i class="fa fas fa-save"></i> Save</button>
                         </div>
 
                         
@@ -135,8 +137,8 @@ isAdminSessionValid(true);
                         <div class="col-md-12">
                            <div class="form-group">
                               <div class="row">
-                                 <label for="tb_pl_name" class="col-md-1 text-left control-label col-form-label">Direct access link:</label>
                                  <div class="col-md-12">
+                                    <label for="tb_pl_name" class="text-left control-label col-form-label">Direct access link:</label>
                                     <div class="col-md-12 prism_side-top">
                                        <span><button type="button" class="btn waves-effect waves-light btn-xs btn-dark mdi mdi-content-copy btn_copy" data-toggle="tooltip" title="Copy" onclick="copyCode($(this),'code_class_link')" /><button type="button" class="btn waves-effect waves-light btn-xs btn-dark mdi mdi-reload" data-toggle="tooltip" title="Re-generate access link" onClick="generateAccessLink($('#file_extension_selector').val())" /></span>
                                     </div>

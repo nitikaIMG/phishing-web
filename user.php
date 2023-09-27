@@ -45,6 +45,48 @@ isAdminSessionValid(true);
         
          /* color: #fff;background-color: #7460ee;border-color: #7460ee !important; */
       }
+      
+      /* Style the container for the switch */
+        .switch {
+          display: inline-block;
+          position: relative;
+          vertical-align: middle;
+        }
+        
+        /* Style the label for the switch */
+        .switch label {
+          display: block;
+          position: relative;
+          cursor: pointer;
+          width: 50px; /* Adjust the width as needed */
+          height: 20px; /* Adjust the height as needed */
+          background-color: #ccc; /* Background color when switch is off */
+          border-radius: 20px; /* Rounded corners */
+        }
+        
+        /* Style the checkbox input visually hidden */
+        .switch input[type="checkbox"] {
+          display: none;
+        }
+        
+        /* Style the lever (the sliding part) of the switch */
+        .switch .lever {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 20px; /* Adjust the width as needed */
+          height: 20px; /* Adjust the height as needed */
+          background-color: #fff; /* Lever color */
+          border-radius: 50%;
+          transition: left 0.3s ease; /* Smooth sliding animation */
+        }
+        
+        /* Style the lever when the switch is turned on */
+        .switch input[type="checkbox"]:checked + .lever {
+          left: 30px; /* Adjust the distance the lever moves to the right */
+          background-color: #025286; /* Lever color when switch is on */
+        }
+
 
    </style>
    <?php
@@ -263,6 +305,7 @@ isAdminSessionValid(true);
                                              <th>Name</th>
                                              <th>Username</th>
                                              <th>Email</th>
+                                              <th>Status</th>
                                              <th>Action</th>
                                           </tr>
                                        </thead>
@@ -613,7 +656,6 @@ isAdminSessionValid(true);
    <script defer src="<?php echo url ?>/js/libs/select2.min.js" ></script>
    <script defer src="<?php echo url ?>/js/libs/toastr.min.js" ></script>
    <script>
-   
    </script>
 </body>
 
