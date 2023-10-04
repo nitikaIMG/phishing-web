@@ -10,21 +10,40 @@ RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^(.*)$ /TechowlPhish2/Techowlphish/$1 [L]
 
 # Redirect requests with .php extension to extension-less URL
+# RewriteCond %{THE_REQUEST} \s/+(.*?/)?(.*?)\.php[\s?]
+# RewriteRule ^ /%1%2 [R=301,L]
+
+# Exclude CSS and JS files from rewrite rules
+RewriteCond %{REQUEST_URI} !\.(css|js)$
+
+# Remove .php extension and redirect to non-extension version
 RewriteCond %{THE_REQUEST} \s/+(.*?/)?(.*?)\.php[\s?]
 RewriteRule ^ /%1%2 [R=301,L]
 
-# Internally rewrite extension-less URL to .php file
+# Handle non-extension URLs
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.php [NC,L]
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^/]+)/?$ $1.php [L]
+
+# Handle multiple levels of inner pages with .php extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/([^/]+)/?$ $1/$2.php [L]
+
+# Redirect requests with .php extension to extension-less URL
+# RewriteCond %{THE_REQUEST} \s/+(.*?/)?(.*?)\.php[\s?]
+# RewriteRule ^ /%1%2 [R=301,L]
+
+# Internally rewrite extension-less URL to .php file
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
 
 # Internally rewrite extension-less URL to .php file
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.php [NC,L]
-
-
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
 
 # BEGIN cPanel-generated php ini directives, do not edit

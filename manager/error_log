@@ -4409,3 +4409,349 @@ Stack trace:
 #1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
 #2 {main}
   thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 05:33:45 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1020
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(63): get_sender_id_by_template(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1020
+[27-Sep-2023 05:35:13 UTC] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1020
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(63): get_sender_id_by_template(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1020
+[27-Sep-2023 05:36:00 UTC] PHP Parse error:  syntax error, unexpected string content "", expecting "-" or identifier or variable or number in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1019
+[27-Sep-2023 05:36:23 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type mysqli as array in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1019
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(63): get_sender_id_by_template(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1019
+[27-Sep-2023 05:37:03 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type mysqli as array in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1020
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(63): get_sender_id_by_template(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1020
+[27-Sep-2023 05:37:59 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type mysqli as array in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1020
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(63): get_sender_id_by_template(Object(mysqli), '4iesrs')
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1020
+[27-Sep-2023 05:38:07 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type mysqli as array in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1020
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(63): get_sender_id_by_template(Object(mysqli), '4iesrs')
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1020
+[27-Sep-2023 05:38:52 UTC] PHP Fatal error:  Uncaught Error: Object of class mysqli could not be converted to string in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1019
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(63): get_sender_id_by_template(Object(mysqli), '4iesrs')
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1019
+[27-Sep-2023 05:54:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this activity? if you don't recognise this device click the followin' at line 84 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 05:54:37 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this activity? if you don't recognise this device click the followin' at line 84 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 06:10:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this device click the following pleace</b> <p><a href="{{BASEURL}}">' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 06:10:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this device click the following pleace</b> <p><a href="{{BASEURL}}">' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 06:10:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this device click the following pleace</b> <p><a href="{{BASEURL}}">' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 06:11:53 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this device click the following pleace</b> <p><a href="{{BASEURL}}">' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 06:13:14 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't check this mailbox, so please don't reply to this message. If you have a quest' at line 149 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 06:13:39 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't check this mailbox, so please don't reply to this message. If you have a quest' at line 149 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:641
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(641): mysqli->prepare('UPDATE `tb_core...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 641
+[27-Sep-2023 06:14:28 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this activity? if you don't recognise this device click the followin' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:648
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(648): mysqli->prepare('INSERT INTO `tb...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 648
+[27-Sep-2023 12:08:03 UTC] PHP Parse error:  Unclosed '{' on line 112 does not match ')' in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 134
+[27-Sep-2023 12:09:21 UTC] PHP Parse error:  Unclosed '{' on line 112 does not match ')' in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 134
+[27-Sep-2023 12:10:30 UTC] PHP Parse error:  Unclosed '{' on line 112 does not match ')' in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 134
+[27-Sep-2023 12:11:34 UTC] PHP Parse error:  Unclosed '{' on line 112 does not match ')' in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 134
+[27-Sep-2023 12:12:02 UTC] PHP Parse error:  Unclosed '{' on line 112 does not match ')' in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 134
+[27-Sep-2023 12:13:18 UTC] PHP Parse error:  Unclosed '{' on line 112 does not match ')' in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 134
+[27-Sep-2023 12:18:53 UTC] PHP Parse error:  Unclosed '{' on line 112 does not match ')' in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 134
+[27-Sep-2023 12:21:30 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 't recognise this activity? if you don't recognise this device click the followin' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:648
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(648): mysqli->prepare('INSERT INTO `tb...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(60): saveMailTemplate(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 648
+[28-Sep-2023 04:20:55 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'tb_dmains.name' in 'field list' in /home/techowlphish/public_html/manager/settings_manager.php:670
+Stack trace:
+#0 /home/techowlphish/public_html/manager/settings_manager.php(670): mysqli_query(Object(mysqli), 'SELECT tb_dmain...')
+#1 /home/techowlphish/public_html/manager/settings_manager.php(68): getLandingDetailById(Object(mysqli), 'bl3fhw')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:24:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'tb_hland_page_list.hlp_id ' in 'where clause' in /home/techowlphish/public_html/manager/settings_manager.php:670
+Stack trace:
+#0 /home/techowlphish/public_html/manager/settings_manager.php(670): mysqli_query(Object(mysqli), 'SELECT tb_domai...')
+#1 /home/techowlphish/public_html/manager/settings_manager.php(68): getLandingDetailById(Object(mysqli), 'h1en3u')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:25:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'bl3fhw' in 'where clause' in /home/techowlphish/public_html/manager/settings_manager.php:670
+Stack trace:
+#0 /home/techowlphish/public_html/manager/settings_manager.php(670): mysqli_query(Object(mysqli), 'SELECT tb_domai...')
+#1 /home/techowlphish/public_html/manager/settings_manager.php(68): getLandingDetailById(Object(mysqli), 'bl3fhw')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:25:32 UTC] PHP Parse error:  Unclosed '(' on line 670 in /home/techowlphish/public_html/manager/settings_manager.php on line 679
+[28-Sep-2023 04:25:32 UTC] PHP Parse error:  Unclosed '(' on line 670 in /home/techowlphish/public_html/manager/settings_manager.php on line 679
+[28-Sep-2023 04:25:32 UTC] PHP Parse error:  Unclosed '(' on line 670 in /home/techowlphish/public_html/manager/settings_manager.php on line 679
+[28-Sep-2023 04:25:32 UTC] PHP Parse error:  Unclosed '(' on line 670 in /home/techowlphish/public_html/manager/settings_manager.php on line 679
+[28-Sep-2023 04:26:09 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:09 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:09 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:09 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:10 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:13 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:13 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:13 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:13 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:40 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:42 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:42 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:42 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 04:26:42 UTC] PHP Parse error:  syntax error, unexpected single-quoted string ".$id.", expecting ")" in /home/techowlphish/public_html/manager/settings_manager.php on line 670
+[28-Sep-2023 05:29:22 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:155
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(155): mysqli_stmt->bind_param('ssss', 'axz8u8', 'Team 1', '[{"uid":"17ms0l...', '28-09-2023 05:2...', '["fandsend.com"...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(39): addUserToTable(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 155
+[28-Sep-2023 05:40:09 UTC] PHP Fatal error:  Uncaught TypeError: print_r(): Argument #2 ($return) must be of type bool, array given in /home/techowlphish/public_html/manager/mail_campaign_manager.php:258
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(258): print_r('["fandsend.com"...', Array)
+#1 /home/techowlphish/public_html/manager/mail_campaign_manager.php(47): pullMailCampaignFieldData(Object(mysqli))
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 258
+[28-Sep-2023 05:43:32 UTC] PHP Fatal error:  Uncaught TypeError: array_search(): Argument #2 ($haystack) must be of type array, string given in /home/techowlphish/public_html/manager/mail_campaign_manager.php:261
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(261): array_search('yopmail.com', '["fandsend.com"...')
+#1 /home/techowlphish/public_html/manager/mail_campaign_manager.php(47): pullMailCampaignFieldData(Object(mysqli))
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 261
+[28-Sep-2023 05:44:10 UTC] PHP Fatal error:  Uncaught TypeError: array_search(): Argument #2 ($haystack) must be of type array, string given in /home/techowlphish/public_html/manager/mail_campaign_manager.php:262
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(262): array_search('yopmail.com', '["fandsend.com"...')
+#1 /home/techowlphish/public_html/manager/mail_campaign_manager.php(47): pullMailCampaignFieldData(Object(mysqli))
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 262
+[28-Sep-2023 05:44:36 UTC] PHP Fatal error:  Uncaught TypeError: array_search(): Argument #2 ($haystack) must be of type array, string given in /home/techowlphish/public_html/manager/mail_campaign_manager.php:262
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(262): array_search('yopmail.com', '["fandsend.com"...')
+#1 /home/techowlphish/public_html/manager/mail_campaign_manager.php(47): pullMailCampaignFieldData(Object(mysqli))
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 262
+[28-Sep-2023 05:49:45 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:155
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(155): mysqli_stmt->bind_param('ssss', '3rxvzm', 'Team 1', '[{"uid":"q94813...', '28-09-2023 05:4...', '["\\"fandsend.co...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(39): addUserToTable(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 155
+[28-Sep-2023 05:50:08 UTC] PHP Fatal error:  Uncaught TypeError: array_search(): Argument #2 ($haystack) must be of type array, string given in /home/techowlphish/public_html/manager/mail_campaign_manager.php:261
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(261): array_search('yopmail.com', '["\\"fandsend.co...')
+#1 /home/techowlphish/public_html/manager/mail_campaign_manager.php(47): pullMailCampaignFieldData(Object(mysqli))
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 261
+[28-Sep-2023 05:50:14 UTC] PHP Fatal error:  Uncaught TypeError: array_search(): Argument #2 ($haystack) must be of type array, string given in /home/techowlphish/public_html/manager/mail_campaign_manager.php:261
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(261): array_search('yopmail.com', '["\\"fandsend.co...')
+#1 /home/techowlphish/public_html/manager/mail_campaign_manager.php(47): pullMailCampaignFieldData(Object(mysqli))
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 261
+[28-Sep-2023 06:39:41 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?WHERE user_group_id=?' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:227
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(227): mysqli->prepare('UPDATE tb_core_...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(45): deleteUser(Object(mysqli), '3rxvzm', 'b2j7pv7k2s')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 227
+[28-Sep-2023 06:39:41 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?WHERE user_group_id=?' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:227
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(227): mysqli->prepare('UPDATE tb_core_...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(45): deleteUser(Object(mysqli), '3rxvzm', 'b2j7pv7k2s')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 227
+[28-Sep-2023 06:39:46 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?WHERE user_group_id=?' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:227
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(227): mysqli->prepare('UPDATE tb_core_...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(45): deleteUser(Object(mysqli), '3rxvzm', 'b2j7pv7k2s')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 227
+[28-Sep-2023 06:39:52 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?WHERE user_group_id=?' at line 1 in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:227
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(227): mysqli->prepare('UPDATE tb_core_...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(45): deleteUser(Object(mysqli), '3rxvzm', 'b2j7pv7k2s')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 227
+[28-Sep-2023 06:40:15 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:228
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(228): mysqli_stmt->bind_param('ss', '{"1":{"uid":"gx...', 'null', '3rxvzm')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(45): deleteUser(Object(mysqli), '3rxvzm', 'b2j7pv7k2s')
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 228
+[28-Sep-2023 11:12:34 UTC] PHP Deprecated:  json_decode(): Passing null to parameter #1 ($json) of type string is deprecated in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 64
+[28-Sep-2023 11:12:34 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 179
+[28-Sep-2023 11:25:04 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:156
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(156): mysqli_stmt->bind_param('ssss', 'lzhk0g', 'Team 2', '[{"uid":"sdh9uc...', '28-09-2023 11:2...', '["fandsend.com"...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(39): addUserToTable(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 156
+[28-Sep-2023 11:25:37 UTC] PHP Deprecated:  json_decode(): Passing null to parameter #1 ($json) of type string is deprecated in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 64
+[28-Sep-2023 11:25:37 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 179
+[28-Sep-2023 11:27:45 UTC] PHP Deprecated:  json_decode(): Passing null to parameter #1 ($json) of type string is deprecated in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 64
+[28-Sep-2023 11:27:45 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/techowlphish/public_html/core/mail_campaign_cron.php on line 179
+[29-Sep-2023 04:07:29 UTC] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/techowlphish/public_html/manager/mail_campaign_manager.php:984
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 984
+[29-Sep-2023 04:10:23 UTC] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/techowlphish/public_html/manager/mail_campaign_manager.php:984
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 984
+[29-Sep-2023 04:20:39 UTC] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home/techowlphish/public_html/manager/mail_campaign_manager.php:984
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 984
+[29-Sep-2023 10:10:18 UTC] PHP Fatal error:  Uncaught Error: Call to a member function modify() on null in /home/techowlphish/public_html/manager/mail_campaign_manager.php:906
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 906
+[29-Sep-2023 10:10:21 UTC] PHP Fatal error:  Uncaught Error: Call to a member function modify() on null in /home/techowlphish/public_html/manager/mail_campaign_manager.php:906
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 906
+[29-Sep-2023 10:10:28 UTC] PHP Fatal error:  Uncaught Error: Call to a member function modify() on null in /home/techowlphish/public_html/manager/mail_campaign_manager.php:906
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 906
+[29-Sep-2023 10:13:13 UTC] PHP Fatal error:  Uncaught Error: Call to a member function modify() on null in /home/techowlphish/public_html/manager/mail_campaign_manager.php:906
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 906
+[29-Sep-2023 10:13:20 UTC] PHP Fatal error:  Uncaught Error: Call to a member function modify() on null in /home/techowlphish/public_html/manager/mail_campaign_manager.php:906
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 906
+[29-Sep-2023 11:59:31 UTC] PHP Fatal error:  Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, int given in /home/techowlphish/public_html/manager/mail_campaign_manager.php:988
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(59): multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 988
+[02-Oct-2023 04:48:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function getDomainName() in /home/techowlphish/public_html/manager/mail_campaign_manager.php:1064
+Stack trace:
+#0 /home/techowlphish/public_html/manager/mail_campaign_manager.php(67): get_landing_page_by_email_temp(Object(mysqli), 'jh0lay')
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/mail_campaign_manager.php on line 1064
+[02-Oct-2023 09:53:31 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'sender_acc_pwd' in 'field list' in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:1612
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1612): mysqli->prepare('SELECT sender_a...')
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#2 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 1612
+[02-Oct-2023 09:54:15 UTC] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on null in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php:1624
+Stack trace:
+#0 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#1 {main}
+  thrown in /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php on line 1624
+[02-Oct-2023 11:15:32 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169
+[02-Oct-2023 11:15:34 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169
+[02-Oct-2023 11:15:34 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169
+[02-Oct-2023 11:15:34 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169
+[02-Oct-2023 11:15:34 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169
+[02-Oct-2023 11:15:35 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169
+[02-Oct-2023 11:15:44 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169
+[02-Oct-2023 11:16:22 UTC] PHP Fatal error:  Uncaught TypeError: Symfony\Component\Mime\Email::to(): Argument #1 must be of type Symfony\Component\Mime\Address|string, null given, called in /home/techowlphish/public_html/manager/common_functions.php on line 111 and defined in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php:169
+Stack trace:
+#0 /home/techowlphish/public_html/manager/common_functions.php(111): Symfony\Component\Mime\Email->to(NULL)
+#1 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(1642): shootMail(Object(Symfony\Component\Mime\Email), 'mail.smtp2go.co...', 'notificationinf...', 'Ya3n5fdCWTsEgmt...', 'Support google<...', NULL, '[]', 'Test Campaign', '<a href="https:...', 'text/html')
+#2 /home/techowlphish/public_html/manager/userlist_campaignlist_mailtemplate_manager.php(118): sendTestMailCampaign(Object(mysqli), Array)
+#3 {main}
+  thrown in /home/techowlphish/public_html/libs/symfony/symfony/mime/Email.php on line 169

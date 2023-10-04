@@ -141,25 +141,50 @@ function getMailCampaignFromCampaignListId(id) {
     });
 }
 
+function clickConfirmForSaveMailCampaign(){
+    var mail_sender;
+    $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_sender_id_by_template",
+            template_id: $('#mailTemplateSelector').val(),
+         }),
+    }).done(function (resp) {
+        mail_sender = resp.data;
+        saveMailCampaignAction(mail_sender);
+    });
+}
+
 function promptSaveMailCampaign() {
 
     var date = $("#datetimepicker_launch").val();
     var time = $("#start_time").val();
     var date1 = date.split("-")[0]+''+time+':00';
     var date = moment(date1, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss');
-
     if ($("#cb_act_deact_campaign").is(':checked') && (new Date(date).valueOf()) <= (new Date($.now()))) {
-  
+
         $('#modal_prompts').modal('toggle');
         $("#modal_prompts_body").text("");
         $("#modal_prompts_body").append("The scheduled time is in past. This will start the campaign immediately. Do you want to save and start campaign \"" + $('#mail_campaign_name').val() + "\"?<br/><br/><i>Note: This will delete previous results of this campaign</i>");
-        $("#modal_prompts_confirm_button").replaceWith(`<button type="button" class="btn btn-danger" id="modal_prompts_confirm_button" onClick="saveMailCampaignAction()">Save</button>`);
-    } else
-   
-        saveMailCampaignAction();
+        $("#modal_prompts_confirm_button").replaceWith(`<button type="button" class="btn btn-danger" id="modal_prompts_confirm_button" onClick="clickConfirmForSaveMailCampaign()">Save</button>`);
+    } else{
+        var mail_sender;
+        $.post({
+            url: "manager/mail_campaign_manager",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ 
+                action_type: "get_sender_id_by_template",
+                template_id: $('#mailTemplateSelector').val(),
+             }),
+        }).done(function (resp) {
+            mail_sender = resp.data;
+        });
+        saveMailCampaignAction(mail_sender);
+    }
 }
 
-function saveMailCampaignAction() {
+function saveMailCampaignAction_old() {
     var employees1 = $('#employees').val();
 
     var id=[];
@@ -229,6 +254,106 @@ function saveMailCampaignAction() {
         return;
     } else
         $("#mailSenderSelector").parent().css("border", "0px");
+
+    enableDisableMe($("#bt_saveMailCamp"));
+
+    $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "save_campaign_list",
+            campaign_id: nextRandomId,
+            campaign_name: campaign_name,
+            scheduled_date: scheduled_date,
+            campaign_data: campaignData,
+            camp_status: cb_act_deact_campaign,
+            employees:employees
+         }),
+    }).done(function (response) {
+        if(response.result == "success"){ 
+            if($('#modal_new_config').hasClass('show'))   {     
+                $('#modal_new_config').modal('toggle');
+            }                
+            toastr.success( 'Saved successfully!');   
+            setTimeout(function() {
+                document.location = "mailcampaignlist";
+            }, 1000);
+        }
+        else
+            toastr.error( response.error);
+        enableDisableMe($("#bt_saveMailCamp"));
+    }); 
+}
+
+function saveMailCampaignAction(mail_sender) {
+    var employees1 = $('#employees').val();
+
+    var id=[];
+    var name=[];
+    $.each(employees1, function(key,val) {
+        var emp = val.split("/")
+        id.push(emp[0]);
+        name.push(emp[1]);
+    });
+
+    var emp_id = id.join();
+    var emp_name = name.join();
+
+    var campaignData = {};
+    var campaign_name = $('#mail_campaign_name').val();
+    campaignData.user_group = {id:emp_id, name:emp_name};
+    campaignData.mail_template = {id:$('#mailTemplateSelector').val(), name:$('#mailTemplateSelector :selected').text()};
+    campaignData.mail_sender = {id:mail_sender.smtp_server, name:mail_sender.sender_name};
+    campaignData.mail_config = {id:"default", name:"Default Configuration"};
+    campaignData.msg_interval = $('#tb_campaign_time_val').val();
+    campaignData.msg_fail_retry = $('#range_campaign_msg_retry').val();
+    
+    var employees = {};
+    employees.user_group = {id:emp_id, name:emp_name};
+    employees.mail_template = {id:$('#mailTemplateSelector').val(), name:$('#mailTemplateSelector :selected').text()};
+    employees.mail_sender = {id:$('#mailSenderSelector').val(), name:$('#mailSenderSelector :selected').text()};
+    employees.mail_config = {id:$('#mailConfigSelector').val(), name:$('#mailConfigSelector :selected').text()};
+    employees.msg_interval = $('#tb_campaign_time_val').val();
+    employees.msg_fail_retry = $('#range_campaign_msg_retry').val();
+   
+    
+    var emp_type=$('#emp_type').val();
+
+    if(emp_type==0){
+        if(($('#employees').val()).length === 0){
+            $("#employees").parent().css("border", "1px solid red");
+            toastr.error( 'None Choosen!');
+            return;
+        }
+    }
+
+    var scheduled_date = $("#datetimepicker_launch").val();
+
+    if ($("#cb_act_deact_campaign").is(':checked'))
+        var cb_act_deact_campaign = 1;
+    else
+        var cb_act_deact_campaign = 0;
+
+    if (RegTest(campaign_name, 'COMMON') == false) {
+        $("#mail_campaign_name").addClass("is-invalid");
+        toastr.error( 'Empty/Unsupported character!');
+        return;
+    } else
+        $("#mail_campaign_name").removeClass("is-invalid");
+
+    if ($('#mailTemplateSelector').val() == null) {
+        $("#mailTemplateSelector").parent().css("border", "1px solid red");
+        toastr.error( 'None selected!');
+        return;
+    } else
+        $("#mailTemplateSelector").parent().css("border", "0px");
+
+    // if ($('#mailSenderSelector').val() == null) {
+    //     $("#mailSenderSelector").parent().css("border", "1px solid red");
+    //     toastr.error( 'None selected!');
+    //     return;
+    // } else
+    //     $("#mailSenderSelector").parent().css("border", "0px");
 
     enableDisableMe($("#bt_saveMailCamp"));
 
@@ -564,3 +689,92 @@ $('#tb_campaign_msg_retry').on('keyup', function() {
         $('#range_campaign_msg_retry').val(tb_campaign_msg_retry);
     }
 });
+
+function getSenderID($template_id){
+        $.post({
+        url: "manager/mail_campaign_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_sender_id_by_template",
+            template_id: $template_id,
+         }),
+    }).done(function (resp) {
+        if(resp.response == "success"){ 
+            return response.data;
+        }
+        else
+         return false;
+    }); 
+}
+
+function emailTemplatePreview(){
+    var selectedTemp = $('#mailTemplateSelector').val();
+    if(selectedTemp != '' && selectedTemp != null && selectedTemp != undefined){
+        $.post({
+            url: "manager/mail_campaign_manager",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ 
+                action_type: "get_email_content_by_template",
+                template_id: selectedTemp,
+             }),
+        }).done(function (resp) {
+            if(resp.response == "success"){ 
+                var content = resp.data;
+                var decodedContent = $("<div/>").html(content.mail_template_content).text();
+                $('#templatepreview').html(decodedContent);
+                $('#email-template').modal('show');
+            }
+            else
+             return false;
+        }); 
+    }
+}
+
+function landingPagePreview(){
+    var selectedTemp = $('#mailTemplateSelector').val();
+    if(selectedTemp != '' && selectedTemp != null && selectedTemp != undefined){
+        $.post({
+            url: "manager/mail_campaign_manager",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ 
+                action_type: "get_landing_page_by_email_temp",
+                template_id: selectedTemp,
+             }),
+        }).done(function (resp) {
+            if(resp.response == "success"){ 
+                var content = resp.data;
+                $('#landingpreview').html('<iframe src='+content+' style="height: calc(100vh - 60px);padding: 0;width: 100%;"></iframe>');
+                $('#landing-page').modal('show');
+            }
+            else
+             return false;
+        }); 
+    }
+}
+
+function testmail(){
+    $('#test-mail').modal('show');
+}
+
+function modalTestDeliveryAction(e){
+    var test_to_address = $("#modal_mail_sender_test_mail_to").val();
+    var selectedTemp = $('#mailTemplateSelector').val();
+
+    enableDisableMe(e);
+    $.post({
+        url: "manager/userlist_campaignlist_mailtemplate_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "send_test_mail_campaign",
+            test_to_address: test_to_address,
+            selectedTemp: selectedTemp,
+         })
+    }).done(function (response) {
+        if(response.result == "success")
+                toastr.success( 'Success. Check your inbox!');
+        else
+            toastr.error( 'Error sending mail!<br/>' + response.error);
+       $('#test-mail').modal('hide');
+        enableDisableMe(e);
+    }); 
+}

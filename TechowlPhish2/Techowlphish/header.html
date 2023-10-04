@@ -15,8 +15,6 @@
 	<!-- Core Style -->
 	<link rel="stylesheet" href="style.css">
 
-	
-
 	<!-- Font Icons -->
 	<link rel="stylesheet" href="css/font-icons.css">
 
@@ -32,7 +30,22 @@
 
 	<!-- Document Title
 	============================================= -->
-	<title>TechOwl Phish</title>
+	<title>SAAS 2 | Canvas</title>
+	<style>
+		/* Hide the mobile menu by default */
+.mobile-menu {
+    display: none;
+}
+
+/* Styles for the mobile menu button (customize as needed) */
+.mobile-menu-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+	</style>
 
 </head>
 
@@ -53,16 +66,18 @@
 						============================================= -->
 						<div id="logo" class="col-lg-2 me-lg-auto">
 							<a href="/" class="w-auto">
-								<img class="logo-default" srcset="https://techowlphish.com/assets/src/assets/img/techPhish.png, https://techowlphish.com/assets/src/assets/img/techPhish.png.png 2x" src="https://techowlphish.com/assets/src/assets/img/techPhish.png" alt="TechOwl Phish">
-								<img class="logo-dark" srcset="demos/saas-2/images/logo-dark.png, demos/saas-2/images/logo-dark@2x.png 2x" src="demos/saas-2/images/logo-dark@2x.png" alt="TechOwl Phish">
+								<img class="logo-default" srcset="https://techowlphish.com/assets/src/assets/img/techPhish.png, https://techowlphish.com/assets/src/assets/img/techPhish.png 2x" src="https://techowlphish.com/assets/src/assets/img/techPhish.png" alt="TechOwl Phish">
+								<img class="logo-dark" srcset="demos/saas-2/images/logo-dark.png, demos/saas-2/images/logo-dark@2x.png 2x" src="demos/saas-2/images/logo-dark@2x.png" alt="Canvas Logo">
 							</a>
 						</div>
 						<!-- #logo end -->
 
                         <div class="header-misc ms-auto col-lg-2 justify-content-lg-end">
-							<a href="https://techowlphish.com/signin" class="button button-border button-rounded rounded border-contrast-500" style="--cnvs-btn-fontsize: 1.125rem">
-							    <!--<i class="bi-asterisk d-none d-md-inline-block me-2 fs-6"></i>-->
-							    Log In</a>
+							<a href="https://techowlphish.com/signin" class="button button-border button-rounded rounded border-contrast-500"
+								style="--cnvs-btn-fontsize: 1.125rem;">
+							  <!--  <i-->
+									<!--class="bi-asterisk d-none d-md-inline-block me-2 fs-6"></i>-->
+									Log In</a>
 						</div>
 
 						<div class="primary-menu-trigger">
@@ -75,25 +90,38 @@
 						============================================= -->
 						<nav class="primary-menu with-arrows">
 
-							<ul class="one-page-menu menu-container" data-easing="easeInOutExpo" data-speed="1250" data-offset="65">
+							<ul class="one-page-menu menu-container" data-easing="easeInOutExpo" data-speed="1250"
+								data-offset="65">
 								<li class="menu-item">
-									<a href="#section-services" class="menu-link" data-href="#section-services"><div>Services</div></a>
+									<a href="#section-services" class="menu-link" data-href="#section-services">
+										<div>Why Us</div>
+									</a>
 								</li>
 								<li class="menu-item">
-									<a href="#section-pricing" class="menu-link" data-href="#section-pricing"><div>Pricing</div></a>
+									<a href="#section-pricing" class="menu-link" data-href="#section-pricing">
+										<div>Pricing</div>
+									</a>
 								</li>
 								<li class="menu-item">
-									<a href="#section-faqs" class="menu-link" data-href="#section-faqs"><div>FQAs</div></a>
+									<a href="#section-faqs" class="menu-link" data-href="#section-faqs">
+										<div>FAQs</div>
+									</a>
 								</li>
 								<li class="menu-item">
-									<a href="#section-blog" class="menu-link" data-href="#section-blog"><div>Blog</div></a>
+									<a href="#section-blog" class="menu-link" data-href="#section-blog">
+										<div>Blog</div>
+									</a>
 								</li>
-								<li class="menu-item">
-									<a href="#section-contactUs" class="menu-link" data-href="#section-contactUs"><div>Contact Us</div></a>
+									<li class="menu-item">
+									<a href="#section-contactUs" class="menu-link" data-href="#section-contactUs">
+										<div>Contact Us</div>
+									</a>
 								</li>
 							</ul>
 
-						</nav><!-- #primary-menu end -->
+						</nav>
+
+						<!-- #primary-menu end -->
 
 					</div>
 				</div>
@@ -102,7 +130,8 @@
 		</header>
 		<!-- #header end -->
 
-
+		<!-- Slider
+		============================================= -->
 	</div><!-- #wrapper end -->
 
 
@@ -110,19 +139,9 @@
 	============================================= -->
 	<script src="js/plugins.min.js"></script>
 	<script src="js/functions.bundle.js"></script>
-		<script src="smooth-scroll.js"></script>
-
-
- <!-- JavaScripts -->
-        <script src="js/plugins.min.js"></script>
-        <script src="js/functions.bundle.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scroll/16.1.0/smooth-scroll.min.js"></script>
-
-
 
 	<script>
-		window.addEventListener('load', function () {
+		window.addEventListener( 'load', function() {
 			var swiperParent = new Swiper('.swiper-testimonial', {
 				slidesPerView: 3,
 				spaceBetween: 30,
@@ -164,9 +183,9 @@
 					crossFade: true
 				},
 				longSwipes: true,
-				autoplayDisableOnInteraction: true,
+				autoplayDisableOnInteraction:true,
 				on: {
-					activeIndexChange: function (swiper) {
+					activeIndexChange: function(swiper) {
 						var index = swiper.realIndex;
 						jQuery('.swiper-tab-link').removeClass('active');
 						jQuery('.swiper-tab-link').eq(index).addClass('active');
@@ -174,7 +193,7 @@
 				}
 			});
 
-			jQuery('.swiper-tab-link').on('click', function () {
+			jQuery('.swiper-tab-link').on('click', function() {
 				var index = jQuery(this).index();
 				SwiperTabsContainer.slideToLoop(index);
 				jQuery('.swiper-tab-link').removeClass('active');
@@ -182,9 +201,29 @@
 			});
 		});
 	</script>
-        
-    </div>
-</body>
-</html>
+	<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuButton = document.querySelector(".cnvs-hamburger");
+        const primaryMenu = document.querySelector(".primary-menu");
+
+        mobileMenuButton.addEventListener("click", function () {
+            primaryMenu.classList.toggle("primary-menu-active");
+        });
+    });
+</script>
+<script>
+  function handleScroll() {
+    const header = document.getElementById("header");
+    if (window.scrollY > 0) {
+      header.classList.add("sticky-header", "sticky-header-shrink");
+    } else {
+      header.classList.remove("sticky-header", "sticky-header-shrink");
+    }
+  }
+  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("load", handleScroll);
+</script>
+
+
 </body>
 </html>

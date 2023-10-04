@@ -59,6 +59,12 @@ if (isset($_POST)) {
 		   multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week($conn,$POSTJ);
 		if($POSTJ['action_type'] == "get_employee_report")
 		   getEmployeeReport($conn);
+		if($POSTJ['action_type'] == "get_sender_id_by_template")
+		   get_sender_id_by_template($conn,$POSTJ['template_id']);
+    	if($POSTJ['action_type'] == "get_email_content_by_template")
+		   get_email_content_by_template($conn,$POSTJ['template_id']);
+    	if($POSTJ['action_type'] == "get_landing_page_by_email_temp")
+		   get_landing_page_by_email_temp($conn,$POSTJ['template_id']);
 		if($POSTJ['action_type'] == "download_report")
 			downloadReport($conn, $POSTJ['campaign_id'],$POSTJ['selected_col'],$POSTJ['dic_all_col'],$POSTJ['file_name'],$POSTJ['file_format'],$POSTJ['tb_data_single']);
 	}
@@ -255,12 +261,12 @@ function pullMailCampaignFieldData($conn){
     			$userdet = json_decode($usergp['user_domain']);
     			$cnt = 0;
     			if(!empty($userdet)){
-    	            foreach($verify_mail as $ver_mail){
-    	                if(array_search($ver_mail['domain'],$userdet) != ''){
+    	            foreach($userdet as $user){
+    	                if(array_search($user,$userdet) != ''){
     	                    $cnt++;
     	                }
     	            }
-    	            if($cnt <= count($userdet) || $cnt == 0){
+    	            if($cnt != count($userdet) || $cnt == 0){
     	                unset($resp['user_group'][$key]);
     	            }
                 }else{
@@ -896,8 +902,17 @@ function chnagelocalformate($conn,$date){
 function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week($conn, $POSTJ){
 
 	$userid=$_SESSION['user'][0];
-	$end_of_week = date('d-m-Y ', strtotime('this week -6 days')); 
-	$end_of_week1 = date('d-m-Y ', strtotime('this week -12 days')); 
+	
+	//to calculate past week campaign count
+// 	$end_of_week = date('d-m-Y ', strtotime('this week -6 days')); 
+// 	$end_of_week1 = date('d-m-Y ', strtotime('this week -12 days')); 
+	
+	//to calculate current week campaign count
+	$now = new DateTime();
+// 	$start_of_week = date('d-m-Y ', strtotime('this week')); 
+// 	$end_of_week = date('d-m-Y ', strtotime('this week +6 days')); 
+	$start_of_week = $now->modify('this week')->format('d-m-Y');
+    $end_of_week = $now->modify('this week +6 days')->format('d-m-Y');
 
     $stmt = $conn->prepare("SELECT  DAYNAME(STR_TO_DATE(date, '%d-%m-%Y')) as dayname,tb_core_mailcamp_list.campaign_id as campaign_id , tb_core_mailcamp_list.userid,tb_core_mailcamp_list.campaign_name as campaign_name,tb_core_mailcamp_list.campaign_data,tb_core_mailcamp_list.date,tb_core_mailcamp_list.scheduled_time,tb_core_mailcamp_list.scheduled_date,tb_core_mailcamp_list.stop_time,tb_core_mailcamp_list.camp_status,tb_core_mailcamp_list.employees,tb_core_mailcamp_list.camp_lock,tb_data_mailcamp_live.sending_status,tb_data_mailcamp_live.send_time,tb_data_mailcamp_live.user_name,tb_data_mailcamp_live.user_email,tb_data_mailcamp_live.send_error,tb_data_mailcamp_live.mail_open_times,tb_data_mailcamp_live.public_ip,tb_data_mailcamp_live.ip_info,tb_data_mailcamp_live.user_agent,tb_data_mailcamp_live.mail_client,tb_data_mailcamp_live.platform,tb_data_mailcamp_live.device_type,tb_data_mailcamp_live.all_headers,
 	tb_data_mailcamp_live.payloads_clicked,tb_data_mailcamp_live.employees_compromised,tb_data_mailcamp_live.emails_reported,tb_data_mailcamp_live.mail_replies
@@ -914,19 +929,16 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 	$result1 = $stmt1->get_result();
 	$rows1 = $result1->fetch_all(MYSQLI_ASSOC);
 
-
 	$stmt2 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE userid = '$userid' AND stop_time != 'NULL'  AND STR_TO_DATE(date, '%d-%m-%Y') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) ");
 	$stmt2->execute();
 	$result2 = $stmt2->get_result();
 	$rows2 = $result2->fetch_all(MYSQLI_ASSOC);
 
-
-	$stmt3 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE userid = '$userid' AND tb_core_mailcamp_list.date<= '$end_of_week' AND tb_core_mailcamp_list.date>= '$end_of_week1' ");
+    $stmt3 = $conn->prepare("SELECT * FROM tb_core_mailcamp_list WHERE userid = ? AND STR_TO_DATE(date, '%d-%m-%Y %h:%i %p') >= ? AND STR_TO_DATE(date, '%d-%m-%Y %h:%i %p') <= ?");
+    $stmt3->bind_param("iss", $userid, $start_of_week, $end_of_week);
 	$stmt3->execute();
-	$result3 = $stmt3->get_result();
-	$rows3 = $result3->fetch_all(MYSQLI_ASSOC);
+	$rows3 = $stmt3->param_count;
 
-	
 	$days = [];
 	$mail_open_count=0;
 	$payloads_clicked_count=0;
@@ -978,7 +990,7 @@ function multi_get_mcampinfo_from_mcamp_list_id_get_live_mcamp_data1_acc_to_week
 	$total = count($rows);
 	$del_mail = count($rows1);
 	$past_camp  = count($rows2);
-	$past_camp_last_week  = count($rows3);
+	$past_camp_last_week  = $rows3;
 	$mail_open = ($mail_open_count/$total)*100;
 	$payloads_clicked = ($payloads_clicked_count/$total)*100;
 	$employees_compromised = ($employees_compromised_count/$total)*100;
@@ -1010,6 +1022,66 @@ function getEmployeeReport($conn){
 	}
 	else
 		echo json_encode(['error' => 'No data']);	
-} 
+}
+
+function get_sender_id_by_template($conn,$template_id){
+	$stmt2 = $conn->prepare("SELECT * FROM tb_core_mailcamp_template_list JOIN tb_core_mailcamp_sender_list ON tb_core_mailcamp_template_list.smtp_server = tb_core_mailcamp_sender_list.sender_list_id WHERE tb_core_mailcamp_template_list.mail_template_id=?");
+	$stmt2->bind_param("s", $template_id);
+	$stmt2->execute();
+	$result1 = $stmt2->get_result();
+	if($result1->num_rows != 0){
+		$row = $result1->fetch_assoc() ;
+		$resp['smtp_server'] = $row['smtp_server'];
+		$resp['sender_name'] = $row['sender_name'];
+		
+		echo json_encode(['response' => 'success','data' => $resp]);	
+	}
+	else
+		echo json_encode(['response' => 'error']);	
+}
+
+function get_email_content_by_template($conn,$template_id){
+	$stmt2 = $conn->prepare("SELECT * FROM tb_core_mailcamp_template_list JOIN tb_core_mailcamp_sender_list ON tb_core_mailcamp_template_list.smtp_server = tb_core_mailcamp_sender_list.sender_list_id WHERE tb_core_mailcamp_template_list.mail_template_id=?");
+	$stmt2->bind_param("s", $template_id);
+	$stmt2->execute();
+	$result1 = $stmt2->get_result();
+	if($result1->num_rows != 0){
+		$row = $result1->fetch_assoc() ;
+		$resp['mail_template_content'] = $row['mail_template_content'];
+		echo json_encode(['response' => 'success','data' => $resp]);	
+	}
+	else
+		echo json_encode(['response' => 'error']);	
+}
+
+function get_landing_page_by_email_temp($conn,$template_id){
+	$stmt2 = $conn->prepare("SELECT tb_hland_page_list.* FROM tb_core_mailcamp_template_list JOIN tb_hland_page_list ON tb_core_mailcamp_template_list.landing_page = tb_hland_page_list.hlp_id WHERE tb_core_mailcamp_template_list.mail_template_id=?");
+	$stmt2->bind_param("s", $template_id);
+	$stmt2->execute();
+	$result1 = $stmt2->get_result();
+	if($result1->num_rows != 0){
+		$row = $result1->fetch_assoc() ;
+		$path = getDomainName($conn,$row['domain']);
+		$row['domain_path'] =  $path['name'];
+		$file_path = 'https://'.$path['name'].'/'.$row['page_file_name'];
+	
+		echo json_encode(['response' => 'success','data' => $file_path]);	
+	}
+	else
+		echo json_encode(['response' => 'error']);	
+}
+
+function getDomainName($conn,$domain){
+  
+	$stmt = $conn->prepare("SELECT*FROM tb_domains WHERE id = ?");
+	$stmt->bind_param("s", $domain);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if($result->num_rows > 0){
+		$row = $result->fetch_assoc();
+        return $row;
+	}			
+	$stmt->close();
+}
 
 ?>

@@ -64,6 +64,8 @@ if (isset($_POST)) {
 		    getsmtpdomain($conn,$POSTJ['id']);
 		if($POSTJ['action_type'] == "get_landing_listing")
 		    getlandinglisting($conn,$POSTJ['id']);
+    	if($POSTJ['action_type'] == "get_landing_details_by_id")
+		    getLandingDetailById($conn,$POSTJ['landing_id']);
 	}
 }
 
@@ -658,6 +660,17 @@ function getlandinglisting($conn,$id){
 	}
 	if($resp){
 		echo json_encode(['resp'=>$resp,'mail_landing_page'=>$mail_landing_page]);
+	}
+	else
+		echo json_encode(['error' => 'No data']);	
+}
+
+function getLandingDetailById($conn,$id){
+    $resp = [];
+	$result = mysqli_query($conn, "SELECT tb_domains.name FROM `tb_hland_page_list` JOIN `tb_domains` ON `tb_hland_page_list`.`domain` = `tb_domains`.`id` WHERE `tb_hland_page_list`.`hlp_id` = '$id'");
+	$resp = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	if($resp){
+		echo json_encode(['resp'=>$resp]);
 	}
 	else
 		echo json_encode(['error' => 'No data']);	

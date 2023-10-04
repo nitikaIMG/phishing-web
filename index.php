@@ -72,7 +72,7 @@ isSessionValid(true);
                                             <!--<h5 class="card-title">User Dashboard </h5>-->
                                             <div class="col-sm-12 col-lg-4">
                                                 <h1 class="font-bold mb-1" id="past_camp_last_week">9</h1>
-                                                <h6 class="mb-3">Emails Delivered (Past Week)</h6>
+                                                <h6 class="mb-3">Emails Delivered (Current Week)</h6>
                                                 <p>A weekly aggregation of all phishing emails delivered across all
                                                     active campaigns. Metrics are updated nightly.</p>
                                                 <a class="mt-3 mb-3 btn btn-lg btn-secondary"

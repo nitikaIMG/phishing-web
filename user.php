@@ -58,8 +58,8 @@ isAdminSessionValid(true);
           display: block;
           position: relative;
           cursor: pointer;
-          width: 50px; /* Adjust the width as needed */
-          height: 20px; /* Adjust the height as needed */
+          width: 45px; /* Adjust the width as needed */
+          height: 18px; /* Adjust the height as needed */
           background-color: #ccc; /* Background color when switch is off */
           border-radius: 20px; /* Rounded corners */
         }
@@ -72,10 +72,10 @@ isAdminSessionValid(true);
         /* Style the lever (the sliding part) of the switch */
         .switch .lever {
           position: absolute;
-          top: 0;
+          top: -4px;
           left: 0;
-          width: 20px; /* Adjust the width as needed */
-          height: 20px; /* Adjust the height as needed */
+          width: 26px; /* Adjust the width as needed */
+          height: 26px; /* Adjust the height as needed */
           background-color: #fff; /* Lever color */
           border-radius: 50%;
           transition: left 0.3s ease; /* Smooth sliding animation */
@@ -83,8 +83,8 @@ isAdminSessionValid(true);
         
         /* Style the lever when the switch is turned on */
         .switch input[type="checkbox"]:checked + .lever {
-          left: 30px; /* Adjust the distance the lever moves to the right */
-          background-color: #025286; /* Lever color when switch is on */
+          left: 21px; /* Adjust the distance the lever moves to the right */
+          background-color: #027c40; /* Lever color when switch is on */
         }
 
 

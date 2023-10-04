@@ -184,33 +184,45 @@ isSessionValid(true);
                                  </select>
                               </div>
                            </div>
-                           <div class="form-group row">
-                              <label for="mailSenderSelector" class="col-sm-4 text-left control-label col-form-label">Mail Sender:*</label>
-                              <div class="col-sm-7">
-                                 <select class="select2 form-control custom-select" id="mailSenderSelector" style="height: 36px;width: 100%;">
-                                 </select>
-                              </div>
-                           </div>
-                           <div class="form-group row">
-                              <label for="mailConfigSelector" class="col-sm-4 text-left control-label col-form-label">Campaign Configuration:</label>
-                              <div class="col-sm-7">
-                                 <select class="select2 form-control custom-select" id="mailConfigSelector" style="height: 36px;width: 100%;">
-                                 </select>
-                              </div>
-                           </div>         
-                        </div>
-                        <div class="col-sm-6">
-                           <div class="form-group row">
+                            <div class="form-group row">
                               <label for="datetimepicker_launch" class="col-sm-4 text-left control-label col-form-label">Launch Time:*</label>
-                              <label class="col-sm-6">
-                                 <div class="d-flex">
-                                       <input type='text' class="form-control" id="datetimepicker_launch" name="date" /> 
-                                          <div class="input-group-append">
-                                             <span class="input-group-text" ><i class="fa fa-calendar" ></i></span> 
-                                          </div> 
-                                 </div> 
+                              <label class="col-sm-7 d-flex">
+                                <input type='text' class="form-control" id="datetimepicker_launch" name="date" /> 
+                                <div class="input-group-append">
+                                    <span class="input-group-text" ><i class="fa fa-calendar" ></i></span> 
+                                </div> 
                               </label>
                            </div>
+                            <div class="form-group row">
+                              <label for="cb_read_receipt" class="col-sm-4 text-left control-label col-form-label m-t-10">Activate:</label>
+                              <div class="col-sm-4 text-left control-label col-form-label m-t-10">
+                                 <div class="custom-control custom-switch m-t-15 col-sm-7 pl-0">
+                                    <label class="switch">
+                                       <input type="checkbox" id="cb_act_deact_campaign" checked="">
+                                       <span class="slider round"></span>
+                                    </label>
+                                 </div>
+                                 <!-- <div class="col-md-4 text-right m-t-10">
+                                    <button type="button" class="btn btn-info" id="bt_saveMailCamp" onclick="promptSaveMailCampaign()"><i class="fa fas fa-save"></i> Save</button>   
+                                 </div> -->
+                              </div>
+                           </div>
+                           <!--<div class="form-group row">-->
+                           <!--   <label for="mailSenderSelector" class="col-sm-4 text-left control-label col-form-label">Mail Sender:*</label>-->
+                           <!--   <div class="col-sm-7">-->
+                           <!--      <select class="select2 form-control custom-select" id="mailSenderSelector" style="height: 36px;width: 100%;">-->
+                           <!--      </select>-->
+                           <!--   </div>-->
+                           <!--</div>-->
+                           <!--<div class="form-group row">-->
+                           <!--   <label for="mailConfigSelector" class="col-sm-4 text-left control-label col-form-label">Campaign Configuration:</label>-->
+                           <!--   <div class="col-sm-7">-->
+                           <!--      <select class="select2 form-control custom-select" id="mailConfigSelector" style="height: 36px;width: 100%;">-->
+                           <!--      </select>-->
+                           <!--   </div>-->
+                           <!--</div>         -->
+                        </div>
+                        <div class="col-sm-6">
                            <div class="form-group row">
                               <label for=" " class="col-sm-4 text-left control-label col-form-label">Message interval (seconds):</label>
                               <div class="col-sm-7 row">
@@ -235,17 +247,11 @@ isSessionValid(true);
                               </div>
                            </div>
                            <div class="form-group row">
-                              <label for="cb_read_receipt" class="col-sm-4 text-left control-label col-form-label m-t-10">Activate upon save:</label>
-                              <div class="col-sm-7 row">
-                                 <div class="custom-control custom-switch m-t-15 col-sm-7">
-                                    <label class="switch">
-                                       <input type="checkbox" id="cb_act_deact_campaign" checked="">
-                                       <span class="slider round"></span>
-                                    </label>
-                                 </div>
-                                 <!-- <div class="col-md-4 text-right m-t-10">
-                                    <button type="button" class="btn btn-info" id="bt_saveMailCamp" onclick="promptSaveMailCampaign()"><i class="fa fas fa-save"></i> Save</button>   
-                                 </div> -->
+                             <div class="col-sm-6 row text-right">
+                              </div>
+                              <div class="col-sm-6 row text-right">
+                                 <button type="button" onClick="emailTemplatePreview()" class="btn btn-info mb-2"><i class="mdi mdi-eye"></i> Preview Email</button>
+                                 <button type="button" onClick="landingPagePreview()" class="btn btn-info"><i class="mdi mdi-eye"></i> Preview Landing Page</button>
                               </div>
                            </div>
                         </div>
@@ -268,7 +274,7 @@ isSessionValid(true);
                                  <div class="container">
                                     <div class="row" >
                                        <div class="col">
-                                          <p>Select the target employeest</p>
+                                          <p>Select the target employees</p>
                                           <hr/>
                                        </div>
                                     </div>
@@ -283,9 +289,13 @@ isSessionValid(true);
                                  </div>
                                   <!-- Employee from box -->
                      <?php } ?>
-
-                     <div class=" text-right ">
-                              <button type="button" class="btn btn-info" id="bt_saveMailCamp" onclick="promptSaveMailCampaign()"><i class="fa fas fa-save"></i> Save</button>   
+                     <div class="row">
+                         <div class="col-md-6">
+                            <button type="button" onClick="testmail()" class="btn btn-warning"> Test Mail</button>
+                         </div>
+                         <div class="col-md-6 text-right">
+                            <button type="button" class="btn btn-info" id="bt_saveMailCamp" onclick="promptSaveMailCampaign()"><i class="fa fas fa-save"></i> Save</button>   
+                         </div>
                      </div>
                      
                   </div>
@@ -307,6 +317,53 @@ isSessionValid(true);
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
+            
+            <div class="modal fade" id="test-mail" tabindex="-1" role="dialog" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <h5 class="modal-title">Enter Email Address</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                     </div>
+                     <div class="modal-body">
+                        <div class="form-group row  m-t-20">
+                           <div class="col-sm-12">
+                              <input type="text" class="form-control" id="modal_mail_sender_test_mail_to" placeholder="Enter Email Address Here">
+                           </div>
+                        </div>
+                     </div>
+                     <div class="modal-footer" >
+                        <button type="button" class="btn btn-success" onclick="modalTestDeliveryAction()"><i class="mdi mdi-content-copy"></i> Send</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal fade" id="email-template" tabindex="-1" role="dialog" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                     <!--<div class="modal-header">-->
+                     <!--   <h5 class="modal-title">Email Template Preview</h5>-->
+                     <!--   <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>-->
+                     <!--</div>-->
+                     <div class="modal-body" style="background: #fff;max-height: 90vh; overflow-y: auto;">
+                        <div class="form-group row m-t-20">
+                           <div id="templatepreview"></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="modal fade" id="landing-page" tabindex="-1" role="dialog" aria-hidden="true" style="overflow: hidden;height: calc(100vh - 30px);">
+               <div class="modal-dialog" role="document" style="max-width: 80%;">
+                  <div class="modal-content">
+                     <div class="modal-body" style="background: #fff;max-height: 90vh;">
+                        <div class="form-group row m-t-20">
+                           <div id="landingpreview" class="p-0"></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
             
             <!-- Modal -->
             <div class="modal fade" id="modal_prompts" tabindex="-1" role="dialog" aria-hidden="true">
@@ -393,7 +450,6 @@ isSessionValid(true);
                     loadTableCampaignList();';
          echo '</script>';
       ?>
-
       <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>
       <script defer src="<?php echo url ?>/js/libs/jquery/datatables.js"></script> 
       <script defer src="<?php echo url ?>/js/libs/toastr.min.js"></script>

@@ -39,7 +39,7 @@
     src="https://techowlshield.com/public/assets/TechOwlsheild/wp-content/plugins/elementor/assets/js/jquery.js"></script>
 	<script>
 		$(document).ready(function () {
-			$("#header").load("header.html");
+			$("#headerContent").load("header.html");
 			$("#footer").load("footer.html");
 		});
 	</script>
@@ -63,8 +63,7 @@
 
 		<!-- Header
 		============================================= -->
-		<header id="header">
-		</header>
+		<div id="headerContent"></div>
 		<!-- #header end -->
 		<!-- Slider
 		============================================= -->

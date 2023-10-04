@@ -131,14 +131,14 @@ function InitMailCampaign($conn, $campaign_id){
 	$mail_template_name = $MTEMPLATE_DATA['mail_template_name'];
 	$mail_template_subject = $MTEMPLATE_DATA['mail_template_subject'];
 	$mail_timage_type = $MTEMPLATE_DATA['timage_type'];
-	$mail_template_content = $MTEMPLATE_DATA['mail_template_content'];
+	$mail_template_content = html_entity_decode($MTEMPLATE_DATA['mail_template_content']);
 	$mail_content_type = $MTEMPLATE_DATA['mail_content_type'];
 	$mail_attachment = $MTEMPLATE_DATA['attachment'];
 
 	$MSENDER_DATA = getMSENDER($conn, $MC_mail_sender_id);
 	$sender_name = $MSENDER_DATA['sender_name'];
 	$sender_SMTP_server = $MSENDER_DATA['sender_SMTP_server'];
-	$sender_from_name = explode("<", $MSENDER_DATA['sender_from'])[0];
+	$sender_from_name = explode("<", $MSENDER_DATA['sender_name'])[0];
 	$sender_from_mail = preg_match("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $MSENDER_DATA['sender_from'], $matches);
 	$sender_from_mail = $matches[0];
 	$sender_acc_username = $MSENDER_DATA['sender_acc_username'];

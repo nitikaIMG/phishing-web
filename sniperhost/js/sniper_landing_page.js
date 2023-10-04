@@ -161,12 +161,13 @@ function loadTableLandPageList() {
 function saveLandPage(e) {
     if(validateFields() == false)
         return;
-
+    
     var page_name = $('#tb_page_name').val();
     var page_file_name_d = $('#tb_page_name').val();
     page_file_name_d = page_file_name_d.replace(/[^\w\s]/gi, '');
     page_file_name_d = page_file_name_d.replace(/\s+/g, '_');
-    var page_file_name = page_file_name_d+'.php'
+    var page_file_name = page_file_name_d.toLowerCase() + '.php';
+    
     var domain = $('#modal_export_report_selector').val();
     var page_content = $('#summernote').summernote('code');    
 

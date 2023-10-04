@@ -114,6 +114,8 @@ if (isset($_POST)){
 			getDomainById($conn,$POSTJ['domain_id']);
 		if($POSTJ['action_type'] == "update_domain_by_id")
 			updateDomainById($conn,$POSTJ);
+		if($POSTJ['action_type'] == "send_test_mail_campaign")
+			sendTestMailCampaign($conn,$POSTJ);
 	}
 	if(isset($_POST['action_type'])){
 		if($_POST['action_type'] == "add_mail_verification")
@@ -144,6 +146,7 @@ function addUserToTable($conn, &$POSTJ){
 	    $user_Domain[] = explode('@',$us_data['email'])[1];
 	}
 	$userdom = json_encode($user_Domain);
+	
 	$user_data = json_encode(array_unique($user_data, SORT_REGULAR));
 
 	if(checkAnIDExist($conn,$user_group_id,'user_group_id','tb_core_mailcamp_user_group')){
@@ -214,14 +217,17 @@ function deleteUser($conn, $user_group_id, $uid){
 	$result = $stmt->get_result();
 	if($result->num_rows != 0){
 		$row = $result->fetch_assoc();
+		$user_domain = json_decode($row["user_domain"],true);
 		$user_data = json_decode($row["user_data"],true);
 
 		$index = array_search($uid, array_column($user_data, 'uid'));
 		if($index !== false ){	//returns false if not found
 			unset($user_data[$index]);
 			$user_data = json_encode($user_data);
-			$stmt = $conn->prepare("UPDATE tb_core_mailcamp_user_group SET user_data=? WHERE user_group_id=?");
-			$stmt->bind_param('ss', $user_data,$user_group_id);
+			unset($user_domain[$index]);
+			$user_domain = json_encode($user_domain);
+			$stmt = $conn->prepare("UPDATE tb_core_mailcamp_user_group SET user_data=?, user_domain =? WHERE user_group_id=?");
+			$stmt->bind_param('sss', $user_data,$user_domain,$user_group_id);
 			if($stmt->execute() === TRUE)
 				echo(json_encode(['result' => 'success']));				
 			else 
@@ -630,7 +636,14 @@ function saveMailTemplate($conn, &$POSTJ){
     $mail_template_content = str_replace('{{landing_page}}', 'https://' . $domain_name . '/' . $landing_name, $mail_template_content);
 
     if (strpos($mail_template_content, 'payloadtrack') === false) {
-        $mail_template_content = '<a href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}" style="text-decoration: none;">' . $mail_template_content . '</a>';
+        $pattern = '/href="[^"]+"/';
+        $landing_url = 'href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}"';
+        $mail_template_content = preg_replace($pattern, $landing_url, $mail_template_content);
+        $keywords = array("{{RID}}", "{{MID}}", "{{NAME}}", "{{FNAME}}", "{{LNAME}}", "{{NOTES}}", "{{EMAIL}}", "{{FROM}}", "{{TRACKINGURL}}", "{{TRACKER}}", "{{BASEURL}}", "{{MUSERNAME}}", "{{MDOMAIN}}");
+        foreach ($keywords as $keyword) {
+            $mail_template_content = str_replace('<span style="background-color: rgb(33, 37, 41); color: rgb(255, 255, 255);', '<span', $mail_template_content);
+        }
+        $mail_template_content = '<a href="https://' . $domain_name . '/' . $landing_name.'?landingmid={{MID}}&amp;landingrid={{RID}}" style="text-decoration: none;">' . htmlspecialchars($mail_template_content) . '</a>';
     }
 
     if(checkAnIDExist($conn, $mail_template_id, 'mail_template_id', 'tb_core_mailcamp_template_list')){
@@ -1360,27 +1373,38 @@ function addverificationmail($conn,$POST,$userid){
 		$headers = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
+// 		$mail = new PHPMailerPHPMailer(true);
+// 		$mail->isSMTP();
+// 		$mail->Host = 'mail.smtp2go.com';
+// 		$mail->SMTPAuth = true;
+// 		$mail->SMTPSecure = 'tls';
+// 		$mail->Port = 587;
+// 		$mail->Username = 'notificationinfo';
+// 		$mail->Password = 'Ya3n5fdCWTsEgmtm';
+// 		// Sender and recipient settings
+// 		$mail->setFrom('google@alertweb.me', 'notificationinfo');
+// 		$mail->addAddress($email ,'Test');
+// 		$mail->IsHTML(true);
+// 		$mail->Subject = "Domain Verification";
+// 		$mail->Body = $msg;
 
-		$mail = new PHPMailerPHPMailer(true);
+        $mail = new PHPMailerPHPMailer(true);
 		$mail->isSMTP();
 		$mail->Host = 'mail.smtp2go.com';
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'tls';
 		$mail->Port = 587;
-		$mail->Username = 'notificationinfo'; // YOUR email username
-		$mail->Password = 'Ya3n5fdCWTsEgmtm'; // YOUR email password
+		$mail->Username = 'notificationinfo';
+		$mail->Password = 'Ya3n5fdCWTsEgmtm';
 		// Sender and recipient settings
-		$mail->setFrom('google@alertweb.me', 'notificationinfo');
+		$mail->setFrom('no-reply@techowlphish.com', 'Techowl Phish');
 		$mail->addAddress($email ,'Test');
 		$mail->IsHTML(true);
 		$mail->Subject = "Domain Verification";
 		$mail->Body = $msg;
 
-
 		$ismailsent = $mail->send();
 	
-
-
 		if(!$ismailsent) {
 			die(json_encode(['result' => 'failed'])); 
 		}else{
@@ -1562,6 +1586,60 @@ function updateDomainById($conn,$POST){
 	}
     $stmt->close();
 
+}
+
+function sendTestMailCampaign($conn,$POSTJ){
+	$selectedTemp = $POSTJ['selectedTemp'];
+	$test_to_address = $POSTJ['test_to_address'];
+
+	$keyword_vals = array();
+	$serv_variables = getServerVariable($conn);
+	$RID = getRandomStr(10);
+    $keyword_vals['{{RID}}'] = $RID;
+    $keyword_vals['{{MID}}'] = "MailCampaign_id";
+    $keyword_vals['{{NAME}}'] = "ABC XYZ";
+    $keyword_vals['{{FNAME}}'] = "ABC";
+    $keyword_vals['{{LNAME}}'] = "XYZ";
+    $keyword_vals['{{NOTES}}'] = "Note_content";
+    $keyword_vals['{{EMAIL}}'] = $test_to_address;
+    $keyword_vals['{{FROM}}'] = 'Sample';
+    $keyword_vals['{{TRACKINGURL}}'] = $serv_variables['baseurl'].'/mid='."MailCampaign_id".'&rid='.$RID;
+    $keyword_vals['{{TRACKER}}'] = '<img src="'.$keyword_vals['{{TRACKINGURL}}'].'"/>';
+    $keyword_vals['{{BASEURL}}'] = $serv_variables['baseurl'];
+	$keyword_vals['{{MUSERNAME}}'] = explode('@', $test_to_address)[0];
+	$keyword_vals['{{MDOMAIN}}'] = explode('@', $test_to_address)[1];
+
+	$stmt = $conn->prepare("SELECT * FROM tb_core_mailcamp_template_list WHERE mail_template_id = ?");
+	$stmt->bind_param("s", $selectedTemp);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if($row = $result->fetch_assoc()){
+	    $sender_list_id = $row['smtp_server'];
+	    $mail_body = html_entity_decode($row['mail_template_content']);
+	    $mail_content_type = $row['mail_content_type'];
+		$stmt2 = $conn->prepare("SELECT * FROM tb_core_mailcamp_sender_list WHERE sender_list_id = ?");
+    	$stmt2->bind_param("s", $sender_list_id);
+    	$stmt2->execute();
+    	$result2 = $stmt2->get_result();
+    	if($row2 = $result2->fetch_assoc()){
+	    	$sender_from = $row2['sender_name'].'<'.$row2['sender_from'].'>';
+        	$sender_username = $row2['sender_acc_username'];
+    		$smtp_server = $row2['sender_smtp_server'];
+    		$sender_pwd = $row2['sender_acc_pwd'];
+    		$cust_headers = $row2['cust_headers'];
+    		$mail_subject = 'Test Campaign';
+    	}
+	}else{
+		die(json_encode(['result' => 'failed', 'error' => "Sender list does not exist. Please fill the password field"]));
+	}
+			
+	$message = (new Email());
+	$mail_subject = filterKeywords($mail_subject,$keyword_vals);
+	$mail_body = filterKeywords($mail_body,$keyword_vals);  	
+	$mail_body = filterQRBarCode($mail_body,$keyword_vals,$message);
+
+	//---------------------------
+	shootMail($message,$smtp_server,$sender_username,$sender_pwd,$sender_from,$test_to_address,$cust_headers,$mail_subject,$mail_body,$mail_content_type);  
 }
 
 ?>

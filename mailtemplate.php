@@ -146,9 +146,10 @@ isAdminSessionValid(true);
 
                         <div class="form-group row">
                               <label>Landing Page:</label>
-                              <select class="select2 form-control date-inputmask" required id="landing_page" placeholder="Landing Page">
+                              <select class="select2 form-control date-inputmask" required id="landing_page" onChange="showLandingPage()" placeholder="Landing Page">
                                  <option value="" selected disabled>Select Landing Page</option>
                               </select>
+                              <p id="landing_domain_name" class="text-success mb-0" style="font-size:16px;"></p>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-6">
@@ -197,6 +198,10 @@ isAdminSessionValid(true);
                            </div> 
                            
                            <div class="col-md-3"> 
+                              <label class="btn btn-info" style="padding: 0.82rem 1.25rem;">
+                                    <i class="fa fas fa-upload"></i> Import Template
+                                    <input type="file" id="fileInput" style="display: none;" accept=".html, .htm">
+                              </label>
                               <div class="panel-group box bg-dark text-white accordion">
                                  <div class="panel panel-default">
                                    <div class="panel-heading card-hover">
@@ -617,6 +622,24 @@ isAdminSessionValid(true);
 
          echo '</script>';
       ?>
+     <script>
+        const fileInput = document.getElementById('fileInput');
+        const summernote = $('#summernote');
+        summernote.summernote();
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0]; // Get the selected file
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const htmlCode = e.target.result;
+                    summernote.summernote('code', htmlCode);
+                };
+                reader.readAsText(file);
+            } else {
+                summernote.summernote('code', '');
+            }
+        });
+      </script>
       <script defer src="<?php echo url ?>/js/libs/sidebarmenu.js"></script>  
       <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>
       <script defer src="<?php echo url ?>/js/libs/toastr.min.js"></script> 

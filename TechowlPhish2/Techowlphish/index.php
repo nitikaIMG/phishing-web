@@ -40,8 +40,8 @@
     src="https://techowlshield.com/public/assets/TechOwlsheild/wp-content/plugins/elementor/assets/js/jquery.js"></script>
 	<script>
 		$(document).ready(function () {
-// 			$("#header").load("header.html");
-			$("#footer").load("footer.html");
+			$("#headerContent").load("header.html");
+			$("#footerContent").load("footer.html");
 		});
 	</script>
 
@@ -54,71 +54,9 @@
 	<div id="wrapper">
 
 		<!-- Header
-		============================================= -->
-		<header id="header">
-			<div id="header-wrap">
-				<div class="container">
-					<div class="header-row">
-
-						<div id="logo" class="col-lg-2 me-lg-auto">
-							<a href="/" class="w-auto">
-								<img class="logo-default" srcset="https://techowlphish.com/assets/src/assets/img/techPhish.png, https://techowlphish.com/assets/src/assets/img/techPhish.png 2x" src="https://techowlphish.com/assets/src/assets/img/techPhish.png" alt="TechOwl Phish">
-								<img class="logo-dark" srcset="demos/saas-2/images/logo-dark.png, demos/saas-2/images/logo-dark@2x.png 2x" src="demos/saas-2/images/logo-dark@2x.png" alt="Canvas Logo">
-							</a>
-						</div>
-
-						<div class="header-misc ms-auto col-lg-2 justify-content-lg-end">
-							<a href="https://techowlphish.com/signin" class="button button-border button-rounded rounded border-contrast-500"
-								style="--cnvs-btn-fontsize: 1.125rem;">
-							  <!--  <i-->
-									<!--class="bi-asterisk d-none d-md-inline-block me-2 fs-6"></i>-->
-									Log In</a>
-						</div>
-
-						<div class="primary-menu-trigger">
-							<button class="cnvs-hamburger" type="button" title="Open Mobile Menu">
-								<span class="cnvs-hamburger-box"><span class="cnvs-hamburger-inner"></span></span>
-							</button>
-						</div>
-
-						<nav class="primary-menu with-arrows">
-
-							<ul class="one-page-menu menu-container" data-easing="easeInOutExpo" data-speed="1250"
-								data-offset="65">
-								<li class="menu-item">
-									<a href="#" class="menu-link" data-href="#section-services">
-										<div>Why Us</div>
-									</a>
-								</li>
-								<li class="menu-item">
-									<a href="#" class="menu-link" data-href="#section-pricing">
-										<div>Pricing</div>
-									</a>
-								</li>
-								<li class="menu-item">
-									<a href="#" class="menu-link" data-href="#section-faqs">
-										<div>FAQs</div>
-									</a>
-								</li>
-								<li class="menu-item">
-									<a href="#" class="menu-link" data-href="#section-blog">
-										<div>Blog</div>
-									</a>
-								</li>
-									<li class="menu-item">
-									<a href="#" class="menu-link" data-href="#section-contactUs">
-										<div>Contact Us</div>
-									</a>
-								</li>
-							</ul>
-
-						</nav><!-- #primary-menu end -->
-
-					</div>
-				</div>
-			</div>
-			<div class="header-wrap-clone"></div>
-		</header>
+		============================================= -->   
+		<div id="headerContent">
+		</div>
 		<!-- #header end -->
 
 		<!-- Slider
@@ -965,110 +903,7 @@
 
 		<!-- Footer
 		============================================= -->
-		<footer id="footer" class="bg-white border-0">
-			<!--<div class="container">-->
-
-			<!--	 Footer Widgets-->
-			<!--	============================================= -->-->
-			<!--	<div class="footer-widgets-wrap p-4">-->
-			<!--		<div class="row gx-4 gy-5">-->
-
-			<!--			<div class="col-lg-5 col-12 col-sm-12 ">-->
-
-			<!--				<div class="widget widget_links widget-li-noicon">-->
-
-			<!--					<h4 class="fw-bolder text-contrast-1000 text-smaller text-uppercase mb-2">-->
-			<!--					    <img src="https://techowlphish.com/assets/src/assets/img/techPhish.png" width="250px">-->
-			<!--					</h4>-->
-
-			<!--					<div>-->
-			<!--					    Guarding Against Digital Threats!-->
-								    
-			<!--					</div>-->
-			<!--					<h4 class="fw-bolder text-contrast-1000 text-smaller text-uppercase mt-2 mb-4">-->
-
-			<!--					<img src="https://techowlshield.com/public/assets/TechOwlsheild/wp-content/plugins/elementor/assets/img/iso-cert.png" width="150px">-->
-			<!--					</h4>-->
-			<!--				</div>-->
-
-			<!--			</div>-->
-
-			<!--			<div class="col-lg-2 col-6 col-sm-6 ">-->
-
-			<!--				<div class="widget widget_links widget-li-noicon">-->
-
-			<!--					<h4 class="fw-bolder text-contrast-1000 text-smaller text-uppercase mb-4">About Us</h4>-->
-
-			<!--					<ul>-->
-			<!--						<li><a href="#">Feedback</a></li>-->
-			<!--						<li><a href="#">Documentation</a></li>-->
-			<!--						<li><a href="#">Plugins</a></li>-->
-			<!--						<li><a href="#">Support Forums</a></li>-->
-			<!--						<li><a href="#">Themes</a></li>-->
-			<!--						<li><a href="#">Contact Us</a></li>-->
-			<!--					</ul>-->
-
-			<!--				</div>-->
-
-			<!--			</div>-->
-
-			<!--			<div class="col-lg-2 col-6 col-sm-6 ">-->
-
-			<!--				<div class="widget widget_links widget-li-noicon">-->
-
-			<!--					<h4 class="fw-bolder text-contrast-1000 text-smaller text-uppercase mb-4">Quick LInks</h4>-->
-
-			<!--					<ul>-->
-			<!--						<li><a href="#section-services">Why Us</a></li>-->
-			<!--						<li><a href="#section-pricing">Pricing</a></li>-->
-			<!--						<li><a href="#section-fqas">FQAs</a></li>-->
-			<!--						<li><a href="#section-blog">Blog</a></li>-->
-			<!--						<li><a href="#section-contactUs">Contact Us</a></li>-->
-			<!--					</ul>-->
-
-			<!--				</div>-->
-
-			<!--			</div>-->
-
-			<!--			<div class="col-lg-3 col-12 col-sm-12 ">-->
-
-			<!--				<div class="widget">-->
-
-			<!--					<h4 class="fw-bolder text-contrast-1000 text-smaller text-uppercase mb-4">Need Help?-->
-			<!--					</h4>-->
-
-			<!--					<ul class="list-unstyled">-->
-			<!--						<li class="mb-3"><a class="text-dark" href="#"><i-->
-			<!--									class="me-3 color bi-telephone-fill"></i>+0 (11) 222 333</a></li>-->
-			<!--						<li class="mb-3"><a class="text-dark" href="#"><i-->
-			<!--									class="me-3 color bi-envelope-fill"></i>no-reply@canvas.com</a></li>-->
-			<!--						<li class="mb-3"><i class="me-3 color bi-calendar-week-fill"></i>Mon - Sat | 09:00 --->
-			<!--							16:00</li>-->
-			<!--						<li><i class="me-3 color bi-calendar-x-fill"></i>Sunday Closed</li>-->
-			<!--					</ul>-->
-
-			<!--				</div>-->
-
-			<!--			</div>-->
-
-			<!--		</div>-->
-			<!--	</div><!-- .footer-widgets-wrap end -->-->
-			<!--</div>-->
-
-			<!-- Copyrights
-			============================================= -->
-			<!-- <div id="copyrights" class="bg-transparent border-top op-08">
-				<div class="container text-center">
-
-					Copyrights &copy; 2023 All Rights Reserved by SemiColonWeb
-					<div class="copyright-links"><a
-							href="https://1.envato.market/c/1309643/480739/4415?u=http%3A%2F%2Fthemeforest.net%2Fuser%2Fsemicolonweb%2Fportfolio"
-							target="_blank">Portfolio</a> / <a href="http://support.semicolonweb.com"
-							target="_blank">Support</a></div>
-
-				</div>
-			</div> -->
-		</footer><!-- #footer end -->
+		<div id="footerContent" class="bg-white border-0"></div>
 
 	</div><!-- #wrapper end -->
 
@@ -1081,90 +916,6 @@
 	<script src="js/plugins.min.js"></script>
 	<script src="js/functions.bundle.js"></script>
 	
-
-	<script>
-		window.addEventListener('load', function () {
-			var swiperParent = new Swiper('.swiper-testimonial', {
-				slidesPerView: 3,
-				spaceBetween: 30,
-				navigation: {
-					prevEl: '.slider-arrow-left',
-					nextEl: '.slider-arrow-right'
-				},
-				pagination: {
-					el: ".swiper-pagination",
-					clickable: true,
-				},
-				breakpoints: {
-					1: {
-						slidesPerView: 1
-					},
-					576: {
-						slidesPerView: 1
-					},
-					768: {
-						slidesPerView: 2
-					},
-					1200: {
-						slidesPerView: 3
-					}
-				}
-			});
-
-			var SwiperTabsContainer = new Swiper('.swiper-tab-container', {
-				loop: true,
-				slidesPerView: 1,
-				autoHeight: true,
-				autoplay: {
-					delay: 5000,
-					disableOnInteraction: false,
-					autoplayDisableOnInteraction: false
-				},
-				effect: 'fade',
-				fadeEffect: {
-					crossFade: true
-				},
-				longSwipes: true,
-				autoplayDisableOnInteraction: true,
-				on: {
-					activeIndexChange: function (swiper) {
-						var index = swiper.realIndex;
-						jQuery('.swiper-tab-link').removeClass('active');
-						jQuery('.swiper-tab-link').eq(index).addClass('active');
-					}
-				}
-			});
-
-			jQuery('.swiper-tab-link').on('click', function () {
-				var index = jQuery(this).index();
-				SwiperTabsContainer.slideToLoop(index);
-				jQuery('.swiper-tab-link').removeClass('active');
-				jQuery(this).addClass('active');
-			});
-		});
-	</script>
-	<script>
-  // Function to handle instant scrolling
-  function instantScroll(target) {
-    const targetElement = document.querySelector(target);
-    if (targetElement) {
-      window.scrollTo(0, targetElement.offsetTop);
-    }
-  }
-
-  // Event listener for menu item clicks
-  document.addEventListener('DOMContentLoaded', function () {
-    const menuItems = document.querySelectorAll('.menu-link');
-    
-    menuItems.forEach(function (menuItem) {
-      menuItem.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = this.getAttribute('data-href');
-        instantScroll(target);
-      });
-    });
-  });
-</script>
 
 
 </body>

@@ -76,7 +76,7 @@ isAdminSessionValid(true);
             <div class="page-breadcrumb">
                <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                      <h4 class="page-title">SniperPhish Settings</h4>
+                      <h4 class="page-title">Add Landing Page</h4>
                   
                       <div class="ml-auto text-right" id="store-area">
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#ModalStore"><i class="fa fas fa-warehouse"></i> Store</button>
@@ -119,10 +119,12 @@ isAdminSessionValid(true);
                         </div>
 
                         <div class="col-md-4 d-flex align-items-center">
-                           <button type="button" class="btn btn-info" onclick="saveLandPage($(this))" style="padding: 0.75rem 1.25rem;"><i class="fa fas fa-save"></i> Save</button>
+                           <button type="button" class="btn btn-info mr-2" onclick="saveLandPage($(this))" style="padding: 0.82rem 1.25rem;"><i class="fa fas fa-save"></i> Save</button>
+                            <label class="btn btn-info mb-0" style="padding: 0.82rem 1.25rem;">
+                                <i class="fa fas fa-upload"></i> Import HTML
+                                <input type="file" id="fileInput" style="display: none;" accept=".html, .htm">
+                            </label>
                         </div>
-
-                        
                      </div>
 
                      <div class="row m-t-10">
@@ -368,6 +370,24 @@ isAdminSessionValid(true);
                      viewLandPageDetailsFromId("' . doFilter($_GET['lp'], 'ALPHA_NUM') . '",true);';
    echo '</script>';
    ?>
+   <script>
+        const fileInput = document.getElementById('fileInput');
+        const summernote = $('#summernote');
+        summernote.summernote();
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0]; // Get the selected file
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const htmlCode = e.target.result;
+                    summernote.summernote('code', htmlCode);
+                };
+                reader.readAsText(file);
+            } else {
+                summernote.summernote('code', '');
+            }
+        });
+    </script>
    <script defer src="<?php echo url ?>/js/libs/select2.min.js"></script>
    <script defer src="<?php echo url ?>/js/libs/jquery/datatables.js"></script>
    <script defer src="<?php echo url ?>/js/libs/prism.js"></script>

@@ -1343,7 +1343,6 @@ function loadTableCampaignResult1(){
 }
 
 function loadTableCampaignResultadmin(){
-    
     try {
         dt_mail_campaign_result.destroy();
     } catch (err) {}
@@ -1373,8 +1372,8 @@ function loadTableCampaignResultadmin(){
                     var date = value.scheduled_datetime;
                     var start_date = new Date(date[0]['start_date']);
                     var end_date = new Date(date[0]['end_date']);
-                    var newDate = moment(start_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
-                    var newDate1 = moment(end_date, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                    var newDate = moment(start_date, 'YYYY-MM-DD h:m A').format('DD/MM/YYYY h:m A');
+                    var newDate1 = moment(end_date, 'YYYY-MM-DD h:m A').format('DD/MM/YYYY h:m A');
 
                     switch (value.sending_status) {
                         case 1:     //In progress
@@ -1526,7 +1525,7 @@ function loadTableCampaignResultadmin(){
 
                     
 
-                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
+                    $("#table_mail_campaign_result1 tbody").append("<tr><td></td><td>" + value.campaign_name.charAt(0).toUpperCase()+ value.campaign_name.slice(1).toLowerCase() + "</td><td>" + status + "</td><td>" + (newDate)+' - '+(newDate1)+ "</td><td>" + emp_count.length + "</td><td>" + delivered +" "+html+ "</td><td>" + mail_open + " "+mailhtml +"</td><td>" + payloads_clicked_open + " "+mailhtmlpay +"</td><td>" + employees_compromised + " "+mailhtmlexp +"</td><td>" + emails_reported + " "+mailhtmlexprep +"</td></tr>");
                 });
             }
 

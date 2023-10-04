@@ -278,7 +278,9 @@ function getMailTemplateFromTemplateId(id) {
     }).done(function (data) {
         $('#mail_template_name').val(data.mail_template_name);
         $('#mail_template_subject').val(data.mail_template_subject);
-        $('#summernote').summernote('code', data.mail_template_content);//.replace(/\n/gi, "<br/>"));
+         var decodedContent = $('<div/>').html(data.mail_template_content).text();
+        $('#summernote').summernote('code', decodedContent);
+        // $('#summernote').summernote('code', data.mail_template_content);//.replace(/\n/gi, "<br/>"));
         $("#mail_content_type_selector").val(data.mail_content_type).trigger("change");
         $("#landing_name").val(data.page_file_name);
         $("#domain_name").val(data.domain_name);
@@ -909,6 +911,23 @@ function get_landing_list(id){
                 }
     
                 });
+        }
+    }); 
+}
+
+function showLandingPage(){
+    var landing_id = $('#landing_page').val();
+    $.post({
+        url: "manager/settings_manager",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ 
+            action_type: "get_landing_details_by_id",
+            landing_id:landing_id
+         })
+    }).done(function (data) {
+        if(!data['error']){  
+             var mail_landing_page = data.resp;
+             $('#landing_domain_name').text(mail_landing_page[0].name);
         }
     }); 
 }
